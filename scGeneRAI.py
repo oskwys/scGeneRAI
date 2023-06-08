@@ -219,6 +219,7 @@ class scGeneRAI:
         target_gene_range = self.simple_features if remove_descriptors else data_tensor_LRP.shape[1]
 
         for sample_id, sample_name in enumerate(sample_names_LRP):
+            print(sample_id, sample_name)
             calc_all_paths(self.nn, data_tensor_LRP, sample_id, sample_name, feature_names_LRP, target_gene_range = target_gene_range, PATH=PATH, batch_size=100, LRPau = LRPau, device = tc.device(device_name))
         
         

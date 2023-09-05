@@ -14,11 +14,15 @@ import os
 import seaborn as sns
 #import scanpy as sc
 #import torch
+import scipy
 
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 path_to_data = '/home/owysocki/Documents/KI_dataset'
+path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset'
+
+df_clinical_features = pd.read_csv( os.path.join( r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_model', 'CCE_clinical_features.csv') )
 
 
 # %% FUSION
@@ -37,7 +41,7 @@ df.sum().sort_values().reset_index().plot(x = 'index', y =0, kind='bar', figsize
 
 # Prepare fusions to model
 # condition
-min_n_with_condition = 10
+min_n_with_condition = 2
 
 df_fusions = df.iloc[:, ((df != 0).sum() > min_n_with_condition).values]
 
@@ -110,19 +114,35 @@ import pyarrow.feather as feather
 df = feather.read_feather(os.path.join(path_to_data, 'CCE_gene_expression'))
 df = df.fillna(0)
 
+# adjust per each patient
+df = df.div(df.sum(axis=1), axis=0) * 10000
+
+
 std_ = df.std()
 std_.sort_values(ascending=False)[:1000].plot(kind='bar')
 
-# condition
-std_min = 5000
+mean_ = np.log(df+1).mean()
+mean_.sort_values(ascending=False).plot()
 
-df_expr = df.loc[:, list(std_[std_ > std_min].index)]
+np.log(df+1).mean().sort_values(ascending=False).plot()
+np.log(df+1).max().sort_values(ascending=False).plot()
+np.log(df+1).min().sort_values(ascending=False).plot()
+
+# condition
+# highest average expression values
+#std_min = 5000
+
+mean_min = df.mean().sort_values(ascending=False)[1000]
+
+df_expr = df.loc[:, list(df.mean()[df.mean() > mean_min].index)]
 
 
 sns.clustermap(np.log(df_expr.values+1), cmap = 'Reds', method = 'ward')
 
 # %% SAVE DATA 
 path_to_save = '/home/owysocki/Documents/KI_dataset/data_to_model'
+path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_model'
+
 
 feather.write_feather(df_fusions, os.path.join(path_to_save, 'CCE_fusions_to_model') )
 feather.write_feather(df_mutations, os.path.join(path_to_save, 'CCE_mutations_to_model') )
@@ -130,7 +150,11 @@ feather.write_feather(df_amp, os.path.join(path_to_save, 'CCE_amplifications_to_
 feather.write_feather(df_del, os.path.join(path_to_save, 'CCE_deletions_to_model') )
 feather.write_feather(df_expr, os.path.join(path_to_save, 'CCE_expressions_to_model') )
 
-
+df_fusions.to_csv(os.path.join(path_to_save, 'CCE_fusions_to_model.csv') )
+df_mutations.to_csv(os.path.join(path_to_save, 'CCE_mutations_to_model.csv') )
+df_amp.to_csv( os.path.join(path_to_save, 'CCE_amplifications_to_model.csv') )
+df_del.to_csv(os.path.join(path_to_save, 'CCE_deletions_to_model.csv') )
+df_expr.to_csv(os.path.join(path_to_save, 'CCE_expressions_to_model.csv') )
 
 
 

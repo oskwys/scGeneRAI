@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import copy
+import pickle
 
 from torch.utils.data import Dataset, DataLoader
 from torch.optim.lr_scheduler import ExponentialLR
@@ -159,7 +160,7 @@ class scGeneRAI:
             self.onehotter = OneHotter()
             one_hot_descriptors = self.onehotter.make_one_hot_new(descriptors)
             self.data = pd.concat([data, one_hot_descriptors], axis=1)
-
+            print(one_hot_descriptors)
         else:
             self.data = data
 
@@ -174,11 +175,11 @@ class scGeneRAI:
 
         self.nn = NN(2*(self.nfeatures), self.nfeatures, self.hidden, self.depth)
 
-        tc.manual_seed(0)
+        #tc.manual_seed(0)
         all_ids = tc.randperm(self.nsamples)
         self.train_ids, self.test_ids = all_ids[:self.nsamples//10*9], all_ids[self.nsamples//10*9:]
 
-        testlosses, epoch_list, network_list = train(self.nn, self.data_tensor[self.train_ids], self.data_tensor[self.test_ids], nepochs, lr=lr, batch_size=batch_size,  lr_decay=lr_decay, device_name=device_name)
+        testlosses, trainlosses, epoch_list, network_list = train(self.nn, self.data_tensor[self.train_ids], self.data_tensor[self.test_ids], nepochs, lr=lr, batch_size=batch_size,  lr_decay=lr_decay, device_name=device_name)
 
         if early_stopping:
             mindex = tc.argmin(testlosses)
@@ -193,7 +194,7 @@ class scGeneRAI:
            self.actual_testloss = testlosses[-1]
 
         print('the network trained for {} epochs (testloss: {})'.format(self.epochs_trained, self.actual_testloss))
-
+        return testlosses.cpu().detach().numpy(), trainlosses.cpu().detach().numpy(), epoch_list
 
     def predict_networks(self, data, descriptors = None, LRPau = True, remove_descriptors = True, device_name = 'cpu', PATH = '.'):
         if not os.path.exists(PATH + '/results/'):
@@ -220,7 +221,7 @@ class scGeneRAI:
 
         for sample_id, sample_name in enumerate(sample_names_LRP):
             print(sample_id, sample_name)
-            calc_all_paths(self.nn, data_tensor_LRP, sample_id, sample_name, feature_names_LRP, target_gene_range = target_gene_range, PATH=PATH, batch_size=100, LRPau = LRPau, device = tc.device(device_name))
+            calc_all_paths(self.nn, data_tensor_LRP, sample_id, sample_name, feature_names_LRP, target_gene_range = target_gene_range, PATH=PATH, batch_size=500, LRPau = LRPau, device = tc.device(device_name))
         
         
 
@@ -262,8 +263,9 @@ def train(neuralnet, train_data, test_data, epochs, lr, batch_size, lr_decay, de
     scheduler = ExponentialLR(optimizer, gamma = lr_decay)
 
     criterion = LogCoshLoss() 
+    #criterion = nn.MSELoss()
     testlosses, epoch_list, network_list = [], [], []
-
+    trainlosses = []
     neuralnet.train().to(device)
 
     for epoch in tqdm(range(epochs)):
@@ -303,6 +305,7 @@ def train(neuralnet, train_data, test_data, epochs, lr, batch_size, lr_decay, de
                 with tc.no_grad():
                     pred = neuralnet(masked_data)
                 testloss = criterion(pred[mask==0], full_data[mask==0])
+                print('test loss:', testloss)
                 testlosses.append(testloss)
                 epoch_list.append(epoch)
                 network_list.append(neuralnet.state_dict())
@@ -315,10 +318,12 @@ def train(neuralnet, train_data, test_data, epochs, lr, batch_size, lr_decay, de
                 with tc.no_grad():
                     pred = neuralnet(masked_data)
                 traintestloss = criterion(pred[mask==0], full_data[mask==0])
+                trainlosses.append(traintestloss)
+                print('train loss:', traintestloss)
                 #print(epoch, 'trainloss:', traintestloss, 'testloss:', testloss)
                 break
     
-    return tc.tensor(testlosses), epoch_list, network_list
+    return tc.tensor(testlosses),  tc.tensor(trainlosses), epoch_list, network_list
 
 
 
@@ -356,7 +361,7 @@ def compute_LRP(neuralnet, test_set, target_id, sample_id, batch_size, device):
     return LRP_scaled.cpu().numpy(), error, y , y_pred, full_data_sample
 
 
-def calc_all_paths(neuralnet, test_data, sample_id, sample_name, featurenames, target_gene_range, PATH, batch_size=100, LRPau = True, device = tc.device('cpu')):
+def calc_all_paths(neuralnet, test_data, sample_id, sample_name, featurenames, target_gene_range, PATH, batch_size=500, LRPau = True, device = tc.device('cpu')):
     end_frame = []
 
     for target in range(target_gene_range):
@@ -367,7 +372,7 @@ def calc_all_paths(neuralnet, test_data, sample_id, sample_name, featurenames, t
        
 
         end_frame.append(frame)
-        end_result_path = PATH + '/results/'  + 'LRP_' + str(sample_id) + '_'+ str(sample_name) + '.csv'
+        end_result_path = PATH + '/results/'  + 'LRP_' + str(sample_id) + '_'+ str(sample_name)# + '.csv'
         #if not os.path.exists(result_path + data_type):
         #    os.makedirs(result_path + data_type)
 
@@ -388,7 +393,11 @@ def calc_all_paths(neuralnet, test_data, sample_id, sample_name, featurenames, t
 
 
 
-    end_frame.to_csv(end_result_path)
+    #end_frame.to_csv(end_result_path)
+    with open(end_result_path, 'wb') as file:
+        pickle.dump(end_frame, file)
+       
+
 
 
 

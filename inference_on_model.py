@@ -14,13 +14,15 @@ import sys
 import os
 import seaborn as sns
 
+from scGeneRAI import scGeneRAI
+import pyarrow.feather as feather
 
 # %% load data
 
 
 #path_to_data = '/home/owysocki/Documents/KI_dataset/data_to_model'
 path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
-path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_model'
+#path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_model'
 #path_to_data = 'KI_dataset/data_to_model'
 
 #df_fus = feather.read_feather(os.path.join(path_to_data, 'CCE_fusions_to_model') )
@@ -57,9 +59,6 @@ data = pd.concat((df_exp_stand, df_mut_scale, df_amp, df_del, df_fus_scale), axi
 
 device = 'cuda'
 
-subtypes = ['BRCA']
-
-split_by_subtypes = True
 
 file_name = 'model_BRCA_batch5_nepochs500_depth2_lr02.pkl'
 path_to_model = r'C:\Users\d07321ow\Documents\GitHub\scGeneRAI'
@@ -76,22 +75,30 @@ with open(path, 'rb') as file:
     
     
     
+path_to_save_lrp = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP'
 
-preds = model.predict_networks(data_temp.iloc[:5,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path.replace('.pkl',''))
+files = os.listdir(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\results')
 
+samples = [file.split('_')[2] for file in files[1:]]
 
-
-
-
-
-
-
-
+# %%
+#preds = model.predict_networks(data_temp.iloc[30:900,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)
+preds = model.predict_networks(data_temp.iloc[931:,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)
 
 
+preds = model.predict_networks(data_temp[~data_temp.index.isin(samples)].iloc[700:720,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)
 
 
 
+
+# %%
+
+
+
+
+
+
+data_temp[~data_temp.index.isin(samples)]
 
 
 

@@ -28,14 +28,14 @@ class Dataset_train(Dataset):
 
 
 class Dataset_LRP(Dataset):
-    def __init__(self, data, target_id, sample_id, maskspersample=10000):
+    def __init__(self, data, target_id, sample_id, maskspersample=100): #  was 10000
         self.nsamples, self.nfeatures = data.shape
         self.data = data
         self.l = data.shape[0]
         self.target_id = target_id
         self.sample_id =sample_id
         self.maskspersample = maskspersample
-
+        print('maskspersample: ',maskspersample)
     def __len__(self):
         return self.maskspersample
 

@@ -365,6 +365,7 @@ def calc_all_paths(neuralnet, test_data, sample_id, sample_name, featurenames, t
     end_frame = []
 
     for target in range(target_gene_range):
+        print('target ', target, '/', target_gene_range)
         LRP_value, error, y, y_pred, full_data_sample = compute_LRP(neuralnet, test_data, target, sample_id, batch_size = batch_size, device = device)
 
         frame = pd.DataFrame({'LRP': LRP_value[:target_gene_range], 'source_gene': featurenames[:target_gene_range], 'target_gene': featurenames[target] ,

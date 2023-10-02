@@ -274,7 +274,7 @@ with open(os.path.join(path_to_save, 'models.pkl'), 'wb') as file:
 with open(os.path.join(path_to_save, 'evals.json'), 'w') as file:
     json.dump(xgboost_eval_dict, file)
     
-shap_matrix_abs.to_csv(os.path.join(path_to_save , 'shap_matrix_abs.csv'))
-shap_matrix.to_csv(os.path.join(path_to_save , 'shap_matrix.csv'))
+pd.DataFrame(shap_matrix_abs).to_csv(os.path.join(path_to_save , 'shap_matrix_abs.csv'))
+pd.DataFrame(shap_matrix).to_csv(os.path.join(path_to_save , 'shap_matrix.csv'))
 
 print('done')

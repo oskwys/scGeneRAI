@@ -1,0 +1,13 @@
+model all data vs model BRCA
+
+consistency	- when traning multiple models
+		- of explanations
+
+loss 
+
+similarity for a whole/brca model between multiple samples:
+	- for a pathway: set of genes, 4 modalities:
+		- cosine similarity
+		- eucledean distance
+		- clustermap and clusters for patients
+		not necesairly graphs

@@ -80,7 +80,7 @@ n_features = len(data.columns)
 m_times = 2
 m_features = 50
 
-s = 250
+s = 2
 
 features_sampled_dict = {}
 for i in range(s):
@@ -138,7 +138,7 @@ for i in range(s):
             'max_depth': 10,
             'eta': 0.3,
             'objective': 'reg:squarederror',  # regression task
-            'tree_method' : "hist", 'device' : "cuda"
+            'tree_method' : "gpu_hist", 'device' : "cuda"
         }
         num_round = 10  # Number of boosting rounds
         
@@ -167,12 +167,13 @@ for i in range(s):
             
         
         
-        
+        model.set_param({"device": "cuda:0"})
+        shap_values = model.predict(dtrain, pred_contribs=True)[:,:-1]
         
         
         # Get SHAP
-        explainer = shap.TreeExplainer(model, X)
-        shap_values = explainer(X).values
+        #explainer = shap.TreeExplainer(model, X)
+        #shap_values = explainer(X).values
         
         # save feature importance
         feature_list_str = [str(i) + '_' + str(feature) + '_' + str(iter_) for feature in feature_list]

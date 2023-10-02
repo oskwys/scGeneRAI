@@ -29,7 +29,7 @@ from datetime import datetime
 
 import importlib, sys
 importlib.reload(f)
-%matplotlib inline 
+#%matplotlib inline 
 import random
 # %%
 

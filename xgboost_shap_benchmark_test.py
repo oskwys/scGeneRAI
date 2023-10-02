@@ -46,8 +46,8 @@ import random
 import itertools
 
 n_features = len(data.columns)
-m_times = 3
-m_features = 5
+m_times = 100
+m_features = 8
 
 s = n_features
 
@@ -247,6 +247,75 @@ shap_matrix_pd = pd.DataFrame(shap_matrix, columns = data.columns, index = data.
 shap_edges = shap_matrix_pd.reset_index().melt(id_vars='index', value_vars=shap_matrix_pd.columns)
 shap_edges = shap_edges.rename(columns = {'index':'source','variable':'target', 'value':'weight'})
 
+# %% Total GAIN
+# %%% total_gain dict
+
+total_gain_dict = {}
+
+cols_all = []
+for i in range(s):
+    print('Feature: ', i)
+    total_gain_dict[str(i)] = {}
+    total_gain_temp_i = np.zeros((1, iterations_per_feature*m_features))
+    cols = []
+    for iter_ in range(iterations_per_feature):
+        
+       
+        total_gain_temp = list(xgboost_eval_dict[str(i)][iter_]['total_gain'].values())
+        
+        if len(total_gain_temp) < m_features:
+            print(iter_, xgboost_eval_dict[str(i)][iter_]['total_gain'].keys())    
+            total_gain_temp = total_gain_temp  + [0]
+            
+        r2 = xgboost_eval_dict[str(i)][iter_]['r2'] 
+        if r2 < r2_threshold:
+            total_gain_temp = [np.nan] * len(total_gain_temp)
+            print(r2)
+                       
+        total_gain_temp_i[0, iter_*m_features: (iter_+1)*m_features] = total_gain_temp
+        
+        cols += xgboost_shaps_dict[str(i)][iter_]['feature_list_str']
+        cols_all += xgboost_shaps_dict[str(i)][iter_]['feature_list_str']
+    total_gain_dict[str(i)]['total_gain'] = shaps_temp_i
+    total_gain_dict[str(i)]['feature_list_str'] = cols
+    total_gain_dict[str(i)]['total_gain_pd'] = pd.DataFrame(data = total_gain_temp_i, columns = cols)
+
+# %%% total_gain_comb_dict
+
+total_gain_comb_dict = {}
+    
+super_cols = []
+for i in range(s):
+    cols = shap_values_dict[str(i)]['feature_list_str'] 
+    #cols = ['_'.join(column.split('_')[:-1]) for column in cols]
+    cols.sort()
+    print('Feature: ', i)
+    for j in range(0,iterations_per_feature*m_features, m_times):
+        
+        cols_to_select = cols[j:j+m_times]
+        super_col = '_'.join(cols_to_select[0].split('_')[:-1])
+        total_gain_comb_dict[super_col] = total_gain_dict[str(i)]['total_gain_pd'].loc[:, cols_to_select].values
+        super_cols.append(super_col)
+        
+        
+# %%% total_gain_mean_dict
+total_gain_mean_dict = {}
+
+for column in super_cols:
+    print(column)
+
+    total_gain_mean_dict[column]={}
+    total_gain_mean_dict[column]['abs_mean_global'] = np.round(np.nanmean(np.abs(total_gain_comb_dict[column] / np.nanmax(np.abs(total_gain_comb_dict[column])))), 5)
+
+
+    
+# %%% edges total GAIN
+gain_matrix = np.zeros((s, n_features))
+
+for column in super_cols:
+    print(column)
+    total_gain_temp = total_gain_mean_dict[column]['abs_mean_global']
+    gain_matrix[int(column.split('_')[0]), int(column.split('_')[1])] = total_gain_temp 
 
 
 # %% SAVE
@@ -276,5 +345,8 @@ with open(os.path.join(path_to_save, 'evals.json'), 'w') as file:
     
 pd.DataFrame(shap_matrix_abs).to_csv(os.path.join(path_to_save , 'shap_matrix_abs.csv'))
 pd.DataFrame(shap_matrix).to_csv(os.path.join(path_to_save , 'shap_matrix.csv'))
+pd.DataFrame(gain_matrix).to_csv(os.path.join(path_to_save , 'gain_matrix.csv'))
+info = {'m_times': [100],'m_features' : [8], 'iterations_per_feature: ': iterations_per_feature}
+pd.DataFrame.from_dict(info).to_csv(os.path.join(path_to_save , 'info.csv'))
 
 print('done')

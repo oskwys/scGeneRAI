@@ -46,8 +46,8 @@ import random
 import itertools
 
 n_features = len(data.columns)
-m_times = 100
-m_features = 10
+m_times = 3
+m_features = 5
 
 s = n_features
 
@@ -224,25 +224,57 @@ for column in super_cols:
 
 
 # %% edges SHAP
+shap_matrix_abs = f.get_shap_martix(shap_values_comb_mean_dict, super_cols, s, n_features,shap_values_type = 'abs_mean_global')
+shap_matrix = f.get_shap_martix(shap_values_comb_mean_dict, super_cols, s, n_features,shap_values_type = 'mean_global')
 
-shap_matrix = np.zeros((s, n_features))
 
-for column in super_cols:
-    print(column)
 
-    shap_temp = shap_values_comb_mean_dict[column]['abs_mean_global']
-    
-    shap_matrix[int(column.split('_')[0]), int(column.split('_')[1])] = shap_temp
 
-sns.heatmap(shap_matrix, mask = shap_matrix<0.1, cmap = 'jet', vmin = 0)
+sns.heatmap(shap_matrix, cmap = 'jet')
 plt.show()
 
-sns.heatmap(shap_matrix, cmap = 'jet', vmin = 0)
+sns.heatmap(shap_matrix, cmap = 'jet', vmin = -1, vmax = 1)
+plt.show()
+
+sns.heatmap(shap_matrix_abs, cmap = 'jet', vmin = 0)
+plt.show()
+
+sns.heatmap(shap_matrix_abs, cmap = 'jet', vmin = 0)
 plt.show()
 
 shap_matrix_pd = pd.DataFrame(shap_matrix, columns = data.columns, index = data.columns[:s]).T
 
 shap_edges = shap_matrix_pd.reset_index().melt(id_vars='index', value_vars=shap_matrix_pd.columns)
 shap_edges = shap_edges.rename(columns = {'index':'source','variable':'target', 'value':'weight'})
+
+
+
+# %% SAVE
+
+print('SAVE !')
+
+import json
+import pickle
+
+path_to_save = '/home/d07321ow/scratch/results/'
+
+path_to_save = f.create_folder_with_datetime(path_to_save)
+
+
+# Save dictionary
+with open(os.path.join(path_to_save, 'shaps.pkl'), 'wb') as file:
+    pickle.dump(xgboost_shaps_dict, file)
+    
+
+# Save dictionary
+with open(os.path.join(path_to_save, 'models.pkl'), 'wb') as file:
+    pickle.dump(xgboost_models_dict, file)
+    
+# Save dictionary
+with open(os.path.join(path_to_save, 'evals.json'), 'w') as file:
+    json.dump(xgboost_eval_dict, file)
+    
+shap_matrix_abs.to_csv(os.path.join(path_to_save , 'shap_matrix_abs.csv'))
+shap_matrix.to_csv(os.path.join(path_to_save , 'shap_matrix.csv'))
 
 print('done')

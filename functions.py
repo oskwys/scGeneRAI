@@ -147,3 +147,44 @@ def ensure_get_score_size(dict_input, m_features):
         dict_output = dict_input
                                 
     return dict_output
+
+
+
+import os
+from datetime import datetime
+
+
+def create_folder_with_datetime(absolute_path):
+    # Ensure the provided path exists; if not, create it
+    if not os.path.exists(absolute_path):
+        os.makedirs(absolute_path)
+
+    # Get the current date and time
+    now = datetime.now()
+    folder_name = "results_" + now.strftime("%Y-%m-%d %H-%M-%S")
+
+    # Combine the absolute path with the new folder name
+    full_path = os.path.join(absolute_path, folder_name)
+
+    # Create the new folder at the specified location
+    if not os.path.exists(full_path):
+        os.makedirs(full_path)
+        print(f"Folder '{folder_name}' created at {full_path}!")
+    else:
+        print(f"Folder '{full_path}' already exists!")
+        
+    return full_path
+
+
+def get_shap_martix(shap_values_comb_mean_dict, super_cols, s, n_features, shap_values_type = 'abs_mean_global'):
+    shap_matrix = np.zeros((s, n_features))
+    for column in super_cols:
+        print(column)
+    
+        shap_temp = shap_values_comb_mean_dict[column][shap_values_type]
+        
+        shap_matrix[int(column.split('_')[0]), int(column.split('_')[1])] = shap_temp
+        
+    return shap_matrix
+
+

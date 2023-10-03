@@ -46,7 +46,7 @@ import random
 import itertools
 
 n_features = len(data.columns)
-m_times = 100
+m_times = 2
 m_features = 8
 
 s = n_features
@@ -65,6 +65,8 @@ for i in range(s):
         
         for iter_ in range(0, int(np.floor(n_features / m_features))):
             feature_list_sampled  = feature_list[m_features * iter_ : m_features * (iter_+1)]
+            if len(feature_list_sampled) < m_features:
+                feature_list_sampled  = feature_list[::-1][0 : m_features]
             feature_list_sampled.sort()
             feature_list_sampled_i.append(feature_list_sampled)
             
@@ -346,7 +348,7 @@ with open(os.path.join(path_to_save, 'evals.json'), 'w') as file:
 pd.DataFrame(shap_matrix_abs).to_csv(os.path.join(path_to_save , 'shap_matrix_abs.csv'))
 pd.DataFrame(shap_matrix).to_csv(os.path.join(path_to_save , 'shap_matrix.csv'))
 pd.DataFrame(gain_matrix).to_csv(os.path.join(path_to_save , 'gain_matrix.csv'))
-info = {'m_times': [100],'m_features' : [8], 'iterations_per_feature: ': iterations_per_feature}
+info = {'m_times': [100],'m_features' : [8], 'iterations_per_feature: ': iterations_per_feature, 'r2_threshold':r2_threshold}
 pd.DataFrame.from_dict(info).to_csv(os.path.join(path_to_save , 'info.csv'))
 
 print('done')

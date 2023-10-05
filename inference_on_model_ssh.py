@@ -44,9 +44,10 @@ with open(path, 'rb') as file:
     
     
 #path_to_save_lrp = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP'
-path_to_save_lrp = '/home/d07321ow/scratch/results_LRP_BRCA/results'
+path_to_save_lrp = '/home/d07321ow/scratch/results_LRP_BRCA'
 
-files = os.listdir(path_to_save_lrp)
+files = os.listdir(path_to_save_lrp+'/results')
+files = [item for item in files if item != 'results']
 
 samples = [file.split('_')[2] for file in files]
 

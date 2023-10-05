@@ -21,7 +21,7 @@ import pyarrow.feather as feather
 
 #path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
 path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
-data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
+data, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
 
 print('DATA shape ', data.shape)
 # %%

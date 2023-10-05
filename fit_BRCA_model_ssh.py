@@ -53,7 +53,7 @@ device = 'cuda'
 batch_size = 5
 learning_rate = 2e-2 # default = 2e-2
 file_name = 'model_BRCA_batch{}_nepochs{}_depth{}_lr{}.pkl'.format(batch_size, nepochs, model_depth, str(learning_rate).replace('0.', ''))
-file_name = 'model_TCGA_batch{}_nepochs{}_depth{}_lr{}.pkl'.format(batch_size, nepochs, model_depth, str(learning_rate).replace('0.', ''))
+#file_name = 'model_TCGA_batch{}_nepochs{}_depth{}_lr{}.pkl'.format(batch_size, nepochs, model_depth, str(learning_rate).replace('0.', ''))
 print(file_name)
 
 print('\n ___________ NEW MODEL ___________ \n')

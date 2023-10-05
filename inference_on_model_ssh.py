@@ -12,6 +12,7 @@ import numpy as np
 import sys
 import os
 import seaborn as sns
+import functions as f
 
 from scGeneRAI import scGeneRAI
 import pyarrow.feather as feather
@@ -20,30 +21,8 @@ import pyarrow.feather as feather
 
 #path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
 path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
+data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
 
-df_exp = feather.read_feather( os.path.join(path_to_data, 'CCE_expressions_to_model') , )
-
-df_fus = pd.read_csv(os.path.join(path_to_data, 'CCE_fusions_to_model.csv') ,index_col = 0)
-df_mut = pd.read_csv( os.path.join(path_to_data, 'CCE_mutations_to_model.csv') ,index_col = 0)
-df_amp = pd.read_csv( os.path.join(path_to_data, 'CCE_amplifications_to_model.csv'),index_col = 0 )
-df_del = pd.read_csv( os.path.join(path_to_data, 'CCE_deletions_to_model.csv') ,index_col = 0 )
-#df_exp = pd.read_csv( os.path.join(path_to_data, 'CCE_expressions_to_model.csv') ,index_col = 0 )
-
-#df_clinical_features = pd.read_csv( os.path.join(path_to_data, 'CCE_clinical_features.csv') )
-
-# %% preprocess data
-df_exp = df_exp.apply(lambda x: np.log(x + 1))
-df_exp_stand = (df_exp-df_exp.mean(axis=0))/df_exp.std(axis=0)
-
-df_mut_scale = (df_mut-df_mut.min(axis=0))/df_mut.max(axis=0)
-df_fus_scale = (df_fus-df_fus.min(axis=0))/df_fus.max(axis=0)
-
-df_amp[df_amp==2] =1
-
-
-# %% data to model
-
-data = pd.concat((df_exp_stand, df_mut_scale, df_amp, df_del, df_fus_scale), axis = 1)
 print('DATA shape ', data.shape)
 # %%
 
@@ -69,32 +48,14 @@ path_to_save_lrp = '/home/d07321ow/scratch/results_LRP_BRCA'
 
 files = os.listdir(path_to_save_lrp)
 
-samples = [file.split('_')[2] for file in files[1:]]
+samples = [file.split('_')[2] for file in files]
 
 # %%
 #preds = model.predict_networks(data_temp.iloc[30:900,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)
-preds = model.predict_networks(data_temp.iloc[0:10,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)
+#preds = model.predict_networks(data_temp.iloc[0:10,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)
 
 
-#preds = model.predict_networks(data_temp[~data_temp.index.isin(samples)].iloc[700:720,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)
-
-
-
-
-# %%
-
-
-
-
-
-
-data_temp[~data_temp.index.isin(samples)]
-
-
-
-
-
-
+preds = model.predict_networks(data_temp[~data_temp.index.isin(samples)], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)
 
 
 

@@ -23,6 +23,33 @@ from datetime import datetime
 
 
 
+def get_input_data(path_to_data):
+        
+        
+    df_fus = pd.read_csv(os.path.join(path_to_data, 'CCE_fusions_to_model.csv') ,index_col = 0)
+    df_mut = pd.read_csv( os.path.join(path_to_data, 'CCE_mutations_to_model.csv') ,index_col = 0)
+    df_amp = pd.read_csv( os.path.join(path_to_data, 'CCE_amplifications_to_model.csv'),index_col = 0 )
+    df_del = pd.read_csv( os.path.join(path_to_data, 'CCE_deletions_to_model.csv') ,index_col = 0 )
+    
+    df_exp = feather.read_feather( os.path.join(path_to_data, 'CCE_expressions_to_model') , )
+    
+    df_clinical_features = pd.read_csv( os.path.join(path_to_data, 'CCE_clinical_features.csv') )
+    
+    df_exp = df_exp.apply(lambda x: np.log(x + 1))
+    df_exp_stand = (df_exp-df_exp.mean(axis=0))/df_exp.std(axis=0)
+    
+    df_mut_scale = (df_mut-df_mut.min(axis=0))/df_mut.max(axis=0)
+    df_fus_scale = (df_fus-df_fus.min(axis=0))/df_fus.max(axis=0)
+    
+    df_amp[df_amp==2] =1
+
+    data_to_model = pd.concat((df_exp_stand, df_mut_scale, df_amp, df_del, df_fus_scale), axis = 1)
+    
+    return data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features
+
+
+
+
 
 def get_samples_by_group(df_clinical_features):
         

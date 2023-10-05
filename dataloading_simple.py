@@ -28,7 +28,7 @@ class Dataset_train(Dataset):
 
 
 class Dataset_LRP(Dataset):
-    def __init__(self, data, target_id, sample_id, maskspersample=100): #  was 10000
+    def __init__(self, data, target_id, sample_id, maskspersample=10000): #  was 10000
         self.nsamples, self.nfeatures = data.shape
         self.data = data
         self.l = data.shape[0]

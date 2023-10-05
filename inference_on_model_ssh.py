@@ -50,7 +50,7 @@ files = os.listdir(path_to_save_lrp+'/results')
 files = [item for item in files if item != 'results']
 
 samples = [file.split('_')[2] for file in files]
-
+print('Samples already done: ', len(samples))
 # %%
 #preds = model.predict_networks(data_temp.iloc[30:900,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)
 #preds = model.predict_networks(data_temp.iloc[0:10,:], descriptors = None, LRPau = True, remove_descriptors = True, device_name = device, PATH = path_to_save_lrp)

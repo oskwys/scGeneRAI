@@ -188,3 +188,35 @@ def get_shap_martix(shap_values_comb_mean_dict, super_cols, s, n_features, shap_
     return shap_matrix
 
 
+
+def get_metrics_all(xgboost_eval_dict, s, iterations_per_feature):
+
+    r2_pd_all = pd.DataFrame(np.zeros(iterations_per_feature))
+    mape_pd_all = pd.DataFrame(np.zeros(iterations_per_feature))
+    mse_pd_all = pd.DataFrame(np.zeros(iterations_per_feature))
+    
+    for i in range(s):
+        print('Feature: ', i)
+        r2_i = []
+        mse_i = []
+        mape_i = []
+        for iter_ in range(iterations_per_feature):
+            # performance
+            r2_i.append(xgboost_eval_dict[str(i)][iter_]['r2'])
+            mse_i.append(xgboost_eval_dict[str(i)][iter_]['mse'])
+            mape_i.append(xgboost_eval_dict[str(i)][iter_]['mape'])
+            
+            
+        r2_pd_all[i] = r2_i
+        mse_pd_all[i] = mse_i
+        mape_pd_all[i] = mape_i
+        
+        
+    
+    r2_pd_all = r2_pd_all.melt(var_name = 'target_feature', value_name = 'r2')
+    
+    mse_pd_all = mse_pd_all.melt(var_name = 'target_feature', value_name = 'mse')
+    
+    mape_pd_all = mape_pd_all.melt(var_name = 'target_feature', value_name = 'mape')
+    
+    return r2_pd_all, mse_pd_all, mape_pd_all

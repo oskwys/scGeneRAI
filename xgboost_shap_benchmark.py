@@ -330,33 +330,9 @@ f.get_auc_artificial_homogeneous(gain_matrix, plot = True, title= 'XGBOOST gain'
 
 
 # %% investigate r2
-r2_pd_all = pd.DataFrame(np.zeros(iterations_per_feature))
-mape_pd_all = pd.DataFrame(np.zeros(iterations_per_feature))
-mse_pd_all = pd.DataFrame(np.zeros(iterations_per_feature))
 
-for i in range(s):
-    print('Feature: ', i)
-    r2_i = []
-    mse_i = []
-    mape_i = []
-    for iter_ in range(iterations_per_feature):
-        # performance
-        r2_i.append(xgboost_eval_dict[str(i)][iter_]['r2'])
-        mse_i.append(xgboost_eval_dict[str(i)][iter_]['mse'])
-        mape_i.append(xgboost_eval_dict[str(i)][iter_]['mape'])
-        
-        
-    r2_pd_all[i] = r2_i
-    mse_pd_all[i] = mse_i
-    mape_pd_all[i] = mape_i
-    
-    
+r2_pd_all, mse_pd_all, mape_pd_all = f.get_metrics_all(xgboost_eval_dict, s, iterations_per_feature)
 
-r2_pd_all = r2_pd_all.melt(var_name = 'target_feature', value_name = 'r2')
-
-mse_pd_all = mse_pd_all.melt(var_name = 'target_feature', value_name = 'mse')
-
-mape_pd_all = mape_pd_all.melt(var_name = 'target_feature', value_name = 'mape')
 
 # %% plot r2
 fig,ax = plt.subplots(figsize = (7,5))

@@ -27,6 +27,10 @@ from datetime import datetime
 
 import importlib, sys
 importlib.reload(f)
+# %%
+
+networks_for_patient_groups_and_ALL_genes = False
+networks_for_patient_groups_and_pathway_genes = False
 
 # %% load data
 
@@ -105,69 +109,72 @@ print(end_time - start_time)
     
 # %% networks for patient groups and pathway genes
 
-for group in samples_groups.keys():
-    print(group)
-    
-    for subgroup in samples_groups[group].keys():
-        print(subgroup)
+
+if networks_for_patient_groups_and_pathway_genes == True:
+    for group in samples_groups.keys():
+        print(group)
         
-        samples_subgroup = samples_groups[group][subgroup]
+        for subgroup in samples_groups[group].keys():
+            print(subgroup)
             
-        for pathway in genes_pathways['Pathway'].unique():
-            
-            genes = genes_pathways_dict[pathway]
-            print(pathway, genes)
-            network_all = pd.DataFrame()
-            i=0
-            index_ = []
-            for sample_name in samples_subgroup:
-                print(i, pathway, sample_name, subgroup, ' ------  networks for patient groups and pathway genes')
-                temp = lrp_dict[sample_name].copy()
-                #print(temp.head())
-                #temp = temp.sort_values(['source_gene','target_gene'])
-                if i==0:
-                    index_ = temp['source_gene'].str.split('_',expand=True)[0].isin(genes) & temp['target_gene'].str.split('_',expand=True)[0].isin(genes)
-                #print(temp.shape)
+            samples_subgroup = samples_groups[group][subgroup]
                 
-                temp = temp[index_]
+            for pathway in genes_pathways['Pathway'].unique():
                 
-                network_all = pd.concat((network_all, temp))
-                i+=1
+                genes = genes_pathways_dict[pathway]
+                print(pathway, genes)
+                network_all = pd.DataFrame()
+                i=0
+                index_ = []
+                for sample_name in samples_subgroup:
+                    print(i, pathway, sample_name, subgroup, ' ------  networks for patient groups and pathway genes')
+                    temp = lrp_dict[sample_name].copy()
+                    #print(temp.head())
+                    #temp = temp.sort_values(['source_gene','target_gene'])
+                    if i==0:
+                        index_ = temp['source_gene'].str.split('_',expand=True)[0].isin(genes) & temp['target_gene'].str.split('_',expand=True)[0].isin(genes)
+                    #print(temp.shape)
+                    
+                    temp = temp[index_]
+                    
+                    network_all = pd.concat((network_all, temp))
+                    i+=1
+                    
+                network_all = f.add_edge_colmn(network_all)
+                network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).mean()
                 
-            network_all = f.add_edge_colmn(network_all)
-            network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).mean()
-            
-            network_all.to_excel(os.path.join(path_to_save, 'network_{}_{}.xlsx'.format(subgroup, pathway)))
-            
+                network_all.to_excel(os.path.join(path_to_save, 'network_{}_{}.xlsx'.format(subgroup, pathway)))
+                
         
 
 # %% networks for patient groups and ALL genes
 
-for group in samples_groups.keys():
-    print(group)
-    
-    for subgroup in samples_groups[group].keys():
-        print(subgroup)
+if networks_for_patient_groups_and_ALL_genes == True:
+    for group in samples_groups.keys():
+        print(group)
         
-        samples_subgroup = samples_groups[group][subgroup]
-        
-        lrp_array = np.zeros((lrp_dict[sample_name].shape[0] , len(samples_subgroup)))
-        
-        
-        for i, sample_name in enumerate(samples_subgroup):
-            print(i, sample_name, subgroup, ' ------ networks for patient groups and ALL genes')
-            temp = lrp_dict[sample_name].copy()
-            lrp_array[:, i] = temp['LRP'].values
+        for subgroup in samples_groups[group].keys():
+            print(subgroup)
             
-
-        lrp_array_mean = np.mean(lrp_array,axis=1)
-        
-        network_all = temp.copy()
-        network_all['LRP'] = lrp_array_mean
-        network_all['LRP'] = network_all['LRP'].round(5)
-        network_all = f.add_edge_colmn(network_all)
-
-        network_all.to_csv(os.path.join(path_to_save, 'network_{}_allgenes.csv'.format(subgroup)))
+            samples_subgroup = samples_groups[group][subgroup]
+            
+            lrp_array = np.zeros((lrp_dict[sample_name].shape[0] , len(samples_subgroup)))
+            
+            
+            for i, sample_name in enumerate(samples_subgroup):
+                print(i, sample_name, subgroup, ' ------ networks for patient groups and ALL genes')
+                temp = lrp_dict[sample_name].copy()
+                lrp_array[:, i] = temp['LRP'].values
+                
+    
+            lrp_array_mean = np.mean(lrp_array,axis=1)
+            
+            network_all = temp.copy()
+            network_all['LRP'] = lrp_array_mean
+            network_all['LRP'] = network_all['LRP'].round(5)
+            network_all = f.add_edge_colmn(network_all)
+    
+            network_all.to_csv(os.path.join(path_to_save, 'network_{}_allgenes.csv'.format(subgroup)))
         
 # %% CLUSTERMAPS and UMAPs
 # %%% get lrp_dict_filtered for each pathway
@@ -193,20 +200,6 @@ lrp_dict_filtered_pd = {}
 for pathway in genes_pathways['Pathway'].unique():
     
     lrp_dict_filtered_pd[pathway] = f.get_lrp_dict_filtered_pd(lrp_dict_filtered, pathway = pathway)    
-
-# %%% clustermap legend
-
-import matplotlib.patches as mpatches
-
-def create_legend(color_map):
-    patches = [mpatches.Patch(color=color, label=label) for label, color in color_map.items()]
-    plt.legend(handles=patches)
-
-# Create a dummy figure just to show the legend
-plt.figure(figsize=(10, 6))
-create_legend(color_map)
-plt.axis('off')
-plt.show()
 
 
 
@@ -266,6 +259,20 @@ for threshold in thresholds:
         plt.savefig(os.path.join(path_to_save, 'UMAP_{}_th{}.png'.format(pathway, str(threshols)[2:])), dpi = 400)        
         
     
+
+# %%% clustermap legend
+
+# import matplotlib.patches as mpatches
+
+# def create_legend(color_map):
+#     patches = [mpatches.Patch(color=color, label=label) for label, color in color_map.items()]
+#     plt.legend(handles=patches)
+
+# # Create a dummy figure just to show the legend
+# plt.figure(figsize=(10, 6))
+# create_legend(color_map)
+# plt.axis('off')
+# plt.show()
     
     
          

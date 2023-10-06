@@ -34,17 +34,18 @@ importlib.reload(f)
 # %%%  get input data
 
 path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
-path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
+#path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
 
 path_to_save = '/home/d07321ow/scratch/results_LRP_BRCA/univariable'
-path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\networks'
+#path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\networks'
 
 
 data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
 
 # %% get samples
-path_to_lrp_results = '/home/d07321ow/scratch/results_LRP_BRCA'
-path_to_lrp_results = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\results'
+path_to_lrp_results = '/home/d07321ow/scratch/results_LRP_BRCA/results'
+
+#path_to_lrp_results = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\results'
 
 samples = f.get_samples_with_lrp(path_to_lrp_results)
 
@@ -60,7 +61,7 @@ for group in samples_groups.keys():
     print(group)
     
     for subgroup in samples_groups[group].keys():
-        print(subgroup)
+        print(subgroup, ' ---  Univariable baseline')
         
         samples_to_univariable = samples_groups[group][subgroup]
         

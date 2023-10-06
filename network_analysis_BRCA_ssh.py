@@ -4,7 +4,7 @@ Created on Thu Oct  5 14:31:35 2023
 
 @author: d07321ow
 """
-%matplotlib inline 
+#%matplotlib inline 
 import pickle
 import pandas as pd
 

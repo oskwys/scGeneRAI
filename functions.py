@@ -442,7 +442,7 @@ def get_lrp_dict_filtered_pd(lrp_dict_filtered, pathway = 'PI3K'):
     n = len(lrp_dict_filtered[pathway].keys())
     
     for index, (sample_name, data) in enumerate(lrp_dict_filtered[pathway].items()):
-        print(index+1,'/',n, sample_name)
+        #print(index+1,'/',n, sample_name)
         
         data_temp = add_edge_colmn(data[['LRP', 'source_gene', 'target_gene']].copy())
         data_temp['sample'] = sample_name

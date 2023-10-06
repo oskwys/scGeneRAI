@@ -212,16 +212,16 @@ for threshold in thresholds:
         print('Clustermap for ', pathway, str(threshold))
         data_to_clustermap = lrp_dict_filtered_pd[pathway].copy()
         
-        data_to_clustermap[data_to_clustermap < threshols] = 0
+        data_to_clustermap[data_to_clustermap < threshold] = 0
         
         df_clinical_features_ = f.get_column_colors_from_clinical_df(df_clinical_features,data_to_clustermap )
         column_colors = f.map_subtypes_to_col_color(df_clinical_features_)    
         
-        sns.clustermap(data_to_clustermap, mask  = data_to_clustermap < threshols, cmap = 'jet', col_colors = column_colors,
+        sns.clustermap(data_to_clustermap, mask  = data_to_clustermap < threshold, cmap = 'jet', col_colors = column_colors,
                        method = 'ward', yticklabels = False, xticklabels = False, vmax = 0.008, vmin = 0)       
         plt.suptitle(pathway, fontsize=20)       
                
-        plt.savefig(os.path.join(path_to_save, 'clustermap_{}_th{}.png'.format(pathway, str(threshols)[2:])), dpi = 400)        
+        plt.savefig(os.path.join(path_to_save, 'clustermap_{}_th{}.png'.format(pathway, str(threshold)[2:])), dpi = 400)        
         
 # %%% plot UMAP
 import umap
@@ -232,7 +232,7 @@ for threshold in thresholds:
         print('UMAP for ', pathway, str(threshold))
         data_to_umap = lrp_dict_filtered_pd[pathway].copy().T
         
-        data_to_umap[data_to_umap < threshols] = 0
+        data_to_umap[data_to_umap < threshold] = 0
         
         reducer = umap.UMAP()
         embedding = reducer.fit_transform(data_to_umap)
@@ -256,7 +256,7 @@ for threshold in thresholds:
         plt.suptitle(pathway, fontsize=20)    
         plt.tight_layout()
              
-        plt.savefig(os.path.join(path_to_save, 'UMAP_{}_th{}.png'.format(pathway, str(threshols)[2:])), dpi = 400)        
+        plt.savefig(os.path.join(path_to_save, 'UMAP_{}_th{}.png'.format(pathway, str(threshold)[2:])), dpi = 400)        
         
     
 

@@ -12,7 +12,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pickle
 import pandas as pd
-
+import pingouin as pg
 import numpy as np
 import sys
 import os
@@ -20,7 +20,11 @@ import os
 import pyarrow.feather as feather
 from datetime import datetime
 
-
+def get_samples_with_lrp(path_to_lrp_results, starts_with = 'LRP_'):
+    files = [f for f in os.listdir(path_to_lrp_results) if f.startswith(starts_with)]
+    print(files)
+    samples = [file.split('_')[2] for file in files]
+    return samples
 
 
 def get_input_data(path_to_data):
@@ -247,3 +251,345 @@ def get_metrics_all(xgboost_eval_dict, s, iterations_per_feature):
     mape_pd_all = mape_pd_all.melt(var_name = 'target_feature', value_name = 'mape')
     
     return r2_pd_all, mse_pd_all, mape_pd_all
+
+
+
+
+def remove_same_source_target(data):
+    
+    data = data[data['source_gene'] != data['target_gene']]
+
+    return data
+
+def get_node_colors(network):
+    colors = pd.Series(list(network.nodes))
+    colors  [  -colors.str.contains('mut') ]= 'lightblue'
+    colors [  colors.str.contains('mut') ] = 'red'
+    colors [  colors.str.contains('del') ] = 'green'
+    colors [  colors.str.contains('amp') ] = 'orange'
+    colors [  colors.str.contains('fus') ] = 'magenta'
+    
+    return list(colors.values)
+
+def get_genes_in_all_i(lrp_dict, top_n, n = 5):
+    
+    genes = []
+    for i in range(n):
+        
+        print(i)
+        
+        data_temp = lrp_dict[str(i)].iloc[:top_n,:]
+        
+        
+        a = data_temp['source_gene'].to_list()
+        b = data_temp['target_gene'].to_list()
+        genes.append(a)
+        genes.append(b)
+        
+    genes = [item for sublist in genes for item in sublist]
+    genes = list(set(genes))
+    genes.sort()
+    
+    return genes
+
+
+
+
+def get_genes_related_to_gene_in_all_i(lrp_dict, gene, top_n, n = 5):
+    
+    genes = []
+    for i in range(n):
+        
+        
+        
+        df_temp = lrp_dict[str(i)]
+        df_temp = df_temp[df_temp['source_gene'].str.contains(gene) | df_temp['target_gene'].str.contains(gene) ].iloc[:top_n,:]
+        
+        a = df_temp['source_gene'].to_list()
+        b = df_temp['target_gene'].to_list()
+        genes.append(a)
+        genes.append(b)
+        
+    genes = [item for sublist in genes for item in sublist]
+    genes = list(set(genes))
+    genes.sort()
+    
+    return genes
+
+
+def get_all_unique_genes(df_temp):
+    genes =[]
+    a = df_temp['source_gene'].to_list()
+    b = df_temp['target_gene'].to_list()
+    genes.append(a)
+    genes.append(b)
+    
+    gene_names = [item for sublist in genes for item in sublist]
+    gene_names = list(set(gene_names))
+    gene_names.sort()
+    
+    genes = [gene.split('_')[0] for gene in gene_names]
+    genes = list(set(genes))
+    genes.sort()
+
+    return genes, gene_names
+
+
+def remove_exp_string(edges_df):
+    
+    edges_df.loc[edges_df['source_gene'].str.contains('_exp'), 'source_gene'] = edges_df.loc[edges_df['source_gene'].str.contains('_exp'), 'source_gene'] .str.replace('_exp','')
+    edges_df.loc[edges_df['target_gene'].str.contains('_exp'), 'target_gene'] = edges_df.loc[edges_df['target_gene'].str.contains('_exp'), 'target_gene'] .str.replace('_exp','')
+    
+    return edges_df
+
+def plot_network_(edges, node_colors, top_n, subtype, i, file, path_to_save, layout=None, pos = None):
+    G = nx.from_pandas_edgelist(edges, source='source_gene', target='target_gene', edge_attr='LRP')
+    degrees = np.array(list(nx.degree_centrality(G).values())) 
+    degrees = degrees / np.max(degrees) * 500
+    #nx.draw(network, with_labels=True, node_color='white', width = edges['LRP']*100, node_size = network.degree)
+    
+        
+    if pos is not None:
+        print('using POS')
+    else:
+        if layout == None:
+            pos = nx.spring_layout(G)
+            
+        elif layout== 'spectral':
+            pos = nx.spectral_layout(G)
+        elif layout== 'spectral':
+            pos = nx.spectral_layout(G)
+            
+    #colors = get_node_colors(G)
+    colors = node_colors
+    widths = edges['LRP'] / edges['LRP'].max() * 10
+    edge_colors =cm.Greys((widths  - np.min(widths) )/ (np.max(widths) - np.min(widths)))
+    
+    fig,ax = plt.subplots(figsize=  (15,15))
+    nx.draw(G, with_labels=True, 
+            node_color=node_colors,
+            width = widths,
+            pos = pos, font_size = 6,
+            #cmap = colors, 
+            edge_color = edge_colors , 
+            ax=ax,  
+            #node_size = degrees
+            node_size = 100)
+    plt.savefig(os.path.join(path_to_save , 'network_{}_{}_{}_{}.svg'.format(file, top_n, subtype, i)), format = 'svg')
+    plt.savefig(os.path.join(path_to_save , 'network_{}_{}_{}_{}.png'.format(file, top_n, subtype, i)), dpi = 300)
+
+    
+def get_pivoted_heatmap(edges,genes):
+    
+    # filter edges
+    edges = edges[edges['source_gene'].isin(genes) | edges['target_gene'].isin(genes) ]
+
+    
+    template_ = pd.DataFrame(columns = genes, index= genes).fillna(0)
+    for row in edges.iterrows():
+        
+        row = row[1]
+        template_.loc[row['source_gene'], row['target_gene']] = row['LRP']
+        
+        
+    return template_
+
+
+def add_suffixes_to_genes(genes):
+    gene_names = []
+    suffixes = ['_amp','_mut','_del','_fus','_exp']
+    for gene in genes:
+        
+        for suffix in suffixes:
+            gene_names.append(gene+suffix)
+            
+    return gene_names
+
+
+def add_edge_colmn(edges):
+    edges['edge'] = edges['source_gene'] + ' - '  + edges['target_gene']
+    
+    edges['edge_type'] = (edges['source_gene'].str.split('_',expand=True).iloc[:,1] + ' - '  + edges['target_gene'].str.split('_',expand=True).iloc[:,1]).str.split(' - ').apply(np.sort).str.join('-')
+    
+    
+    '''edges['edge_type'] = 'exp-exp'
+    edges.loc[ edges['edge'].str.contains('mut') & edges['edge'].str.contains('exp') , 'edge_type'] = 'mut-exp'
+    edges.loc[ edges['edge'].str.contains('mut') & edges['edge'].str.contains('amp') , 'edge_type'] = 'mut-amp'
+    edges.loc[ edges['edge'].str.contains('mut') & edges['edge'].str.contains('del') , 'edge_type'] = 'mut-del'
+    edges.loc[ edges['edge'].str.contains('mut') & edges['edge'].str.contains('fus') , 'edge_type'] = 'mut-fus'
+    
+    edges.loc[ edges['edge'].str.contains('amp') & edges['edge'].str.contains('exp') , 'edge_type'] = 'amp-exp'
+    edges.loc[ edges['edge'].str.contains('amp') & edges['edge'].str.contains('del') , 'edge_type'] = 'amp-del'
+    edges.loc[ edges['edge'].str.contains('amp') & edges['edge'].str.contains('fus') , 'edge_type'] = 'amp-fus'
+    
+    
+    edges.loc[ edges['edge'].str.contains('del') & edges['edge'].str.contains('exp') , 'edge_type'] = 'del-exp'
+    edges.loc[ edges['edge'].str.contains('del') & edges['edge'].str.contains('del') , 'edge_type'] = 'del-fus'
+    
+    edges.loc[ edges['source_gene'].str.contains('mut') & edges['target_gene'].str.contains('mut') , 'edge_type'] = 'mut-mut'
+    edges.loc[ edges['source_gene'].str.contains('amp') & edges['target_gene'].str.contains('amp') , 'edge_type'] = 'amp-amp'
+    edges.loc[ edges['source_gene'].str.contains('del') & edges['target_gene'].str.contains('del') , 'edge_type'] = 'del-del'
+    edges.loc[ edges['source_gene'].str.contains('fus') & edges['target_gene'].str.contains('fus') , 'edge_type'] = 'fus-fus'
+    '''
+    
+    return edges
+
+
+
+def get_lrp_dict_filtered_pd(lrp_dict_filtered, pathway = 'PI3K'):
+    
+    lrp_dict_filtered_pd = pd.DataFrame()#lrp_dict_filtered)
+    n = len(lrp_dict_filtered[pathway].keys())
+    
+    for index, (sample_name, data) in enumerate(lrp_dict_filtered[pathway].items()):
+        print(index+1,'/',n, sample_name)
+        
+        data_temp = add_edge_colmn(data[['LRP', 'source_gene', 'target_gene']].copy())
+        data_temp['sample'] = sample_name
+    
+        lrp_dict_filtered_pd = pd.concat((lrp_dict_filtered_pd, data_temp))
+        
+    
+    lrp_dict_filtered_pd = lrp_dict_filtered_pd.reset_index(drop=True)
+    
+    lrp_dict_filtered_pd_pivot = pd.pivot_table(lrp_dict_filtered_pd , index = 'edge', columns = 'sample', values = 'LRP')
+
+    
+    return lrp_dict_filtered_pd_pivot
+
+    
+def get_column_colors_from_clinical_df(df_clinical_features, df_to_clustermap):
+    
+    df_clinical_features_ = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(df_to_clustermap.columns)]
+    df_clinical_features_ = df_clinical_features_.set_index(df_to_clustermap.columns)
+    
+    
+    return df_clinical_features_
+    
+def map_subtypes_to_col_color(df_clinical_features_):
+        
+    triple_neg_index = (df_clinical_features_['HER2']=='Negative') & (df_clinical_features_['Progesterone_receptor']=='Negative') & (df_clinical_features_['Estrogen_receptor']=='Negative')
+    df_clinical_features_['TNBC'] = "Positive"
+    df_clinical_features_.loc[triple_neg_index, 'TNBC'] = "Negative" # it means that triple negative is RED
+    
+    color_map = {
+        "Negative": "red",
+        "Positive": "blue",
+        "Equivocal": "yellow",
+        'Indeterminate':'gray',
+        '[Not Evaluated]':'white',
+        '[Not Available]':'white',}    
+        
+    column_colors_her2 = df_clinical_features_['HER2'].map(color_map)
+    column_colors_er = df_clinical_features_['Estrogen_receptor'].map(color_map)
+    column_colors_pro = df_clinical_features_['Progesterone_receptor'].map(color_map)
+    column_colors_tnbc = df_clinical_features_['TNBC'].map(color_map)
+
+
+    column_colors = [column_colors_her2, column_colors_er, column_colors_pro, column_colors_tnbc]
+    return column_colors
+
+
+
+    
+def get_correlation_r(data, num_cols, method = 'pearson'):
+             
+    corrs = pg.pairwise_corr(data[num_cols], columns=num_cols, method=method)
+    corrs = corrs.sort_values('p-unc').reset_index(drop=True)
+    corrs = corrs.rename(columns = {'X':'source_gene', 'Y':'target_gene', 'p-unc':'p-val'})
+    
+    corrs = corrs[['source_gene', 'target_gene',  'r',  'p-val', 'power']]
+    corrs = add_edge_colmn(corrs)
+    corrs['test'] = method
+    return corrs
+
+
+
+
+def bootstrap_iteration(group0, group1, M):
+    boot_group0 = resample(group0, replace=True, n_samples=M)
+    stat, p = mannwhitneyu(boot_group0, group1)
+    cles = stat / (M * M)
+    return p, cles
+
+def get_mannwhitney_bootstrap(df_cat, df_num, cat_col, num_col, iters=100):
+    M = (df_cat[cat_col] > 0).sum()  # Sample size for each bootstrap
+    p_values = []
+    cles_list = []
+
+    x = df_num[num_col]
+    y = df_cat[cat_col].astype('category').cat.codes
+
+    group0 = x[y == 0]
+    group1 = x[y > 0]
+    
+    for i in range(iters):
+        try:
+            p, cles = bootstrap_iteration(group0, group1, M)
+        except:
+            p, cles = 1, 0.5
+        p_values.append(p)
+        cles_list.append(cles)
+    
+    p_value_mean = np.mean(p_values)
+    cles_mean = np.mean(cles_list)
+    
+    return p_value_mean, cles_mean
+
+from scipy.stats import mannwhitneyu
+from sklearn.utils import resample
+
+
+
+def get_mannwhitneyu_matrix(df_cat, df_num, iters=10):
+    
+    cat_cols = df_cat.columns
+    num_cols = df_num.columns
+    # Initialize an empty DataFrame to store correlation values
+    cles_matrix = pd.DataFrame(index=cat_cols, columns=num_cols)
+    pval_matrix = pd.DataFrame(index=cat_cols, columns=num_cols)
+    n = len(num_cols)
+    # Compute biserial correlation for each pair of categorical and numerical columns
+    for cat_col in cat_cols:
+        
+        for i, num_col in enumerate(num_cols):
+            #print(cat_col, num_col, num_col,i, '/',n)
+            #u, pval = pointbiserialr(df_cat[cat_col].astype('category').cat.codes, df_num[num_col])
+            pval, cles = get_mannwhitney_bootstrap(df_cat, df_num, cat_col , num_col, iters = iters)
+            pval_matrix.loc[cat_col, num_col] = pval
+            cles_matrix.loc[cat_col, num_col] = cles
+            
+    
+    # Convert to float for plotting
+    pval_matrix = pval_matrix.astype(float)
+    cles_matrix = cles_matrix.astype(float)
+    
+    pval_matrix = pval_matrix.reset_index().melt(id_vars = 'index')
+    pval_matrix=pval_matrix.rename(columns = {'index':'source_gene','variable':'target_gene','value':'p-val'})
+    pval_matrix = add_edge_colmn(pval_matrix)
+
+    cles_matrix = cles_matrix.reset_index().melt(id_vars = 'index')
+    cles_matrix=cles_matrix.rename(columns = {'index':'source_gene','variable':'target_gene','value':'CLES'})
+    cles_matrix = add_edge_colmn(cles_matrix)
+
+    mwu_stats = pval_matrix.merge(cles_matrix)
+    
+    
+    return pval_matrix, cles_matrix , mwu_stats
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+ 
+    

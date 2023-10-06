@@ -39,6 +39,9 @@ path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
 path_to_save = '/home/d07321ow/scratch/results_LRP_BRCA/univariable'
 #path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\networks'
 
+#path_to_pathways = r'C:\Users\d07321ow\Documents\GitHub\scGeneRAI\PATHWAYS'
+path_to_pathways ='/home/d07321ow/scratch/scGeneRAI/PATHWAYS'
+
 
 data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
 
@@ -53,7 +56,21 @@ samples = f.get_samples_with_lrp(path_to_lrp_results)
 
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
 
-samples_groups = f.get_samples_by_group(df_clinical_features)       
+samples_groups = f.get_samples_by_group(df_clinical_features) 
+
+
+# %% gene from pathways
+
+genes_pathways = pd.read_csv(os.path.join(path_to_pathways, 'genes_pathways_pancanatlas_matched_cce.csv'))
+genes_pathways_set = set(genes_pathways['cce_match'])
+
+genes_pathways_dict = {}
+
+for pathway in genes_pathways['Pathway'].unique():
+    
+    genes_pathways_dict[pathway] = genes_pathways.loc[genes_pathways['Pathway'] == pathway, 'Gene'].to_list()
+
+      
 # %% Univariable baseline
 import pingouin as pg
 

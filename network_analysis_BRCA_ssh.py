@@ -52,7 +52,7 @@ path_to_lrp_results = '/home/d07321ow/scratch/results_LRP_BRCA/results'
 data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
 
 # %% get samples
-samples = f.get_samples_with_lrp(path_to_lrp_results)[:30]
+samples = f.get_samples_with_lrp(path_to_lrp_results)#[:30]
 print('Samples: ', len(samples))
 print('Samples: ', len(set(samples)))
 # %%% get sample goups
@@ -82,7 +82,7 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n = 30#len(lrp_files)  
+n = len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()

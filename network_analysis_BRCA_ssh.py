@@ -52,7 +52,7 @@ path_to_lrp_results = '/home/d07321ow/scratch/results_LRP_BRCA/results'
 data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
 
 # %% get samples
-samples = f.get_samples_with_lrp(path_to_lrp_results)
+samples = f.get_samples_with_lrp(path_to_lrp_results)[:30]
 print('Samples: ', len(samples))
 print('Samples: ', len(set(samples)))
 # %%% get sample goups
@@ -82,12 +82,12 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n = len(lrp_files)  
+n = 30#len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()
 
-for i in range(30):
+for i in range(n):
     
             
     file_name = lrp_files[i]
@@ -111,15 +111,6 @@ print(end_time - start_time)
     
 # %% networks for patient groups and pathway genes
 
-aggregation_functions = {
-    'YourColumnNameHere': {  # Replace with the actual column name you're working on
-        'mean': 'mean',
-        'median': 'median',
-        'std': 'std',
-        'q1': lambda x: x.quantile(0.25),
-        'q3': lambda x: x.quantile(0.75)
-    }
-}
 
 
 
@@ -155,7 +146,7 @@ if networks_for_patient_groups_and_pathway_genes == True:
                     
                 network_all = f.add_edge_colmn(network_all)
                 
-                network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).agg(aggregation_functions).reset_index()
+                network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).describe().drop(columns = ['min','max']).reset_index()
                 
                 #network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).mean()
                 

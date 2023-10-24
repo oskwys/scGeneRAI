@@ -87,7 +87,7 @@ n = len(lrp_files)
 #network_data = pd.DataFrame()
 start_time = datetime.now()
 
-for i in range(n):
+for i in range(30):
     
             
     file_name = lrp_files[i]
@@ -110,6 +110,17 @@ print(end_time - start_time)
 
     
 # %% networks for patient groups and pathway genes
+
+aggregation_functions = {
+    'YourColumnNameHere': {  # Replace with the actual column name you're working on
+        'mean': 'mean',
+        'median': 'median',
+        'std': 'std',
+        'q1': lambda x: x.quantile(0.25),
+        'q3': lambda x: x.quantile(0.75)
+    }
+}
+
 
 
 if networks_for_patient_groups_and_pathway_genes == True:
@@ -144,7 +155,7 @@ if networks_for_patient_groups_and_pathway_genes == True:
                     
                 network_all = f.add_edge_colmn(network_all)
                 
-                network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).agg(mean='mean', median='median', std='std', q1=lambda x: x.quantile(0.25),  q3=lambda x: x.quantile(0.75)).reset_index()
+                network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).agg(aggregation_functions).reset_index()
                 
                 #network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).mean()
                 

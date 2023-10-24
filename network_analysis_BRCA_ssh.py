@@ -146,11 +146,15 @@ if networks_for_patient_groups_and_pathway_genes == True:
                     
                 network_all = f.add_edge_colmn(network_all)
                 
-                network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).describe().drop(columns = ['min','max']).reset_index()
+                network_all_stats = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).describe().reset_index()
+                network_all_stats .columns = network_all_stats.columns.droplevel()
+                network_all_stats = network_all_stats.drop(columns = ['min','max', 'count']).rename(columns = {'50%':'median'})
+                
+                
                 
                 #network_all = network_all.groupby(by = ['edge','source_gene', 'target_gene','edge_type'],as_index=False).mean()
                 
-                network_all.to_excel(os.path.join(path_to_save, 'network_{}_{}.xlsx'.format(subgroup, pathway)))
+                network_all_stats.to_excel(os.path.join(path_to_save, 'network_{}_{}.xlsx'.format(subgroup, pathway)))
                 
         
 
@@ -178,14 +182,14 @@ if networks_for_patient_groups_and_ALL_genes == True:
             lrp_array_std = np.round( np.std(lrp_array,axis=1), 5)
             lrp_array_median = np.round( np.median(lrp_array,axis=1), 5)
             lrp_array_q1 = np.round( np.quantile(lrp_array, .25, axis=1), 5)
-            lrp_array_q3 = np.round( np.quantile(lrp_array, .25, axis=1), 5)
+            lrp_array_q3 = np.round( np.quantile(lrp_array, .75, axis=1), 5)
             
             network_all = temp.copy()
-            network_all['LRP_mean'] = lrp_array_mean
-            network_all['LRP_std'] = lrp_array_mean
-            network_all['LRP_median'] = lrp_array_mean
-            network_all['LRP_q1'] = lrp_array_mean
-            network_all['LRP_q3'] = lrp_array_mean
+            network_all['LRP'] = lrp_array_mean
+            network_all['LRP_std'] = lrp_array_std
+            network_all['LRP_median'] = lrp_array_median
+            network_all['LRP_q1'] = lrp_array_q1
+            network_all['LRP_q3'] = lrp_array_q3
             
             network_all = f.add_edge_colmn(network_all)
     

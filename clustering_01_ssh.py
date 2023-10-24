@@ -122,7 +122,7 @@ lrp_array_diff_pd['LRP_variability'].plot()
 # get 10% of highest mean LRP
 thresholds = [0.2, 0.1, 0.05, 0.01] # %
 for threshold in thresholds:
-    print('Threshold: ' threshold)
+    print('Threshold: ', threshold)
     
     lrp_array_pd_topn = lrp_array_diff_pd.iloc[:int(lrp_array_diff_pd.shape[0] * threshold/100), :]
 

@@ -122,6 +122,8 @@ lrp_array_diff_pd['LRP_variability'].plot()
 # get 10% of highest mean LRP
 thresholds = [0.2, 0.1, 0.05, 0.01] # %
 for threshold in thresholds:
+    print('Threshold: ' threshold)
+    
     lrp_array_pd_topn = lrp_array_diff_pd.iloc[:int(lrp_array_diff_pd.shape[0] * threshold/100), :]
 
     lrp_array_pd_topn = lrp_array[lrp_array_pd_topn['index'].values, :].T
@@ -133,7 +135,7 @@ for threshold in thresholds:
     X_umap = reducer.fit_transform(lrp_array_pd_topn)
     
     X_umap = pd.DataFrame(X_umap, columns = ['umap_1', 'umap_2'])
-    X_umap.to_csv(os.path.join(path_to_save, 'umap_thres{}.csv'.format(str(threshold).replae('.',''))))
+    X_umap.to_csv(os.path.join(path_to_save, 'umap_thres{}.csv'.format(str(threshold).replace('.',''))))
     
     
     

@@ -123,24 +123,29 @@ lrp_array_diff_pd['LRP_variability'].plot()
 
 # get 10% of highest mean LRP
 thresholds = [0.2, 0.1, 0.05, 0.01] # %
+n_neighbors = [10, 15, 20, 25]
+min_dist = [0.05, 0.1, 0.2, 0.5]
+
 for threshold in thresholds:
-    print('Threshold: ', threshold)
-    
-    lrp_array_pd_topn = lrp_array_diff_pd.iloc[:int(lrp_array_diff_pd.shape[0] * threshold/100), :]
-
-    lrp_array_pd_topn = lrp_array[lrp_array_pd_topn['index'].values, :].T
-
-    
-    import umap
-    # Perform UMAP
-    reducer = umap.UMAP(n_neighbors=15, n_components=2, min_dist=0.1, metric='euclidean')
-    X_umap = reducer.fit_transform(lrp_array_pd_topn)
-    
-    X_umap = pd.DataFrame(X_umap, columns = ['umap_1', 'umap_2'])
-    X_umap.to_csv(os.path.join(path_to_save, 'umap_thres{}.csv'.format(str(threshold).replace('.',''))))
-    
-    
-    
+    for n_neighbors in n_neighbors_list:
+        for min_dist in min_dist_list:
+            print('Threshold: ', threshold, n_neighbors, min_dist)
+            
+            lrp_array_pd_topn = lrp_array_diff_pd.iloc[:int(lrp_array_diff_pd.shape[0] * threshold/100), :]
+        
+            lrp_array_pd_topn = lrp_array[lrp_array_pd_topn['index'].values, :].T
+        
+            
+            import umap
+            # Perform UMAP
+            reducer = umap.UMAP(n_neighbors=n_neighbors, n_components=2, min_dist = min_dist, metric='euclidean')
+            X_umap = reducer.fit_transform(lrp_array_pd_topn)
+            
+            X_umap = pd.DataFrame(X_umap, columns = ['umap_1', 'umap_2'])
+            X_umap.to_csv(os.path.join(path_to_save, 'umap_thres{}_n{}_dist{}.csv'.format(str(threshold).replace('.',''), n_neighbors, str(min_dist).replace('.',''))))
+            
+            
+            
     
     
     

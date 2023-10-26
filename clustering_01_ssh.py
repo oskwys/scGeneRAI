@@ -122,9 +122,9 @@ lrp_array_diff_pd['LRP_variability'].plot()
 
 
 # get 10% of highest mean LRP
-thresholds = [0.2, 0.1, 0.05, 0.01, 0.005, 0.001] # %
-n_neighbors_list = [10, 15, 20, 25]
-min_dist_list = [0.05, 0.1, 0.2, 0.5]
+thresholds = [0.2, 0.1, 0.05, 0.02, 0.01, 0.005, 0.002, 0.001] # %
+n_neighbors_list = [5, 10, 15, 20, 25, 30]
+min_dist_list = [0.01, 0.05, 0.1, , 0.15, 0.2, 0.5]
 
 for threshold in thresholds:
     for n_neighbors in n_neighbors_list:

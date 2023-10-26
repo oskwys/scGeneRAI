@@ -53,7 +53,7 @@ path_to_lrp_results = '/home/d07321ow/scratch/results_LRP_BRCA/results'
 data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
 
 # %% get samples
-samples = f.get_samples_with_lrp(path_to_lrp_results)[:30]
+samples = f.get_samples_with_lrp(path_to_lrp_results)
 pd.DataFrame(samples, columns = ['samples']).to_csv(os.path.join(path_to_save, 'BRCA_samples'))
 
 print('Samples: ', len(samples))
@@ -75,7 +75,7 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n =30# len(lrp_files)  
+n =len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()
@@ -182,7 +182,7 @@ if calculate_PCA:
     
     explained_variances_df = pd.DataFrame(explained_variances)#, columns = ['threshold',''])
     explained_variances_df['thresholds'] = thresholds
-    explained_variances_df.to_csv(os.path.join(path_to_save, 'PCA_explained_variance.csv'))
+    explained_variances_df.to_csv(os.path.join(path_to_save, 'PCA_explained_variance_thres{}.csv'.format(str(threshold).replace('.',''))))
     
     
 # %% AGGLOMERATIVE CLUSTERING
@@ -200,10 +200,10 @@ if calculate_linkage:
         Z_complete = linkage(lrp_array_pd_topn, 'complete')
         Z_ward = linkage(lrp_array_pd_topn, 'ward')
     
-        pd.DataFrame(Z_single).to_csv(os.path.join(path_to_save, 'Z_single.csv'))
-        pd.DataFrame(Z_average).to_csv(os.path.join(path_to_save, 'Z_average.csv'))
-        pd.DataFrame(Z_complete).to_csv(os.path.join(path_to_save, 'Z_complete.csv'))
-        pd.DataFrame(Z_ward).to_csv(os.path.join(path_to_save, 'Z_ward.csv'))
+        pd.DataFrame(Z_single).to_csv(os.path.join(path_to_save, 'Z_single_thres{}.csv'.format(str(threshold).replace('.',''))))
+        pd.DataFrame(Z_average).to_csv(os.path.join(path_to_save, 'Z_average_thres{}.csv'.format(str(threshold).replace('.',''))))
+        pd.DataFrame(Z_complete).to_csv(os.path.join(path_to_save, 'Z_complete_thres{}.csv'.format(str(threshold).replace('.',''))))
+        pd.DataFrame(Z_ward).to_csv(os.path.join(path_to_save, 'Z_ward_thres{}.csv'.format(str(threshold).replace('.',''))))
     
     
 #     # Plot

@@ -35,7 +35,7 @@ calculate_UMAP = False#True
 
 calculate_PCA = True
 
-calculate_linkage = True
+calculate_linkage = False
 
 
 # %% load data
@@ -182,8 +182,7 @@ if calculate_PCA:
     
     explained_variances_df = pd.DataFrame(explained_variances)#, columns = ['threshold',''])
     explained_variances_df['thresholds'] = thresholds
-    explained_variances_df.to_csv(os.path.join(path_to_save, 'PCA_explained_variance_thres{}.csv'.format(str(threshold).replace('.',''))))
-    
+    explained_variances_df.to_csv(os.path.join(path_to_save, 'PCA_explained_variance.csv'))
     
 # %% AGGLOMERATIVE CLUSTERING
 from scipy.cluster.hierarchy import dendrogram, linkage

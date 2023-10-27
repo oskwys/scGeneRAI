@@ -31,8 +31,8 @@ importlib.reload(f)
 
 networks_for_patient_groups_and_ALL_genes = True
 networks_for_patient_groups_and_pathway_genes = True
-plot_clustermaps_pathway = True
-plot_umaps = True
+plot_clustermaps_pathway = False
+plot_umaps = False
 
 # %% load data
 
@@ -52,12 +52,28 @@ path_to_lrp_results = '/home/d07321ow/scratch/results_LRP_BRCA/results'
 data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
 
 # %% get samples
-samples = f.get_samples_with_lrp(path_to_lrp_results)[:30]
+samples = f.get_samples_with_lrp(path_to_lrp_results)
 print('Samples: ', len(samples))
 print('Samples: ', len(set(samples)))
 # %%% get sample goups
 
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
+
+cluster0_samples = ['TCGA-B6-A0RT', 'TCGA-E9-A243', 'TCGA-AO-A0JC', 'TCGA-LL-A5YO',
+       'TCGA-E9-A22D', 'TCGA-E2-A1B5', 'TCGA-AR-A1AX', 'TCGA-EW-A1OV',
+       'TCGA-C8-A12V', 'TCGA-AR-A252', 'TCGA-BH-A0H5', 'TCGA-AQ-A7U7',
+       'TCGA-A2-A0EQ', 'TCGA-AO-A128', 'TCGA-E2-A1II', 'TCGA-BH-A1F0',
+       'TCGA-E9-A248', 'TCGA-A8-A08H', 'TCGA-EW-A1P7', 'TCGA-A2-A0CR',
+       'TCGA-D8-A73U', 'TCGA-OL-A66I', 'TCGA-A2-A0CL', 'TCGA-E9-A2JT',
+       'TCGA-A2-A25F', 'TCGA-A2-A0YK', 'TCGA-GM-A2DO', 'TCGA-AR-A1AJ',
+       'TCGA-GM-A2DI', 'TCGA-PE-A5DE', 'TCGA-E2-A108', 'TCGA-AR-A0TS',
+       'TCGA-AR-A0TT', 'TCGA-S3-AA15', 'TCGA-A2-A04Q', 'TCGA-A2-A0ST',
+       'TCGA-AC-A2FB', 'TCGA-AR-A1AW', 'TCGA-A8-A0A7', 'TCGA-AR-A1AO',
+       'TCGA-A2-A0EP', 'TCGA-BH-A209', 'TCGA-EW-A1IZ', 'TCGA-S3-AA17',
+       'TCGA-E2-A1B6', 'TCGA-E9-A1NE', 'TCGA-BH-A0W5']
+
+df_clinical_features['cluster0'] = 0
+df_clinical_features.loc[df_clinical_features['bcr_patient_barcode'].isin(cluster0_samples), 'cluster0'] = 1
 
 samples_groups = f.get_samples_by_group(df_clinical_features)
 
@@ -82,7 +98,7 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n = 30#len(lrp_files)  
+n = len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()
@@ -115,7 +131,7 @@ print(end_time - start_time)
 
 
 if networks_for_patient_groups_and_pathway_genes == True:
-    for group in samples_groups.keys():
+    for group in list(samples_groups.keys())[-1:]:
         print(group)
         
         for subgroup in samples_groups[group].keys():
@@ -161,7 +177,7 @@ if networks_for_patient_groups_and_pathway_genes == True:
 # %% networks for patient groups and ALL genes
 
 if networks_for_patient_groups_and_ALL_genes == True:
-    for group in samples_groups.keys():
+    for group in list(samples_groups.keys())[-1:]:
         print(group)
         
         for subgroup in samples_groups[group].keys():
@@ -296,128 +312,6 @@ if plot_umaps:
 # plt.axis('off')
 # plt.show()
     
-# %% PCA and UMAP for all
-
-zz
-
-lrp_array = np.zeros((data_temp.shape[0], len(samples)))
- 
- 
-for index, (sample_name, data) in enumerate(lrp_dict.items()):
-    print(index, sample_name)
-    lrp_array[:, index]  = data['LRP'].values
-
-
-lrp_array_mean = np.round(  np.mean(lrp_array,axis=1), 5)
-lrp_array_std = np.round( np.std(lrp_array,axis=1), 5)
-lrp_array_median = np.round( np.median(lrp_array,axis=1), 5)
-lrp_array_q1 = np.round( np.quantile(lrp_array, .25, axis=1), 5)
-lrp_array_q3 = np.round( np.quantile(lrp_array, .75, axis=1), 5)
-
-diff_ = lrp_array_q3 - lrp_array_q1
-
-
-
-
-lrp_array_diff_pd = pd.DataFrame(data = np.array([diff_, data['source_gene'], data['target_gene']]).T,  index= data.reset_index(drop=True).index, columns = ['LRP_variability','source_gene','target_gene']   ).sort_values('LRP_variability', ascending = False).reset_index()
-    
-lrp_array_diff_pd['LRP_variability'].plot()
-
-
-# get 10% of highest mean LRP
-threshold = 0.1 # %
-lrp_array_pd_topn = lrp_array_diff_pd.iloc[:int(lrp_array_diff_pd.shape[0] * threshold/100), :]
-
-lrp_array_pd_topn = lrp_array[lrp_array_pd_topn['index'].values, :].T
-
-
-
-# %%% PCA
-from sklearn.decomposition import PCA
-
-# Perform PCA
-pca = PCA(n_components=10)  # Reducing to 2 components
-X_pca = pca.fit_transform(lrp_array_pd_topn)
-
-# Print the explained variance ratio
-explained_variance = pca.explained_variance_ratio_
-print(f"Explained variance ratio: {explained_variance}")
-
-# Create a 2D scatter plot
-fig, ax = plt.subplots(figsize = (8,8))
-scatter = ax.scatter(X_pca[:, 0], X_pca[:, 1], cmap='viridis', s=10)
-
-ax.set_xlabel(f'Principal Component 1 ({explained_variance[0]:.2%})')
-ax.set_ylabel(f'Principal Component 2 ({explained_variance[1]:.2%})')
-ax.set_title('2D PCA of Iris Dataset')
-
-# Display the plot
-plt.show()
-
-
-import umap
-# Perform UMAP
-reducer = umap.UMAP(n_neighbors=15, n_components=2, min_dist=0.1, metric='euclidean')
-X_umap = reducer.fit_transform(lrp_array_pd_topn)
-
-# Plot
-fig, ax = plt.subplots(figsize = (8,8))
-scatter = ax.scatter(X_umap[:, 0], X_umap[:, 1], cmap='viridis', s=10)
-
-
-ax.set_xlabel('UMAP 1')
-ax.set_ylabel('UMAP 2')
-ax.set_title('2D UMAP of Iris Dataset')
-
-plt.show()
-
-
-
-import hdbscan
-
-
-# Step 1: Create a synthetic dataset
-# This creates a dataset with 3 centers (as an example)
-X = X_pca
-
-# Step 2: Fit HDBSCAN on the dataset
-# The minimum cluster size can be adjusted depending on your dataset
-clusterer = hdbscan.HDBSCAN(min_cluster_size=10).fit(X)
-
-# Step 3: Extract the labels
-# Labels are the cluster each data point belongs to, noise points are labeled -1
-labels = clusterer.labels_
-
-# Step 4: Plot the results
-# Create a scatter plot assigning each cluster a unique color
-unique_labels = set(labels)
-cluster_results = pd.DataFrame()
-cluster_results['samples'] = samples
-cluster_results['labels'] = labels
-
-fig, ax = plt.subplots()
-
-# Set up a color palette (one color for each label, plus one for noise points labeled -1)
-colors = plt.cm.Spectral(np.linspace(0, 1, len(unique_labels)))
-
-# Plot each cluster using a separate color
-for k, col in zip(unique_labels, colors):
-    if k == -1:
-        # Black is used for noise.
-        col = 'k'
-
-    class_member_mask = (labels == k)
-
-    xy = X[class_member_mask]
-    ax.scatter(xy[:, 0], xy[:, 1], s=50, c=[col], marker=u'o', alpha=0.8, label=f'Cluster {k}')
-
-ax.set_title('HDBSCAN clustering')
-ax.legend(title='Clusters')
-plt.show()
-
-
-
-clusterer.single_linkage_tree_.plot(cmap='viridis', colorbar=True)
 
 
 

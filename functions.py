@@ -350,41 +350,41 @@ def remove_exp_string(edges_df):
     
     return edges_df
 
-def plot_network_(edges, node_colors, top_n, subtype, i, file, path_to_save, layout=None, pos = None):
-    G = nx.from_pandas_edgelist(edges, source='source_gene', target='target_gene', edge_attr='LRP')
-    degrees = np.array(list(nx.degree_centrality(G).values())) 
-    degrees = degrees / np.max(degrees) * 500
-    #nx.draw(network, with_labels=True, node_color='white', width = edges['LRP']*100, node_size = network.degree)
+# def plot_network_(edges, node_colors, top_n, subtype, i, file, path_to_save, layout=None, pos = None):
+#     G = nx.from_pandas_edgelist(edges, source='source_gene', target='target_gene', edge_attr='LRP')
+#     degrees = np.array(list(nx.degree_centrality(G).values())) 
+#     degrees = degrees / np.max(degrees) * 500
+#     #nx.draw(network, with_labels=True, node_color='white', width = edges['LRP']*100, node_size = network.degree)
     
         
-    if pos is not None:
-        print('using POS')
-    else:
-        if layout == None:
-            pos = nx.spring_layout(G)
+#     if pos is not None:
+#         print('using POS')
+#     else:
+#         if layout == None:
+#             pos = nx.spring_layout(G)
             
-        elif layout== 'spectral':
-            pos = nx.spectral_layout(G)
-        elif layout== 'spectral':
-            pos = nx.spectral_layout(G)
+#         elif layout== 'spectral':
+#             pos = nx.spectral_layout(G)
+#         elif layout== 'spectral':
+#             pos = nx.spectral_layout(G)
             
-    #colors = get_node_colors(G)
-    colors = node_colors
-    widths = edges['LRP'] / edges['LRP'].max() * 10
-    edge_colors =cm.Greys((widths  - np.min(widths) )/ (np.max(widths) - np.min(widths)))
+#     #colors = get_node_colors(G)
+#     colors = node_colors
+#     widths = edges['LRP'] / edges['LRP'].max() * 10
+#     edge_colors =cm.Greys((widths  - np.min(widths) )/ (np.max(widths) - np.min(widths)))
     
-    fig,ax = plt.subplots(figsize=  (15,15))
-    nx.draw(G, with_labels=True, 
-            node_color=node_colors,
-            width = widths,
-            pos = pos, font_size = 6,
-            #cmap = colors, 
-            edge_color = edge_colors , 
-            ax=ax,  
-            #node_size = degrees
-            node_size = 100)
-    plt.savefig(os.path.join(path_to_save , 'network_{}_{}_{}_{}.svg'.format(file, top_n, subtype, i)), format = 'svg')
-    plt.savefig(os.path.join(path_to_save , 'network_{}_{}_{}_{}.png'.format(file, top_n, subtype, i)), dpi = 300)
+#     fig,ax = plt.subplots(figsize=  (15,15))
+#     nx.draw(G, with_labels=True, 
+#             node_color=node_colors,
+#             width = widths,
+#             pos = pos, font_size = 6,
+#             #cmap = colors, 
+#             edge_color = edge_colors , 
+#             ax=ax,  
+#             #node_size = degrees
+#             node_size = 100)
+#     plt.savefig(os.path.join(path_to_save , 'network_{}_{}_{}_{}.svg'.format(file, top_n, subtype, i)), format = 'svg')
+#     plt.savefig(os.path.join(path_to_save , 'network_{}_{}_{}_{}.png'.format(file, top_n, subtype, i)), dpi = 300)
 
     
 def get_pivoted_heatmap(edges,genes):
@@ -586,10 +586,96 @@ def get_mannwhitneyu_matrix(df_cat, df_num, iters=10):
     return pval_matrix, cles_matrix , mwu_stats
 
 
+def color_mapper(input_list):
+    # Define the color for each specific keyword
+    keyword_to_color = {
+
+        'del': 'green',  # assuming 'green' is the color for 'del'
+        'amp': 'orange',  # assuming 'blue' is the color for 'amp'
+        'fus': 'blue',  # assuming 'orange' is the color for 'fus'
+        'mut': 'red',  # assuming 'red' is the color for 'mut'
+    }
+
+    # This dictionary will store the items with their corresponding color
+    color_map = {}
+
+    # Iterate through each item in the input list
+    for item in input_list:
+        # Default color if no keyword is matched, it's set to 'black' here
+        color = 'gray'
+
+        # Check each keyword to see if it exists in the item
+        for keyword, assigned_color in keyword_to_color.items():
+            if '_' + keyword in item:  # the underscore ensures we are checking, e.g., '_mut' and not just 'mut'
+                color = assigned_color
+                break  # if we found a keyword, we don't need to check the others for this item
+
+        # Add the item and its color to the dictionary
+        color_map[item] = color
+
+    return color_map
 
 
 
 
+
+
+import networkx as nx
+def plot_network_(edges, path_to_save, layout=None, pos=None,  title='', name_to_save = 'network', ax=None):
+
+
+    G = nx.from_pandas_edgelist(edges, source='source_gene', target='target_gene', edge_attr='LRP')
+    degrees = np.array(list(nx.degree_centrality(G).values()))
+    degrees_norm = degrees / np.max(degrees)
+    # nx.draw(network, with_labels=True, node_color='white', width = edges['LRP']*100, node_size = network.degree)
+
+    if pos is not None:
+        print('using POS')
+    else:
+        if layout == None:
+            pos = nx.spring_layout(G)
+
+        elif layout == 'spectral':
+            pos = nx.spectral_layout(G)
+        elif layout == 'kamada_kawai_layout':
+            pos = nx.kamada_kawai_layout(G)
+
+
+    widths = edges['LRP'] / edges['LRP'].max() * 10
+
+    edges_from_G = [i[0] + ' - ' + i[1] for i in list(G.edges)]
+    edge_colors = list(color_mapper(edges_from_G).values())
+
+    node_color_mapper = {'exp': 'gray', 'mut': 'red', 'amp': 'orange', 'del': 'green', 'fus': 'b'}
+    # Plot legend
+    ls = list(node_color_mapper.keys())
+    cl = list(node_color_mapper.values())
+    for label, color in zip(ls, cl):
+        ax.plot([], [], 'o', color=color, label=label)
+    ax.legend(title = 'Nodes', loc='best')
+
+    node_colors = pd.Series([i.split('_')[1] for i in list(G.nodes)]).map(node_color_mapper)
+
+    if ax == None:
+        fig, ax = plt.subplots(figsize=(10, 10))
+    nx.draw(G, with_labels=False,
+            node_color=node_colors,
+            width=widths,
+            pos=pos, # font_size=0,
+            # cmap = colors,
+            edge_color=edge_colors,
+            ax=ax,
+            # node_size = degrees,
+            node_size=degrees_norm * 2000)
+
+    labels = {node: node.split('_')[0] for node in list(G.nodes)}
+    nx.draw_networkx_labels(G, pos, labels, font_size=25, ax=ax)
+
+    ax.set_title(title)
+    plt.tight_layout()
+
+    #plt.savefig(os.path.join(path_to_save , name_to_save + '.svg'), format = 'svg')
+    #plt.savefig(os.path.join(path_to_save , name_to_save + '.png'), dpi = 300)
 
 
 

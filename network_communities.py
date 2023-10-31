@@ -28,9 +28,11 @@ from datetime import datetime
 import importlib, sys
 importlib.reload(f)
 
+%matplotlib inline
+
 # %% get samples
 path_to_networks = '/home/d07321ow/scratch/results_LRP_BRCA'
-path_to_networks = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\networks'
+path_to_networks = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\networks'
 
 
 path_to_lrp_results = '/home/d07321ow/scratch/results_LRP_BRCA'
@@ -38,6 +40,14 @@ path_to_lrp_results = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRA
 
 samples = f.get_samples_with_lrp(path_to_lrp_results)
 
+path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
+path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
+
+
+data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
+
+
+samples = df_clinical_features['bcr_patient_barcode'].to_list()
 # %%% get sample goups
 
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
@@ -130,11 +140,11 @@ for index, (subgroup, network_temp) in enumerate(networks.items()):
     visual_style["vertex_color"] = [mapper[type_] for type_ in types_]
     visual_style["vertex_label"] = [name.split('_')[0] for name in g.vs["name"]]
     visual_style["vertex_label_size"] = 3
-    visual_style["edge_width"] = df_temp["LRP"] / df_temp["LRP"].max() * 10 
+    visual_style["edge_width"] = df_temp["LRP"] / df_temp["LRP"].max() * 5 
     visual_style["vertex_frame_color"] = 'gray'
     
     normalized_LRP = np.array(df_temp["LRP"]) / df_temp["LRP"].max()
-    colors = [cm.jet(val) for val in normalized_LRP]
+    colors = [cm.Reds(val) for val in normalized_LRP]
     visual_style["edge_color"] = colors
     
     #visual_style["vertex_label_dist"] = 2

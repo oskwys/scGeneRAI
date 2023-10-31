@@ -98,7 +98,7 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n = len(lrp_files)  
+n = 30#len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()

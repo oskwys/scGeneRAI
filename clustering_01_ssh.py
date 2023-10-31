@@ -31,11 +31,11 @@ importlib.reload(f)
 
 # %%
 
-calculate_UMAP = False#True
+calculate_UMAP = True
 
 calculate_PCA = True
 
-calculate_linkage = False
+calculate_linkage = True
 
 
 # %% load data
@@ -122,6 +122,7 @@ lrp_array_q3 = np.round( np.quantile(lrp_array, .75, axis=1), 5)
 
 diff_ = lrp_array_q3 - lrp_array_q1
 
+diff_ = lrp_array_median
 
 
 

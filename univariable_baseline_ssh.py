@@ -29,6 +29,7 @@ from datetime import datetime
 
 import importlib, sys
 importlib.reload(f)
+pd.options.mode.chained_assignment = None  # default='warn'
 
 # %% load data
 # %%%  get input data
@@ -93,7 +94,7 @@ for group in list(samples_groups.keys())[-1:]:
             # Spearman
             num_cols = [item for item in data_temp.columns if '_exp' in item or '_mut' in item]
             num_cols = [item for item in num_cols if any(gene in item for gene in genes)]
-            
+            print(' - Spearman')
             corrs_spearman_exp = f.get_correlation_r(data_temp, num_cols, method = 'spearman')
             
             
@@ -101,7 +102,7 @@ for group in list(samples_groups.keys())[-1:]:
             # MWU
             cat_cols = [item for item in data_temp.columns if '_exp' not in item and '_mut' not in item]
             cat_cols = [item for item in cat_cols if any(gene in item for gene in genes)]
-
+            print(' - MWU')
             pval_matrix , cles_matrix, mwu_stats  = f.get_mannwhitneyu_matrix(data_temp[cat_cols], data_temp[num_cols], iters=100)
 
             mwu_stats['test'] = 'mwu'
@@ -111,14 +112,15 @@ for group in list(samples_groups.keys())[-1:]:
 
             cat_cols = [item for item in data_temp.columns if '_exp' not in item and '_mut' not in item]
             cat_cols = [item for item in cat_cols if any(gene in item for gene in genes)]
-            print(cat_cols)
+            print(' - Chi2')
+            print(' -- ', cat_cols)
             from itertools import combinations
 
             chi2_res = pd.DataFrame()
 
             # Loop over all possible pairs of genes using itertools and compute the chi2 test
             for gene1, gene2 in combinations(cat_cols, 2):
-                print('Chi2 genes: ', gene1, gene2)
+                print('--- Chi2 genes: ', gene1, gene2)
                 chi2_res_temp = pd.DataFrame()
 
                 expected, observed, stats = pg.chi2_independence(data_temp, x=gene1,y=gene2)
@@ -134,6 +136,7 @@ for group in list(samples_groups.keys())[-1:]:
                 # Store the result
                 chi2_res = pd.concat((chi2_res, pd.DataFrame(chi2_res_temp).T))
                 
+            print(chi2_res)
             chi2_res  = chi2_res[chi2_res ['warning'] == ''].reset_index(drop=True)    
             chi2_res = f.add_edge_colmn(chi2_res).drop(columns = ['test','lambda','dof','warning'])
             chi2_res['test'] = 'chi2'

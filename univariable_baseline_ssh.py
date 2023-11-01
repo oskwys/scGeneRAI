@@ -77,7 +77,7 @@ for pathway in genes_pathways['Pathway'].unique():
 # %% Univariable baseline
 import pingouin as pg
 
-for group in list(samples_groups.keys())[-1:]:
+for group in list(samples_groups.keys()):
     print(group)
     
     for subgroup in samples_groups[group].keys():
@@ -136,11 +136,11 @@ for group in list(samples_groups.keys())[-1:]:
                 # Store the result
                 chi2_res = pd.concat((chi2_res, pd.DataFrame(chi2_res_temp).T))
                 
-            print(chi2_res)
+            
             chi2_res = f.add_edge_colmn(chi2_res).drop(columns = ['test','lambda','dof','warning'])
             #chi2_res  = chi2_res[chi2_res ['warning'] == ''].reset_index(drop=True)   
             chi2_res['test'] = 'chi2'
-        
+            print(chi2_res)
                         
             univariable_res = pd.concat((corrs_spearman_exp, mwu_stats, chi2_res))
             

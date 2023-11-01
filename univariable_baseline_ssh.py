@@ -137,7 +137,7 @@ for group in list(samples_groups.keys()):
                 chi2_res = pd.concat((chi2_res, pd.DataFrame(chi2_res_temp).T))
                 
             
-            chi2_res = f.add_edge_colmn(chi2_res).drop(columns = ['test','lambda','dof','warning'])
+            chi2_res = f.add_edge_colmn(chi2_res).drop(columns = ['test','lambda','dof'])
             #chi2_res  = chi2_res[chi2_res ['warning'] == ''].reset_index(drop=True)   
             chi2_res['test'] = 'chi2'
             print(chi2_res)

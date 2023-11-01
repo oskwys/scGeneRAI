@@ -56,7 +56,7 @@ samples_groups = f.get_samples_by_group(df_clinical_features)
 
 
 
-# %%
+# %% grid for pathways
 path_to_read = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\networks'
 path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\networks'
 
@@ -100,18 +100,20 @@ for key in samples_groups.keys():
         df = pd.merge(df_neg, df_pos, on = ['edge', 'source_gene','target_gene','edge_type'])
         df['edge_'] = df['edge'].str.replace('_exp','').str.replace('_amp','').str.replace('_mut','').str.replace('_del','').str.replace('_exp','')
         topn = 100
-        figsize = (30,20)
+        figsize = (40,20)
         #fig, ax = plt.subplots(1, 5, figsize = figsize)
         fig = plt.figure(figsize=figsize) 
                 # Define the GridSpec
-        gs = GridSpec(2, 4, figure=fig, width_ratios=[1, 1, 1, 3])  # 2 rows, 4 columns
+        gs = GridSpec(2, 6, figure=fig, width_ratios=[1, 1, 1, 1, 1, 3])  # 2 rows, 4 columns
         
         # Now specify the location of each subplot in the grid
         ax_1 = fig.add_subplot(gs[:, 0])  # First column, all rows
         ax_2 = fig.add_subplot(gs[:, 1])  # Second column, all rows
         ax_3 = fig.add_subplot(gs[:, 2])  # Third column, all rows
-        ax_4 = fig.add_subplot(gs[0, 3])    # Last column, first row
-        ax_5 = fig.add_subplot(gs[1, 3])    # Last column, second row
+        ax_4 = fig.add_subplot(gs[:, 3])  # Second column, all rows
+        ax_5 = fig.add_subplot(gs[:, 4])  # Third column, all rows
+        ax_6 = fig.add_subplot(gs[0, 5])    # Last column, first row
+        ax_7 = fig.add_subplot(gs[1, 5])    # Last column, second row
 
 
 
@@ -191,6 +193,54 @@ for key in samples_groups.keys():
         #plt.savefig(os.path.join(path_to_save, 'lrp_diff_{}_{}_{}.png'.format(pathway, key,topn)))
         # network
         
+        
+        # mean
+        df = df.sort_values('mean_pos', ascending=False).reset_index(drop=True)
+        df_topn = df.iloc[:topn, :]
+        
+        df_topn_melt = df_topn.melt(id_vars=['edge', 'source_gene','target_gene','edge_type'], value_vars=['mean_pos','mean_neg'], var_name='group', value_name='average_LRP')
+        
+        ax=ax_4
+        sns.barplot(df_topn_melt , y = 'edge', x = 'average_LRP', hue='group', palette = {'mean_neg':'gray','mean_pos':'red'}, ax=ax, orient = 'h')
+        ax.set_yticklabels(df_topn[ 'edge_'])
+        ax.grid()
+        ax.set_ylabel(None)
+        ax.legend(bbox_to_anchor=(.8, 0.00),loc='lower center' )
+        ax.set_axisbelow(True)
+        ax2 = ax.twinx()
+        ax2.set_ylim(ax.get_ylim())
+        ax2.set_yticks(ax.get_yticks())
+        ax2.set_yticklabels(df_topn_melt.loc[:df_topn.shape[0]-1, 'edge_type'])
+        #ax.legend([group_pos,group_neg])
+        ax.set_title('Mean')
+        #plt.tight_layout()
+        #plt.savefig(os.path.join(path_to_save, 'lrp_mean_{}_{}_{}.png'.format(pathway, key,topn)))
+        
+        
+        # median
+        df = df.sort_values('median_pos', ascending=False).reset_index(drop=True)
+        df_topn = df.iloc[:topn, :]
+        
+        df_topn_melt = df_topn.melt(id_vars=['edge', 'source_gene','target_gene','edge_type'], value_vars=['median_pos','median_neg'], var_name='group', value_name='median_LRP')
+        #fig, ax = plt.subplots(figsize = figsize)
+        
+        ax =ax_5
+        sns.barplot(df_topn_melt , y = 'edge', x = 'median_LRP', hue='group',palette = {'median_neg':'gray','median_pos':'red'}, ax=ax, orient = 'h')
+        ax.set_yticklabels(df_topn[ 'edge_'])
+        ax.grid()
+        ax.legend(bbox_to_anchor=(.8, 0.00),loc='lower center' )
+        ax.set_axisbelow(True)
+        ax.set_ylabel(None)
+        ax2 = ax.twinx()
+        ax2.set_ylim(ax.get_ylim())
+        ax2.set_yticks(ax.get_yticks())
+        ax2.set_yticklabels(df_topn_melt.loc[:df_topn.shape[0]-1, 'edge_type'])
+        #ax.legend(labels = [group_pos,group_neg])
+        ax.set_title('Median')
+        
+        
+        
+       
         network_pos = df.sort_values('mean_pos', ascending=False).reset_index(drop=True)
         network_pos = network_pos.iloc[:topn, :]
         network_pos['LRP'] = network_pos['mean_pos']
@@ -204,8 +254,8 @@ for key in samples_groups.keys():
         name_to_save_neg = 'lrp_mean_network_{}_{}_{}_neg'.format(pathway, key, topn)
         title_pos = '{} {} {} POSITIVE'.format(pathway, key, topn)
         title_neg = '{} {} {} NEGATIVE'.format(pathway, key, topn)
-        f.plot_network_(network_pos, path_to_save, 'kamada_kawai_layout', None, title_pos, name_to_save_pos, ax_4)
-        f.plot_network_(network_neg, path_to_save, 'kamada_kawai_layout', None, title_neg, name_to_save_neg, ax_5)
+        f.plot_network_(network_pos, path_to_save, 'kamada_kawai_layout', None, title_pos, name_to_save_pos, ax_6)
+        f.plot_network_(network_neg, path_to_save, 'kamada_kawai_layout', None, title_neg, name_to_save_neg, ax_7)
         
         plt.tight_layout()
         plt.savefig(os.path.join(path_to_save, 'gridplot_{}_{}_{}.png'.format(pathway, key,topn)))
@@ -251,41 +301,46 @@ for key in samples_groups.keys():
 
         
     df_neg = pd.read_csv(os.path.join(path_to_read , file_name_neg),index_col=0)
-    df_neg.columns = ['index_','edge', 'source_gene','target_gene','edge_type'] + [i + '_neg' for i in list(df_neg.columns[5:])]
+    df_neg = df_neg[['edge',  'source_gene', 'target_gene', 'edge_type','LRP', 'LRP_std', 'LRP_median', 'LRP_q1','LRP_q3']]
+    df_neg.columns = ['edge',  'source_gene', 'target_gene', 'edge_type','LRP_mean_neg'] + [i + '_neg' for i in list(df_neg.columns[5:])]
     df_pos = pd.read_csv(os.path.join(path_to_read , file_name_pos), index_col=0)
-    df_pos.columns = ['index_','edge', 'source_gene','target_gene','edge_type'] + [i + '_pos' for i in list(df_pos.columns[5:])]
+    df_pos = df_pos[['edge',  'source_gene', 'target_gene', 'edge_type','LRP', 'LRP_std', 'LRP_median', 'LRP_q1','LRP_q3']]
+    df_pos.columns = ['edge',  'source_gene', 'target_gene', 'edge_type','LRP_mean_pos'] + [i + '_pos' for i in list(df_pos.columns[5:])]
     
     
     df = pd.merge(df_neg, df_pos, on = ['edge', 'source_gene','target_gene','edge_type'])
     df['edge_'] = df['edge'].str.replace('_exp','').str.replace('_amp','').str.replace('_mut','').str.replace('_del','').str.replace('_exp','')
-    topn = 100
-    figsize = (30,20)
+    topn = 25
+    figsize = (40,20)
     #fig, ax = plt.subplots(1, 5, figsize = figsize)
     fig = plt.figure(figsize=figsize) 
             # Define the GridSpec
-    gs = GridSpec(2, 4, figure=fig, width_ratios=[1, 1, 1, 3])  # 2 rows, 4 columns
+    gs = GridSpec(2, 6, figure=fig, width_ratios=[1, 1, 1, 1, 1, 3])  # 2 rows, 4 columns
     
     # Now specify the location of each subplot in the grid
     ax_1 = fig.add_subplot(gs[:, 0])  # First column, all rows
     ax_2 = fig.add_subplot(gs[:, 1])  # Second column, all rows
     ax_3 = fig.add_subplot(gs[:, 2])  # Third column, all rows
-    ax_4 = fig.add_subplot(gs[0, 3])    # Last column, first row
-    ax_5 = fig.add_subplot(gs[1, 3])    # Last column, second row
+    ax_4 = fig.add_subplot(gs[:, 3])  # Second column, all rows
+    ax_5 = fig.add_subplot(gs[:, 4])  # Third column, all rows
+    ax_6 = fig.add_subplot(gs[0, 5])    # Last column, first row
+    ax_7 = fig.add_subplot(gs[1, 5])    # Last column, second row
 
 
 
     # mean
-    df = df.sort_values('mean_neg', ascending=False).reset_index(drop=True)
+    df = df.sort_values('LRP_mean_neg', ascending=False).reset_index(drop=True)
     df_topn = df.iloc[:topn, :]
     
-    df_topn_melt = df_topn.melt(id_vars=['edge', 'source_gene','target_gene','edge_type'], value_vars=['mean_pos','mean_neg'], var_name='group', value_name='average_LRP')
+    df_topn_melt = df_topn.melt(id_vars=['edge', 'source_gene','target_gene','edge_type'], value_vars=['LRP_mean_pos','LRP_mean_neg'], var_name='group', value_name='average_LRP')
     
     ax=ax_1
-    sns.barplot(df_topn_melt , y = 'edge', x = 'average_LRP', hue='group', palette = {'mean_neg':'gray','mean_pos':'red'}, ax=ax, orient = 'h')
+    sns.barplot(df_topn_melt , y = 'edge', x = 'average_LRP', hue='group', palette = {'LRP_mean_neg':'gray','LRP_mean_pos':'red'}, ax=ax, orient = 'h')
     ax.set_yticklabels(df_topn[ 'edge_'])
     ax.grid()
     ax.legend(bbox_to_anchor=(.8, 0.00),loc='lower center' )
     ax.set_axisbelow(True)
+    ax.set_ylabel(None)
     ax2 = ax.twinx()
     ax2.set_ylim(ax.get_ylim())
     ax2.set_yticks(ax.get_yticks())
@@ -297,18 +352,19 @@ for key in samples_groups.keys():
     
     
     # median
-    df = df.sort_values('median_neg', ascending=False).reset_index(drop=True)
+    df = df.sort_values('LRP_median_neg', ascending=False).reset_index(drop=True)
     df_topn = df.iloc[:topn, :]
     
-    df_topn_melt = df_topn.melt(id_vars=['edge', 'source_gene','target_gene','edge_type'], value_vars=['median_pos','median_neg'], var_name='group', value_name='median_LRP')
+    df_topn_melt = df_topn.melt(id_vars=['edge', 'source_gene','target_gene','edge_type'], value_vars=['LRP_median_pos','LRP_median_neg'], var_name='group', value_name='median_LRP')
     #fig, ax = plt.subplots(figsize = figsize)
     
     ax =ax_2
-    sns.barplot(df_topn_melt , y = 'edge', x = 'median_LRP', hue='group',palette = {'median_neg':'gray','median_pos':'red'}, ax=ax, orient = 'h')
+    sns.barplot(df_topn_melt , y = 'edge', x = 'median_LRP', hue='group',palette = {'LRP_median_neg':'gray','LRP_median_pos':'red'}, ax=ax, orient = 'h')
     ax.set_yticklabels(df_topn[ 'edge_'])
     ax.grid()
     ax.legend(bbox_to_anchor=(.8, 0.00),loc='lower center' )
     ax.set_axisbelow(True)
+    ax.set_ylabel(None)
     ax2 = ax.twinx()
     ax2.set_ylim(ax.get_ylim())
     ax2.set_yticks(ax.get_yticks())
@@ -319,7 +375,7 @@ for key in samples_groups.keys():
     #plt.savefig(os.path.join(path_to_save, 'lrp_median_{}_{}_{}.png'.format(pathway, key,topn)))
     
     # diff
-    df['diff'] = df['mean_pos'] - df['mean_neg']
+    df['diff'] = df['LRP_mean_pos'] - df['LRP_mean_neg']
     df['diff_abs'] = df['diff'].abs()
     df = df.sort_values('diff_abs', ascending=False).reset_index(drop=True)
     neg_diff_q25 = np.quantile(df.loc[df['diff'] < 0, 'diff'].values, .25)
@@ -339,32 +395,72 @@ for key in samples_groups.keys():
     sns.barplot(df_topn , y = 'edge', x = 'diff',hue = 'edge_type',  ax=ax, palette = barplot_mapper ,orient = 'h', dodge = False)
     ax.set_yticklabels(df_topn[ 'edge_'])
     ax.grid()
-
+    ax.set_ylabel(None)
     ax.legend(bbox_to_anchor=(.8, 0.00),loc='lower center' )
     ax.set_axisbelow(True)
-    # ax2 = ax.twinx()
-    # ax2.set_ylim(ax.get_ylim())
-    # ax2.set_yticks(ax.get_yticks())
-    # ax2.set_yticklabels(df_topn[ 'edge_type'])
+    
+    
+    # mean
+    df = df.sort_values('LRP_mean_pos', ascending=False).reset_index(drop=True)
+    df_topn = df.iloc[:topn, :]
+    
+    df_topn_melt = df_topn.melt(id_vars=['edge', 'source_gene','target_gene','edge_type'], value_vars=['LRP_mean_pos','LRP_mean_neg'], var_name='group', value_name='average_LRP')
+    
+    ax=ax_4
+    sns.barplot(df_topn_melt , y = 'edge', x = 'average_LRP', hue='group', palette = {'LRP_mean_neg':'gray','LRP_mean_pos':'red'}, ax=ax, orient = 'h')
+    ax.set_yticklabels(df_topn[ 'edge_'])
+    ax.grid()
+    ax.set_ylabel(None)
+    ax.legend(bbox_to_anchor=(.8, 0.00),loc='lower center' )
+    ax.set_axisbelow(True)
+    ax2 = ax.twinx()
+    ax2.set_ylim(ax.get_ylim())
+    ax2.set_yticks(ax.get_yticks())
+    ax2.set_yticklabels(df_topn_melt.loc[:df_topn.shape[0]-1, 'edge_type'])
+    #ax.legend([group_pos,group_neg])
+    ax.set_title('Mean')
     #plt.tight_layout()
-    #plt.savefig(os.path.join(path_to_save, 'lrp_diff_{}_{}_{}.png'.format(pathway, key,topn)))
-    # network
+    #plt.savefig(os.path.join(path_to_save, 'lrp_mean_{}_{}_{}.png'.format(pathway, key,topn)))
     
-    network_pos = df.sort_values('mean_pos', ascending=False).reset_index(drop=True)
+    
+    # median
+    df = df.sort_values('LRP_median_pos', ascending=False).reset_index(drop=True)
+    df_topn = df.iloc[:topn, :]
+    
+    df_topn_melt = df_topn.melt(id_vars=['edge', 'source_gene','target_gene','edge_type'], value_vars=['LRP_median_pos','LRP_median_neg'], var_name='group', value_name='median_LRP')
+    #fig, ax = plt.subplots(figsize = figsize)
+    
+    ax =ax_5
+    sns.barplot(df_topn_melt , y = 'edge', x = 'median_LRP', hue='group',palette = {'LRP_median_neg':'gray','LRP_median_pos':'red'}, ax=ax, orient = 'h')
+    ax.set_yticklabels(df_topn[ 'edge_'])
+    ax.grid()
+    ax.legend(bbox_to_anchor=(.8, 0.00),loc='lower center' )
+    ax.set_axisbelow(True)
+    ax.set_ylabel(None)
+    ax2 = ax.twinx()
+    ax2.set_ylim(ax.get_ylim())
+    ax2.set_yticks(ax.get_yticks())
+    ax2.set_yticklabels(df_topn_melt.loc[:df_topn.shape[0]-1, 'edge_type'])
+    #ax.legend(labels = [group_pos,group_neg])
+    ax.set_title('Median')
+    
+    
+    
+    network_pos = df.sort_values('LRP_mean_pos', ascending=False).reset_index(drop=True)
     network_pos = network_pos.iloc[:topn, :]
-    network_pos['LRP'] = network_pos['mean_pos']
+    network_pos['LRP'] = network_pos['LRP_mean_pos']
     
-    network_neg = df.sort_values('mean_neg', ascending=False).reset_index(drop=True)
+    network_neg = df.sort_values('LRP_mean_neg', ascending=False).reset_index(drop=True)
     network_neg = network_neg.iloc[:topn, :]
-    network_neg['LRP'] = network_neg['mean_neg']
+    network_neg['LRP'] = network_neg['LRP_mean_neg']
     
     
-    name_to_save_pos = 'lrp_mean_network_{}_{}_{}_pos'.format(pathway, key, topn)
-    name_to_save_neg = 'lrp_mean_network_{}_{}_{}_neg'.format(pathway, key, topn)
+    name_to_save_pos = 'lrp_mean_network_{}_{}_pos'.format(key, topn)
+    name_to_save_neg = 'lrp_mean_network_{}_{}_neg'.format(key, topn)
     title_pos = '{} {} {} POSITIVE'.format(pathway, key, topn)
     title_neg = '{} {} {} NEGATIVE'.format(pathway, key, topn)
-    f.plot_network_(network_pos, path_to_save, 'kamada_kawai_layout', None, title_pos, name_to_save_pos, ax_4)
-    f.plot_network_(network_neg, path_to_save, 'kamada_kawai_layout', None, title_neg, name_to_save_neg, ax_5)
+    f.plot_network_(network_pos, path_to_save, 'kamada_kawai_layout', None, title_pos, name_to_save_pos, ax_6)
+    f.plot_network_(network_neg, path_to_save, 'kamada_kawai_layout', None, title_neg, name_to_save_neg, ax_7)
     
     plt.tight_layout()
     plt.savefig(os.path.join(path_to_save, 'gridplot_{}_{}.png'.format(key,topn)))

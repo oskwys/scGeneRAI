@@ -6,7 +6,7 @@ Created on Tue Oct 24 23:30:01 2023
 """
 
 
-#%matplotlib inline 
+%matplotlib inline 
 import pickle
 import pandas as pd
 
@@ -33,10 +33,10 @@ importlib.reload(f)
 # %% load data
 
 path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
-path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\umaps'
+path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\umaps_median'
 
 path_to_save = '/home/d07321ow/scratch/results_LRP_BRCA/umaps'
-path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\umaps'
+path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\umaps_median'
 
 # %%
 
@@ -46,9 +46,12 @@ data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.
 
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
 
+df_clinical_features = f.add_cluster0(df_clinical_features)
+
 
 samples_groups = f.get_samples_by_group(df_clinical_features)
 
+cluster0_sample_index = 845#samples_cluster0_index[2]
 
 
 # %% load umaps
@@ -88,64 +91,66 @@ for file in umap_files:
 
     # Step 2: Fit HDBSCAN on the dataset
     # The minimum cluster size can be adjusted depending on your dataset
-    min_cluster_sizes = [ 10, 15, 20, 25, 50]
     
-    for min_cluster_size in min_cluster_sizes:
-        clusterer = hdbscan.HDBSCAN(min_cluster_size = min_cluster_size).fit(X)
+    #### !!!!!! UNCOMMENT if clusters needed
+    # min_cluster_sizes = [ 10, 15, 20, 25, 50]
     
-        # Step 3: Extract the labels
-        # Labels are the cluster each data point belongs to, noise points are labeled -1
-        labels = clusterer.labels_
-        label_x = labels[cluster0_sample_index]
-        print('lable x: ', label_x)
-        unique_, counts_ = np.unique(labels, return_counts = True)
+    # for min_cluster_size in min_cluster_sizes:
+    #     clusterer = hdbscan.HDBSCAN(min_cluster_size = min_cluster_size).fit(X)
+    
+    #     # Step 3: Extract the labels
+    #     # Labels are the cluster each data point belongs to, noise points are labeled -1
+    #     labels = clusterer.labels_
+    #     label_x = labels[cluster0_sample_index]
+    #     print('lable x: ', label_x)
+    #     unique_, counts_ = np.unique(labels, return_counts = True)
         
-        if label_x > 0:
-            #if len(unique_)>2:
-                #if counts_[1] < counts_[2]:
+    #     if label_x > 0:
+    #         #if len(unique_)>2:
+    #             #if counts_[1] < counts_[2]:
                 
-            index_x = labels == label_x
+    #         index_x = labels == label_x
             
             
-            index0 = labels == 0
-            labels[index_x] = 0
-            labels[index0] = label_x
-            print('changed')
-            label_x = labels[cluster0_sample_index]
-            print('lable x: ', label_x)        
+    #         index0 = labels == 0
+    #         labels[index_x] = 0
+    #         labels[index0] = label_x
+    #         print('changed')
+    #         label_x = labels[cluster0_sample_index]
+    #         print('lable x: ', label_x)        
                 
     
     
-        # Step 4: Plot the results
-        # Create a scatter plot assigning each cluster a unique color
-        unique_labels = set(new_labels)
+    #     # Step 4: Plot the results
+    #     # Create a scatter plot assigning each cluster a unique color
+    #     unique_labels = set(labels)
         
-        #cluster_results['labels_{}_{}_{}_{}'.format(threshold, n_neighbors, min_dist, min_cluster_size)] = labels
+    #     #cluster_results['labels_{}_{}_{}_{}'.format(threshold, n_neighbors, min_dist, min_cluster_size)] = labels
     
-        fig, ax =  plt.subplots(figsize = (8,8))
+    #     fig, ax =  plt.subplots(figsize = (8,8))
     
-        # Set up a color palette (one color for each label, plus one for noise points labeled -1)
-        colors = plt.cm.Paired(np.linspace(0, 1, len(unique_labels)))
+    #     # Set up a color palette (one color for each label, plus one for noise points labeled -1)
+    #     colors = plt.cm.Paired(np.linspace(0, 1, len(unique_labels)))
     
-        # Plot each cluster using a separate color
-        for k, col in zip(unique_labels, colors):
-            if k == -1:
-                # Black is used for noise.
-                col = 'k'
+    #     # Plot each cluster using a separate color
+    #     for k, col in zip(unique_labels, colors):
+    #         if k == -1:
+    #             # Black is used for noise.
+    #             col = 'k'
     
-            class_member_mask = (labels == k)
+    #         class_member_mask = (labels == k)
     
-            xy = X[class_member_mask]
-            ax.scatter(xy[:, 0], xy[:, 1], s=10, c=[col], marker=u'o', alpha=0.8, label=f'Cluster {k}')
+    #         xy = X[class_member_mask]
+    #         ax.scatter(xy[:, 0], xy[:, 1], s=10, c=[col], marker=u'o', alpha=0.8, label=f'Cluster {k}')
     
-        title = 'HDBSCAN \n Threshold ' + threshold + '\n' + 'n_neighbors ' + n_neighbors + '\n' + 'min_dist ' + min_dist + '\n min_cluster_size ' +str( min_cluster_size)
-        ax.set_title(title)
+    #     title = 'HDBSCAN \n Threshold ' + threshold + '\n' + 'n_neighbors ' + n_neighbors + '\n' + 'min_dist ' + min_dist + '\n min_cluster_size ' +str( min_cluster_size)
+    #     ax.set_title(title)
         
-        ax.legend(title='Clusters')
-        ax.axis('off')
-        plt.tight_layout()
-        plt.savefig(os.path.join(path_to_save, 'UMAP_{}_{}_{}_clustersize{}.png'.format(threshold, n_neighbors, min_dist, min_cluster_size)), dpi = 400)        
-
+    #     ax.legend(title='Clusters')
+    #     ax.axis('off')
+    #     plt.tight_layout()
+    #     plt.savefig(os.path.join(path_to_save, 'UMAP_{}_{}_{}_clustersize{}.png'.format(threshold, n_neighbors, min_dist, min_cluster_size)), dpi = 400)        
+    #### !!!!!! UNCOMMENT if clusters needed
 
     
     for group in samples_groups.keys():

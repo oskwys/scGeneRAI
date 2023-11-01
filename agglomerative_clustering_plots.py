@@ -31,19 +31,23 @@ importlib.reload(f)
 # %% load data
 
 path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
-path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\umaps'
+path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\umaps_median'
 
 path_to_save = '/home/d07321ow/scratch/results_LRP_BRCA/umaps'
-path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\umaps'
+path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\umaps_median'
 
 # %%
 samples = pd.read_csv(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\BRCA_samples.txt', index_col = 0)['samples'].to_list()
 data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model')
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
+
+df_clinical_features = f.add_cluster0(df_clinical_features)
+
 samples_groups = f.get_samples_by_group(df_clinical_features)
 
 # %% load PCA
 from collections import Counter
+from scipy.cluster.hierarchy import dendrogram
 
 z_files = files = [f for f in os.listdir(path_to_data) if f.startswith('Z_')]
 #cluster_results = pd.DataFrame()

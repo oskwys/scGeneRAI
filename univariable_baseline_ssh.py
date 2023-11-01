@@ -56,6 +56,8 @@ samples = f.get_samples_with_lrp(path_to_lrp_results)
 
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
 
+df_clinical_features = f.add_cluster0(df_clinical_features)
+
 samples_groups = f.get_samples_by_group(df_clinical_features) 
 
 
@@ -74,7 +76,7 @@ for pathway in genes_pathways['Pathway'].unique():
 # %% Univariable baseline
 import pingouin as pg
 
-for group in samples_groups.keys():
+for group in list(samples_groups.keys())[-1:]:
     print(group)
     
     for subgroup in samples_groups[group].keys():

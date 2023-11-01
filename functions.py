@@ -682,8 +682,23 @@ def plot_network_(edges, path_to_save, layout=None, pos=None,  title='', name_to
 
 
 
+def add_cluster0(df_clinical_features):
 
 
-    
- 
-    
+    cluster0_samples = ['TCGA-B6-A0RT', 'TCGA-E9-A243', 'TCGA-AO-A0JC', 'TCGA-LL-A5YO',
+                        'TCGA-E9-A22D', 'TCGA-E2-A1B5', 'TCGA-AR-A1AX', 'TCGA-EW-A1OV',
+                        'TCGA-C8-A12V', 'TCGA-AR-A252', 'TCGA-BH-A0H5', 'TCGA-AQ-A7U7',
+                        'TCGA-A2-A0EQ', 'TCGA-AO-A128', 'TCGA-E2-A1II', 'TCGA-BH-A1F0',
+                        'TCGA-E9-A248', 'TCGA-A8-A08H', 'TCGA-EW-A1P7', 'TCGA-A2-A0CR',
+                        'TCGA-D8-A73U', 'TCGA-OL-A66I', 'TCGA-A2-A0CL', 'TCGA-E9-A2JT',
+                        'TCGA-A2-A25F', 'TCGA-A2-A0YK', 'TCGA-GM-A2DO', 'TCGA-AR-A1AJ',
+                        'TCGA-GM-A2DI', 'TCGA-PE-A5DE', 'TCGA-E2-A108', 'TCGA-AR-A0TS',
+                        'TCGA-AR-A0TT', 'TCGA-S3-AA15', 'TCGA-A2-A04Q', 'TCGA-A2-A0ST',
+                        'TCGA-AC-A2FB', 'TCGA-AR-A1AW', 'TCGA-A8-A0A7', 'TCGA-AR-A1AO',
+                        'TCGA-A2-A0EP', 'TCGA-BH-A209', 'TCGA-EW-A1IZ', 'TCGA-S3-AA17',
+                        'TCGA-E2-A1B6', 'TCGA-E9-A1NE', 'TCGA-BH-A0W5']
+
+    df_clinical_features['cluster0'] = 0
+    df_clinical_features.loc[df_clinical_features['bcr_patient_barcode'].isin(cluster0_samples), 'cluster0'] = 1
+
+    return df_clinical_features

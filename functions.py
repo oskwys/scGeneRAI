@@ -417,7 +417,7 @@ def add_suffixes_to_genes(genes):
 def add_edge_colmn(edges):
     edges['edge'] = edges['source_gene'] + ' - '  + edges['target_gene']
     
-    edges['edge_type'] = (edges['source_gene'].str.split('_',expand=True).iloc[:,1] + ' - '  + edges['target_gene'].str.split('_',expand=True).iloc[:,1]).str.split(' - ').apply(np.sort).str.join('-')
+    edges['edge_type'] = (edges['source_gene'].str.split('_', expand=True).iloc[:,1] + ' - '  + edges['target_gene'].str.split('_', expand=True).iloc[:,1]).str.split(' - ').apply(np.sort).str.join('-')
     
     
     '''edges['edge_type'] = 'exp-exp'

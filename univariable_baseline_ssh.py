@@ -87,7 +87,7 @@ for group in list(samples_groups.keys())[-1:]:
         data_temp = data_to_model[data_to_model.index.isin(samples_to_univariable)]
     
         for pathway in genes_pathways['Pathway'].unique():
-            
+            print(pathway)
             genes = genes_pathways_dict[pathway]
             
             # Spearman
@@ -111,13 +111,14 @@ for group in list(samples_groups.keys())[-1:]:
 
             cat_cols = [item for item in data_temp.columns if '_exp' not in item and '_mut' not in item]
             cat_cols = [item for item in cat_cols if any(gene in item for gene in genes)]
-
+            print(cat_cols)
             from itertools import combinations
 
             chi2_res = pd.DataFrame()
 
             # Loop over all possible pairs of genes using itertools and compute the chi2 test
             for gene1, gene2 in combinations(cat_cols, 2):
+                print('Chi2 genes: ', gene1, gene2)
                 chi2_res_temp = pd.DataFrame()
 
                 expected, observed, stats = pg.chi2_independence(data_temp, x=gene1,y=gene2)

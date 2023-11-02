@@ -288,7 +288,7 @@ if plot_umaps:
 # %% get top 1000 interactions for each sample
 
 if get_top1000:
-    topn = 250
+    topn = 100
     
     df_topn = pd.DataFrame(np.zeros((topn,len(samples)), dtype = 'str'), columns = samples)
     
@@ -300,7 +300,7 @@ if get_top1000:
         data_temp = f.add_edge_colmn(data_temp)
         df_topn.iloc[:, i] = data_temp['edge'].values
     
-    df_topn.to_csv(os.path.join(path_to_save, 'df_topn_for_individuals.csv'))
+    df_topn.to_csv(os.path.join(path_to_save, 'df_topn_for_individuals_top{}.csv'.format(topn)))
     
     
     unique_edges = list(df_topn.melt()['value'].unique())
@@ -313,7 +313,7 @@ if get_top1000:
     unique_edges_df = pd.DataFrame([unique_edges, unique_edges_count]).T#, columns = )
     unique_edges_df.columns = ['edge','count']
     
-    unique_edges_df.to_csv(os.path.join(path_to_save, 'unique_edges_count_in_top1000.csv'))
+    unique_edges_df.to_csv(os.path.join(path_to_save, 'unique_edges_count_in_top_{}.csv'.format(topn)))
 
     #unique_edges_df['count'].plot(kind = 'hist')
 

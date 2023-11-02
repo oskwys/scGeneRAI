@@ -201,29 +201,29 @@ if networks_for_patient_groups_and_ALL_genes == True:
         
 # %% CLUSTERMAPS and UMAPs
 # %%% get lrp_dict_filtered for each pathway
-
-lrp_dict_filtered = {}
- 
-for pathway in genes_pathways['Pathway'].unique():
-    print(pathway, ' ---- get lrp_dict_filtered for each pathway')
-    lrp_dict_filtered[pathway] = {}
-    genes = genes_pathways_dict[pathway]     
-    for index, (sample_name, data) in enumerate(lrp_dict.items()):
-        #print(index, sample_name)
-        if index ==0:
-             index_ = data['source_gene'].str.split('_',expand=True)[0].isin(genes) & data['target_gene'].str.split('_',expand=True)[0].isin(genes)
-         
+if plot_clustermaps_pathway or plot_umaps:
+    lrp_dict_filtered = {}
+     
+    for pathway in genes_pathways['Pathway'].unique():
+        print(pathway, ' ---- get lrp_dict_filtered for each pathway')
+        lrp_dict_filtered[pathway] = {}
+        genes = genes_pathways_dict[pathway]     
+        for index, (sample_name, data) in enumerate(lrp_dict.items()):
+            #print(index, sample_name)
+            if index ==0:
+                 index_ = data['source_gene'].str.split('_',expand=True)[0].isin(genes) & data['target_gene'].str.split('_',expand=True)[0].isin(genes)
+             
+            
+            temp = data[index_].copy()
+            #print(temp.shape[0])
+            lrp_dict_filtered[pathway][sample_name] = temp.reset_index(drop=True)
+            
         
-        temp = data[index_].copy()
-        #print(temp.shape[0])
-        lrp_dict_filtered[pathway][sample_name] = temp.reset_index(drop=True)
-        
+    lrp_dict_filtered_pd = {}
+    for pathway in genes_pathways['Pathway'].unique():
+        print(pathway, ' ---- get lrp_dict_filtered for each pathway PD')
+        lrp_dict_filtered_pd[pathway] = f.get_lrp_dict_filtered_pd(lrp_dict_filtered, pathway = pathway)    
     
-lrp_dict_filtered_pd = {}
-for pathway in genes_pathways['Pathway'].unique():
-    print(pathway, ' ---- get lrp_dict_filtered for each pathway PD')
-    lrp_dict_filtered_pd[pathway] = f.get_lrp_dict_filtered_pd(lrp_dict_filtered, pathway = pathway)    
-
 
 
 # %%% plot clustermap
@@ -288,7 +288,7 @@ if plot_umaps:
 # %% get top 1000 interactions for each sample
 
 if get_top1000:
-    topn = 1000
+    topn = 250
     
     df_topn = pd.DataFrame(np.zeros((topn,len(samples)), dtype = 'str'), columns = samples)
     
@@ -305,7 +305,7 @@ if get_top1000:
     
     unique_edges = list(df_topn.melt()['value'].unique())
     unique_edges_count = []
-    for i, unique_edge in enumerate(unique_edges[:-1]):
+    for i, unique_edge in enumerate(unique_edges):
         print(i,'/', len(unique_edges), unique_edge)
         a = np.sum(np.sum(df_topn == unique_edge, axis=0))
         unique_edges_count.append(a)

@@ -29,10 +29,11 @@ import importlib, sys
 importlib.reload(f)
 # %%
 
-networks_for_patient_groups_and_ALL_genes = True
-networks_for_patient_groups_and_pathway_genes = True
+networks_for_patient_groups_and_ALL_genes = False
+networks_for_patient_groups_and_pathway_genes = False
 plot_clustermaps_pathway = False
 plot_umaps = False
+get_top1000 = True
 
 # %% load data
 
@@ -58,22 +59,9 @@ print('Samples: ', len(set(samples)))
 # %%% get sample goups
 
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
+df_clinical_features = f.add_cluster0(df_clinical_features)
 
-cluster0_samples = ['TCGA-B6-A0RT', 'TCGA-E9-A243', 'TCGA-AO-A0JC', 'TCGA-LL-A5YO',
-       'TCGA-E9-A22D', 'TCGA-E2-A1B5', 'TCGA-AR-A1AX', 'TCGA-EW-A1OV',
-       'TCGA-C8-A12V', 'TCGA-AR-A252', 'TCGA-BH-A0H5', 'TCGA-AQ-A7U7',
-       'TCGA-A2-A0EQ', 'TCGA-AO-A128', 'TCGA-E2-A1II', 'TCGA-BH-A1F0',
-       'TCGA-E9-A248', 'TCGA-A8-A08H', 'TCGA-EW-A1P7', 'TCGA-A2-A0CR',
-       'TCGA-D8-A73U', 'TCGA-OL-A66I', 'TCGA-A2-A0CL', 'TCGA-E9-A2JT',
-       'TCGA-A2-A25F', 'TCGA-A2-A0YK', 'TCGA-GM-A2DO', 'TCGA-AR-A1AJ',
-       'TCGA-GM-A2DI', 'TCGA-PE-A5DE', 'TCGA-E2-A108', 'TCGA-AR-A0TS',
-       'TCGA-AR-A0TT', 'TCGA-S3-AA15', 'TCGA-A2-A04Q', 'TCGA-A2-A0ST',
-       'TCGA-AC-A2FB', 'TCGA-AR-A1AW', 'TCGA-A8-A0A7', 'TCGA-AR-A1AO',
-       'TCGA-A2-A0EP', 'TCGA-BH-A209', 'TCGA-EW-A1IZ', 'TCGA-S3-AA17',
-       'TCGA-E2-A1B6', 'TCGA-E9-A1NE', 'TCGA-BH-A0W5']
 
-df_clinical_features['cluster0'] = 0
-df_clinical_features.loc[df_clinical_features['bcr_patient_barcode'].isin(cluster0_samples), 'cluster0'] = 1
 
 samples_groups = f.get_samples_by_group(df_clinical_features)
 
@@ -98,7 +86,7 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n = 30#len(lrp_files)  
+n = len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()
@@ -297,7 +285,39 @@ if plot_umaps:
             plt.savefig(os.path.join(path_to_save, 'UMAP_{}_th{}.png'.format(pathway, str(threshold)[2:])), dpi = 400)        
     
     
+# %% get top 1000 interactions for each sample
 
+if get_top1000:
+    topn = 1000
+    
+    df_topn = pd.DataFrame(np.zeros((topn,len(samples)), dtype = 'str'), columns = samples)
+    
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+    
+        data_temp = data_temp.sort_values('LRP', ascending = False).iloc[:topn, :]
+        data_temp = f.add_edge_colmn(data_temp)
+        df_topn.iloc[:, i] = data_temp['edge'].values
+    
+    df_topn.to_csv(os.path.join(path_to_save, 'df_topn_for_individuals.csv'))
+    
+    
+    unique_edges = list(df_topn.melt()['value'].unique())
+    unique_edges_count = []
+    for i, unique_edge in enumerate(unique_edges[:-1]):
+        print(i,'/', len(unique_edges), unique_edge)
+        a = np.sum(np.sum(df_topn == unique_edge, axis=0))
+        unique_edges_count.append(a)
+        
+    unique_edges_df = pd.DataFrame([unique_edges, unique_edges_count]).T#, columns = )
+    unique_edges_df.columns = ['edge','count']
+    
+    unique_edges_df.to_csv(os.path.join(path_to_save, 'unique_edges_count_in_top1000.csv'))
+
+    #unique_edges_df['count'].plot(kind = 'hist')
+
+    #unique_edges_df.sort_values('count', ascending = False).reset_index(drop=True)['count'].plot()
 # %%% clustermap legend
 
 # import matplotlib.patches as mpatches

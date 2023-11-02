@@ -94,7 +94,7 @@ for group in list(samples_groups.keys()):
             # Spearman
             num_cols = [item for item in data_temp.columns if '_exp' in item or '_mut' in item]
             num_cols = [item for item in num_cols if any(gene in item for gene in genes)]
-            print(' - Spearman')
+            print(' - Spearman', num_cols)
             corrs_spearman_exp = f.get_correlation_r(data_temp, num_cols, method = 'spearman')
             
             
@@ -103,7 +103,7 @@ for group in list(samples_groups.keys()):
             cat_cols = [item for item in data_temp.columns if '_exp' not in item and '_mut' not in item]
             cat_cols = [item for item in cat_cols if any(gene in item for gene in genes)]
             print(' - MWU')
-            pval_matrix , cles_matrix, mwu_stats  = f.get_mannwhitneyu_matrix(data_temp[cat_cols], data_temp[num_cols], iters=100)
+            pval_matrix , cles_matrix, mwu_stats  = f.get_mannwhitneyu_matrix(data_temp[cat_cols], data_temp[num_cols], iters=2)
 
             mwu_stats['test'] = 'mwu'
             

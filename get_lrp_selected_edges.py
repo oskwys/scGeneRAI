@@ -62,8 +62,8 @@ samples_groups = f.get_samples_by_group(df_clinical_features)
 
 
 # %%
-
-edges_to_select = pd.read_csv(os.path.join(path_to_save, 'edges_to_select.csv'), index_col = 0)['edge'].to_list()
+topn = 100
+edges_to_select = pd.read_csv(os.path.join(path_to_save, 'edges_to_select_{}.csv'.format(topn)), index_col = 0)['edge'].to_list()
 
 
 # %%% load LRP data
@@ -107,8 +107,8 @@ print(end_time - start_time)
 
 
 
-LRP_pd = pd.DataFrame(LRP_matrix, columns = samples[:30], index = edges)
-LRP_pd.to_csv(os.path.join(path_to_save, 'LRP_top1000_individual.csv'))
+LRP_pd = pd.DataFrame(LRP_matrix, columns = samples, index = edges)
+LRP_pd.to_csv(os.path.join(path_to_save, 'LRP_individual_top{}.csv'.format(topn)))
 
 
 #sns.clustermap(LRP_pd, method = 'ward')

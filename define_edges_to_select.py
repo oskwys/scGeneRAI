@@ -34,12 +34,19 @@ importlib.reload(f)
 #path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
 path_to_data = '/home/d07321ow/scratch/results_LRP_BRCA/networks'
 #path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
-
-edges_count = pd.read_csv(os.path.join(path_to_data, 'unique_edges_count_in_top1000.csv'), index_col = 0)
+topn = 100
+edges_count = pd.read_csv(os.path.join(path_to_data, 'unique_edges_count_in_top_{}.csv'.format(topn)), index_col = 0)
 
 # %% plot histograms
 
 edges_count = edges_count.sort_values('count', ascending=False).reset_index(drop=True)
+
+# from kneed import KneeLocator
+# kneedle = KneeLocator(edges_count.index, edges_count['count'].max() - edges_count['count'], S=1.0, curve="concave", direction="increasing",interp_method="interp1d")
+# kneedle.plot_knee_normalized()
+# kneedle.plot_knee()
+# kneedle.Ds_y
+
 
 from kneefinder import KneeFinder
 kf = KneeFinder(edges_count.index, edges_count['count'])
@@ -74,7 +81,7 @@ plt.xlabel('Interaction occurance in the top 1000 LRP')
 plt.ylabel('Count')
 plt.legend()
 
-edges_to_select['edge'].to_csv(os.path.join(path_to_data, 'edges_to_select.csv'))
+edges_to_select['edge'].to_csv(os.path.join(path_to_data, 'edges_to_select_{}.csv'.format(topn)))
 
 
 

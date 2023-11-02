@@ -31,8 +31,9 @@ import importlib, sys
 importlib.reload(f)
 
 
-path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
-path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
+#path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
+path_to_data = '/home/d07321ow/scratch/results_LRP_BRCA/networks'
+#path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
 
 edges_count = pd.read_csv(os.path.join(path_to_data, 'unique_edges_count_in_top1000.csv'), index_col = 0)
 

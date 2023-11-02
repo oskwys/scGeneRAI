@@ -81,7 +81,7 @@ n = len(lrp_files)
 start_time = datetime.now()
 
 LRP_matrix = np.zeros((len(edges_to_select),n))
-
+samples_to_pd = []
 for i in range(n):
     
             
@@ -100,6 +100,7 @@ for i in range(n):
         
     data_temp = data_temp[index_].reset_index(drop = True)
     LRP_matrix[:,i] = data_temp['LRP'].values
+    samples_to_pd.append(sample_name)
 
 end_time = datetime.now()
 
@@ -107,7 +108,7 @@ print(end_time - start_time)
 
 
 
-LRP_pd = pd.DataFrame(LRP_matrix, columns = samples, index = edges)
+LRP_pd = pd.DataFrame(LRP_matrix, columns = samples_to_pd, index = edges)
 LRP_pd.to_csv(os.path.join(path_to_save, 'LRP_individual_top{}.csv'.format(topn)))
 
 

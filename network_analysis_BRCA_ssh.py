@@ -302,13 +302,14 @@ if get_top1000:
     
     df_topn.to_csv(os.path.join(path_to_save, 'df_topn_for_individuals_top{}.csv'.format(topn)))
     
+    unique_edges, unique_edges_count = np.unique(df_topn.values.ravel(), return_counts=True)
     
-    unique_edges = list(df_topn.melt()['value'].unique())
-    unique_edges_count = []
-    for i, unique_edge in enumerate(unique_edges):
-        print(i,'/', len(unique_edges), unique_edge)
-        a = np.sum(np.sum(df_topn == unique_edge, axis=0))
-        unique_edges_count.append(a)
+    # unique_edges = list(df_topn.melt()['value'].unique())
+    # unique_edges_count = []
+    # for i, unique_edge in enumerate(unique_edges):
+    #     print(i,'/', len(unique_edges), unique_edge)
+    #     a = np.sum(np.sum(df_topn == unique_edge, axis=0))
+    #     unique_edges_count.append(a)
         
     unique_edges_df = pd.DataFrame([unique_edges, unique_edges_count]).T#, columns = )
     unique_edges_df.columns = ['edge','count']

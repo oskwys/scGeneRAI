@@ -273,7 +273,7 @@ for cluster_i in range(5):
 
 
 import community as community_louvain
-from sklearn.metrics import adjusted_rand_score
+from sklearn.metrics import adjusted_rand_score,adjusted_mutual_info_score
 
 def detect_communities(G):
     # Use the Louvain method for community detection
@@ -293,12 +293,10 @@ def compare_communities(labels1, labels2):
     return score
 
 
-edges = LRP_pd.iloc[:,1].reset_index()
+edges = LRP_pd.iloc[:,100].reset_index()
 
 edges['source_gene']  = edges['index'].str.split(' - ', expand = True)[0]
 edges['target_gene']= edges['index'].str.split(' - ', expand = True)[1]
-#edges['source_gene'] = edges['source_gene'].str.split('_', expand=True)[0]
-#edges['target_gene'] = edges['target_gene'].str.split('_', expand=True)[0]
 edges  = edges.rename(columns = {edges.columns[1]:'LRP'})
 edges['LRP_norm'] = edges['LRP'] / edges['LRP'].max()
 edges = edges.sort_values('LRP', ascending = False).reset_index(drop=True)
@@ -314,7 +312,7 @@ name_to_save = 'global_network1000_knee_cluster_{}.png'.format(cluster_i)
 title = 'Top1000, {} interactions, filted using knee point, mean LRP\n CLUSTER {}'.format(edges.shape[0], cluster_i)
 
 
-G1 = nx.from_pandas_edgelist(edges, source='source_gene', target='target_gene', edge_attr='LRP_norm')
+G = nx.from_pandas_edgelist(edges, source='source_gene', target='target_gene', edge_attr='LRP_norm')
 degrees = np.array(list(nx.degree_centrality(G).values()))
 degrees_norm = degrees / np.max(degrees)
 widths = edges['LRP'] / edges['LRP'].max() 
@@ -365,8 +363,8 @@ plt.tight_layout()
 
 
 # Detect communities in each graph
-partition1 = detect_communities(G1)
-partition2 = detect_communities(G2)
+partition1 = detect_communities(G)
+partition2 = detect_communities(G)
 
 # Convert partitions to labels
 labels1 = communities_to_labels(partition1)
@@ -375,9 +373,130 @@ labels2 = communities_to_labels(partition2)
 # Compare the communities
 score = compare_communities(labels1, labels2)
 
+eigenvalues1, _ = np.linalg.eig(nx.adjacency_matrix(G1).todense())
+eigenvalues2, _ = np.linalg.eig(nx.adjacency_matrix(G2).todense())
+
+# Plot eigenvalues
+plt.scatter(range(len(eigenvalues1)), np.sort(eigenvalues1), label='Network 1')
+plt.scatter(range(len(eigenvalues2)), np.sort(eigenvalues2), label='Network 2')
+plt.legend()
+plt.show()
+
+edges = LRP_pd.iloc[:,0].reset_index()
+edges['source_gene']  = edges['index'].str.split(' - ', expand = True)[0]
+edges['target_gene']= edges['index'].str.split(' - ', expand = True)[1]
+G = nx.from_pandas_edgelist(edges, source='source_gene', target='target_gene')
+
+nodes_all = list(G.nodes)
+nodes_labaled_all = pd.DataFrame(nodes_all, columns=['node'])
+
+G_list = []
+partitions_list = []
+
+for i in range(988):
+    print(i)
+    edges = LRP_pd.iloc[:,i].reset_index()
+    
+    edges['source_gene']  = edges['index'].str.split(' - ', expand = True)[0]
+    edges['target_gene']= edges['index'].str.split(' - ', expand = True)[1]
+    edges  = edges.rename(columns = {edges.columns[1]:'LRP'})
+    edges['LRP_norm'] = edges['LRP'] / edges['LRP'].max()
+    edges = edges.sort_values('LRP', ascending = False).reset_index(drop=True)
+    kf = KneeFinder(edges.index, edges['LRP'])
+    knee_x, knee_y = kf.find_knee()
+    #kf.plot()
+    #knee_x=2000
+    edges = edges.iloc[:int(knee_x), :]
+      
+    G = nx.from_pandas_edgelist(edges, source='source_gene', target='target_gene', edge_attr='LRP_norm')
+    partition = detect_communities(G)
+    
+    G_list.append(G)
+    partitions_list.append(partition)
+    
+    labels = communities_to_labels(partition)
+    edges_ = edges['index'].to_list()
+    nodes_ = list(G.nodes)
+    
+    nodes_labaled = pd.DataFrame(np.array([nodes_, labels]).T, columns = ['node', 'community_{}'.format(i)])
+    
+    nodes_labaled_all = nodes_labaled_all.merge(nodes_labaled, on = 'node', how = 'left')
+    
+# nodes_labaled_all.iloc[:, 1:] = nodes_labaled_all.iloc[:, 1:].fillna(-1).astype('int')
+# nodes_labaled_all.iloc[:, 1:] = nodes_labaled_all.iloc[:, 1:].apply(pd.to_numeric, errors='coerce')
+
+# sns.heatmap(nodes_labaled_all.iloc[:, 1:])
+# sns.clustermap(nodes_labaled_all.iloc[:, 1:], method = 'ward')
+
+# a = nodes_labaled_all.iloc[:, 1]
+# b = nodes_labaled_all.iloc[:, 2]
+
+
+# # similarity based on communities
+
+# shared_nodes = set(G_list[0].nodes) & set(G_list[1].nodes)
+# labels1 = [partitions_list[0][node] for node in shared_nodes if node in partitions_list[0]]
+# labels2 = [partitions_list[1][node] for node in shared_nodes if node in partitions_list[1]]
+
+# # Calculate similarity metrics for the shared nodes
+# ars = adjusted_rand_score(labels1, labels2)
 
 
 
+from itertools import combinations
+# Number of networks
+n_networks = len(G_list)
+# Create an n x n matrix filled with zeros (or NaN if you prefer)
+ars_matrix = np.zeros((n_networks, n_networks))
+amis_matrix = np.zeros((n_networks, n_networks))
+shared_nodes_matrix = np.zeros((n_networks, n_networks))
+shared_edges_matrix = np.zeros((n_networks, n_networks))
+
+# Iterate over all unique pairs of networks
+for (i, G1), (j, G2) in combinations(enumerate(G_list), 2):
+    print(i,j)
+    # Find the shared nodes between the two graphs
+    shared_nodes = set(G1.nodes) & set(G2.nodes)
+    # Fill the symmetric matrix positions
+    shared_nodes_matrix[i, j] = len(shared_nodes)
+    shared_nodes_matrix[j, i] = len(shared_nodes)
+    
+    
+    shared_edges = set(G1.edges) & set(G2.edges)
+    # Fill the symmetric matrix positions
+    shared_edges_matrix[i, j] = len(shared_edges)
+    shared_edges_matrix[j, i] = len(shared_edges)
+    
+    
+    # Get the community labels for the shared nodes in both networks
+    labels1 = [partitions_list[i][node] for node in shared_nodes if node in partitions_list[i]]
+    labels2 = [partitions_list[j][node] for node in shared_nodes if node in partitions_list[j]]
+
+    # Calculate the ARS between the two sets of labels
+    ars = adjusted_rand_score(labels1, labels2)
+    amis = adjusted_mutual_info_score(labels1, labels2)
+    
+    # Fill the symmetric matrix positions
+    ars_matrix[i, j] = ars
+    ars_matrix[j, i] = ars
+    
+    amis_matrix[i, j] = amis
+    amis_matrix[j, i] = amis
+
+sns.heatmap(ars_matrix)
+sns.clustermap(ars_matrix, method = 'ward')
+
+sns.heatmap(amis_matrix)
+sns.clustermap(amis_matrix, method = 'ward')
+
+
+
+
+# Iterate over all unique pairs of networks
+for (i, G1), (j, G2) in combinations(enumerate(G_list), 2):
+    print(i,j)
+    # Find the shared nodes between the two graphs
+    
 # %%
 
 edges = LRP_pd.iloc[:, i].reset_index()

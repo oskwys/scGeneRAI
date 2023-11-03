@@ -42,6 +42,7 @@ LRP_pd = pd.read_csv(os.path.join(path_to_save, 'LRP_individual_top{}.csv'.forma
 # %%
 import community as community_louvain
 from sklearn.metrics import adjusted_rand_score,adjusted_mutual_info_score
+from kneefinder import KneeFinder
 
 def detect_communities(G):
     # Use the Louvain method for community detection

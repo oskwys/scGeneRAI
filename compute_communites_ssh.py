@@ -43,6 +43,7 @@ LRP_pd = pd.read_csv(os.path.join(path_to_save, 'LRP_individual_top{}.csv'.forma
 import community as community_louvain
 from sklearn.metrics import adjusted_rand_score,adjusted_mutual_info_score
 from kneefinder import KneeFinder
+from kneed import KneeLocator
 
 def detect_communities(G):
     # Use the Louvain method for community detection
@@ -84,8 +85,10 @@ for i in range(988):
     edges  = edges.rename(columns = {edges.columns[1]:'LRP'})
     edges['LRP_norm'] = edges['LRP'] / edges['LRP'].max()
     edges = edges.sort_values('LRP', ascending = False).reset_index(drop=True)
-    kf = KneeFinder(edges.index, edges['LRP'])
-    knee_x, knee_y = kf.find_knee()
+    #kf = KneeFinder(edges.index, edges['LRP'])
+    #knee_x, knee_y = kf.find_knee()
+    kl = KneeLocator(edges.index, edges['LRP'], curve="convex", direction = 'decreasing', S=1, interp_method='polynomial')
+    knee_x = int(kl.knee)
     #kf.plot()
     #knee_x=2000
     edges = edges.iloc[:int(knee_x), :]

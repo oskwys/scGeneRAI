@@ -63,7 +63,7 @@ samples_groups = f.get_samples_by_group(df_clinical_features)
 # %%
 path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
 
-topn = 100
+topn = 1000
 
 LRP_pd = pd.read_csv(os.path.join(path_to_save, 'LRP_individual_top{}.csv'.format(topn)), index_col = 0)
 

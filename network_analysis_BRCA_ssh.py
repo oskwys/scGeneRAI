@@ -59,7 +59,7 @@ print('Samples: ', len(set(samples)))
 # %%% get sample goups
 
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
-df_clinical_features = f.add_cluster0(df_clinical_features)
+df_clinical_features = f.add_cluster2(df_clinical_features)
 
 
 
@@ -319,6 +319,47 @@ if get_top1000:
     #unique_edges_df['count'].plot(kind = 'hist')
 
     #unique_edges_df.sort_values('count', ascending = False).reset_index(drop=True)['count'].plot()
+    
+
+    
+# %% get top 1000 interactions (exclude exp-exp) for each sample
+
+if get_top1000:
+    topn = 1000
+    
+    df_topn = pd.DataFrame(np.zeros((topn,len(samples)), dtype = 'str'), columns = samples)
+    
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[ - (data_temp['source_gene'] .str.contains('_exp') & data_temp['target_gene'] .str.contains('_exp'))]
+        data_temp = data_temp.sort_values('LRP', ascending = False)
+        data_temp = data_temp.iloc[:topn, :]
+        data_temp = f.add_edge_colmn(data_temp)
+        df_topn.iloc[:, i] = data_temp['edge'].values
+    
+    df_topn.to_csv(os.path.join(path_to_save, 'df_topn_for_individuals_top{}.csv'.format(topn)))
+    
+    unique_edges, unique_edges_count = np.unique(df_topn.values.ravel(), return_counts=True)
+    
+    # unique_edges = list(df_topn.melt()['value'].unique())
+    # unique_edges_count = []
+    # for i, unique_edge in enumerate(unique_edges):
+    #     print(i,'/', len(unique_edges), unique_edge)
+    #     a = np.sum(np.sum(df_topn == unique_edge, axis=0))
+    #     unique_edges_count.append(a)
+        
+    unique_edges_df = pd.DataFrame([unique_edges, unique_edges_count]).T#, columns = )
+    unique_edges_df.columns = ['edge','count']
+    
+    unique_edges_df.to_csv(os.path.join(path_to_save, 'unique_edges_noexpexp_count_in_top_{}.csv'.format(topn)))
+    
+    
+    
+    
+    
+    
+    
 # %%% clustermap legend
 
 # import matplotlib.patches as mpatches
@@ -333,10 +374,6 @@ if get_top1000:
 # plt.axis('off')
 # plt.show()
     
-
-
-
-
 
 
 

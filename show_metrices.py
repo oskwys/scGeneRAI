@@ -68,7 +68,7 @@ labels_df = pd.DataFrame(samples, columns = ['samples'])
 LRP_pd = pd.read_csv(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\LRP_individual_top1000.csv', index_col = 0)
 
 
-# %% CLUSTERMAP ALL
+# %%% CLUSTERMAP ALL
 
 df_clinical_features_ = LRP_pd.T.reset_index().iloc[:,0:1].merge(df_clinical_features, left_on = 'index', right_on = 'bcr_patient_barcode').set_index('index')
 column_colors = f.map_subtypes_to_col_color(df_clinical_features_)
@@ -80,7 +80,7 @@ from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 data_to_dendrogram = ars_matrix
 Z = linkage(data_to_dendrogram, method='ward')
 
-cutoff = 30
+cutoff = 22
 fig, ax = plt.subplots(figsize=(10, 3))
 dn = dendrogram(
     Z, 
@@ -116,7 +116,7 @@ from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 data_to_dendrogram = amis_matrix
 Z = linkage(data_to_dendrogram, method='ward')
 
-cutoff = 30
+cutoff = 18
 fig, ax = plt.subplots(figsize=(10, 3))
 dn = dendrogram(
     Z, 
@@ -183,7 +183,7 @@ from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 data_to_dendrogram = shared_edges_matrix
 Z = linkage(data_to_dendrogram, method='ward')
 
-cutoff = 9000
+cutoff = 11000
 fig, ax = plt.subplots(figsize=(10, 3))
 dn = dendrogram(
     Z, 
@@ -197,7 +197,7 @@ dn = dendrogram(
 
 plt.axhline(y=cutoff, color='r', linestyle='--')
 ax.set_ylabel('Distance')
-ax.set_title('Number of shared nodes') 
+ax.set_title('Number of shared edges') 
 plt.tight_layout()
 plt.savefig(os.path.join(path_to_save, 'dendrogram_shared_edges'))
 cluster_labels = fcluster(Z, t=cutoff, criterion='distance')
@@ -213,18 +213,15 @@ plt.savefig(os.path.join(path_to_save, 'clustermap_shared_edges'))
 
 
 
-# %%
+# %% save labels
 
 labels_df = labels_df[labels_df['samples'].isin(list(LRP_pd.columns))]
 
 labels_df.to_csv(os.path.join(path_to_save, 'cluster_labels_shared_edges.csv'))
 
-# %%
+# %% see silhouette_score
 
-
-
-
-
+data_to_dendrogram = shared_edges_matrix
 
 
 
@@ -266,7 +263,8 @@ plt.ylabel('Gap Value')
 plt.title('Gap Values by Cluster Count')
 plt.show()
 
-
+# %% UMAP
+data_to_dendrogram = shared_edges_matrix
 
 import umap
 reducer = umap.UMAP()
@@ -274,13 +272,29 @@ embedding = reducer.fit_transform(data_to_dendrogram)
 
 X_umap = pd.DataFrame(embedding , columns  = ['umap_1','umap_2'])
 
-fig, ax = plt.subplots(figsize = (8,8))
-scatter = ax.scatter(X_umap['umap_1'], X_umap['umap_2'], cmap='viridis', s=10)
-
-
+fig, ax = plt.subplots(figsize = (6,6))
+#scatter = ax.scatter(X_umap['umap_1'], X_umap['umap_2'], cmap='viridis', s=10)
+sns.scatterplot(data = X_umap, x='umap_1', y='umap_2', hue=np.array(cluster_labels, dtype = 'str'),palette = {'1':'orange', '2':'green','3':'red','4':'purple','5':'brown','6':'pink'}, ax=ax)
 ax.set_xlabel('UMAP 1')
 ax.set_ylabel('UMAP 2')
-title = 'Threshold ' + threshold + '\n' + 'n_neighbors ' + n_neighbors + '\n' + 'min_dist ' + min_dist
-ax.set_title(title)
+ax.set_title('UMAP\nClusters from dendrogram')
+ax.set_xticks([])
+ax.set_yticks([])
 
 
+# Perform HDBSCAN clustering
+import hdbscan
+threshold = 22
+clusterer = hdbscan.HDBSCAN(min_cluster_size=int(threshold))  # Adjust parameters as needed
+cluster_labels_hdbscan = pd.Series(clusterer.fit_predict(embedding)).astype('str').values
+
+# Create a scatter plot
+fig, ax = plt.subplots(figsize=(6,6))
+sns.scatterplot(x=X_umap['umap_1'], y=X_umap['umap_2'], hue=cluster_labels_hdbscan, cmap='viridis', ax=ax)
+
+# Label the axes and title
+ax.set_xlabel('UMAP 1')
+ax.set_ylabel('UMAP 2')
+ax.set_title('UMAP\nClusters from HDBSCAN on UMAP embedding')
+ax.set_xticks([])
+ax.set_yticks([])

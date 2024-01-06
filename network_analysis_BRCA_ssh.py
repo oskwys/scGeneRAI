@@ -33,8 +33,11 @@ networks_for_patient_groups_and_ALL_genes = False
 networks_for_patient_groups_and_pathway_genes = False
 plot_clustermaps_pathway = False
 plot_umaps = False
-get_top1000 = True
+get_top1000 = False
 
+get_top1000_noexpexp = True
+get_pathway_LRP = True
+get_LRP_median_matrix = True
 # %% load data
 
 path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
@@ -324,7 +327,7 @@ if get_top1000:
     
 # %% get top 1000 interactions (exclude exp-exp) for each sample
 
-if get_top1000:
+if get_top1000_noexpexp:
     topn = 1000
     
     df_topn = pd.DataFrame(np.zeros((topn,len(samples)), dtype = 'str'), columns = samples)
@@ -338,7 +341,7 @@ if get_top1000:
         data_temp = f.add_edge_colmn(data_temp)
         df_topn.iloc[:, i] = data_temp['edge'].values
     
-    df_topn.to_csv(os.path.join(path_to_save, 'df_topn_for_individuals_top{}.csv'.format(topn)))
+    df_topn.to_csv(os.path.join(path_to_save, 'df_topn_for_individuals_top{}_noexpexp.csv'.format(topn)))
     
     unique_edges, unique_edges_count = np.unique(df_topn.values.ravel(), return_counts=True)
     
@@ -352,33 +355,99 @@ if get_top1000:
     unique_edges_df = pd.DataFrame([unique_edges, unique_edges_count]).T#, columns = )
     unique_edges_df.columns = ['edge','count']
     
-    unique_edges_df.to_csv(os.path.join(path_to_save, 'unique_edges_noexpexp_count_in_top_{}.csv'.format(topn)))
+    unique_edges_df.to_csv(os.path.join(path_to_save, 'unique_edges_noexpexp_count_in_top_{}_noexpexp.csv'.format(topn)))
     
     
     
+# %% get LRP only for interaction including PATHWAY genes
+temp = lrp_dict['TCGA-3C-AAAU']
+
+
+if get_pathway_LRP:
+
+    for pathway in genes_pathways['Pathway'].unique():
+        genes = genes_pathways.loc[genes_pathways['Pathway'] == pathway, 'cce_match'].to_list()
+        index_ = (temp['source_gene'].str.split('_', expand = True)[0].isin(genes)) + (temp['target_gene'].str.split('_', expand = True)[0].isin(genes))
+
+        df_topn = pd.DataFrame(np.zeros((topn,len(samples)), dtype = 'str'), columns = samples)
+
+        np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+
+        for i, sample_name in enumerate(samples):
+            print(i)
+            data_temp = lrp_dict[sample_name]
+            data_temp = data_temp[index_]
+            
+            np_lrp_temp[:, i] = data_temp['LRP'].values
+            
+            data_temp = data_temp.sort_values('LRP', ascending = False).reset_index(drop=True)
+            data_temp = data_temp.iloc[:topn, :]
+            data_temp = f.add_edge_colmn(data_temp)
+            df_topn.iloc[:, i] = data_temp['edge'].values
+        
+        df_topn.to_csv(os.path.join(path_to_save, 'df_topn_for_individuals_top{}_{}.csv'.format(topn, pathway)))
+        
+        unique_edges, unique_edges_count = np.unique(df_topn.values.ravel(), return_counts=True)
+        
+        # unique_edges = list(df_topn.melt()['value'].unique())
+        # unique_edges_count = []
+        # for i, unique_edge in enumerate(unique_edges):
+        #     print(i,'/', len(unique_edges), unique_edge)
+        #     a = np.sum(np.sum(df_topn == unique_edge, axis=0))
+        #     unique_edges_count.append(a)
+            
+        unique_edges_df = pd.DataFrame([unique_edges, unique_edges_count]).T#, columns = )
+        unique_edges_df.columns = ['edge','count']
+        
+        unique_edges_df.to_csv(os.path.join(path_to_save, 'unique_edges_noexpexp_count_in_top_{}_{}.csv'.format(topn, pathway)))
+        
+        # median LRP matrix
+        # lrp_median = np.nanmedian(np_lrp_temp, axis = 1)
+        # lrp_median_df = pd.DataFrame()
+        # lrp_median_df ['LRP_median'] = lrp_median
+        # lrp_median_df[['source_gene', 'target_gene']] =   temp.loc[index_, ['source_gene', 'target_gene']].reset_index(drop=True)
+        
+        # lrp_median_df_doubled = pd.DataFrame()
+        # lrp_median_df_doubled ['source_gene'] = lrp_median_df['target_gene']
+        # lrp_median_df_doubled ['target_gene'] = lrp_median_df['source_gene']
+        # lrp_median_df_doubled['LRP_median'] = lrp_median_df['LRP_median']
+        
+        # lrp_median_df = pd.concat((lrp_median_df, lrp_median_df_doubled)).reset_index(drop=True)
+        # lrp_median_df_pivot = lrp_median_df.pivot_table(columns = 'target_gene', values = 'LRP_median', index = 'source_gene')
+        #sns.heatmap(lrp_median_df_pivot)
+
+
+# %% get LRP median clustermap matix
+temp = lrp_dict['TCGA-3C-AAAU']
+
+
+if get_LRP_median_matrix:
+
+    np_lrp_temp = np.zeros((temp.shape[0],len(samples)) )
+
+    for i, sample_name in enumerate(samples[:10]):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
     
+    # median LRP matrix
+    lrp_median = np.nanmedian(np_lrp_temp, axis = 1)
+    lrp_median_df = pd.DataFrame()
+    lrp_median_df ['LRP_median'] = lrp_median
+    lrp_median_df[['source_gene', 'target_gene']] =   temp[['source_gene', 'target_gene']]
     
+    lrp_median_df_doubled = pd.DataFrame()
+    lrp_median_df_doubled ['source_gene'] = lrp_median_df['target_gene']
+    lrp_median_df_doubled ['target_gene'] = lrp_median_df['source_gene']
+    lrp_median_df_doubled['LRP_median'] = lrp_median_df['LRP_median']
     
+    lrp_median_df = pd.concat((lrp_median_df, lrp_median_df_doubled)).reset_index(drop=True)
+    lrp_median_df_pivot = lrp_median_df.pivot_table(columns = 'target_gene', values = 'LRP_median', index = 'source_gene')
+
+    lrp_median_pivot = lrp_median_df_pivot.fillna(0).values + lrp_median_df_pivot.T.fillna(0).values - np.diag(np.diag(lrp_median_df_pivot.values))
+    np.fill_diagonal(lrp_median_pivot, 0)
+    lrp_median_df_pivot = pd.DataFrame(lrp_median_pivot, index = lrp_median_df_pivot.index, columns = lrp_median_df_pivot.columns)
+
+    lrp_median_df_pivot.to_csv(os.path.join(path_to_save, 'lrp_median_matrix.csv'))
     
-# %%% clustermap legend
-
-# import matplotlib.patches as mpatches
-
-# def create_legend(color_map):
-#     patches = [mpatches.Patch(color=color, label=label) for label, color in color_map.items()]
-#     plt.legend(handles=patches)
-
-# # Create a dummy figure just to show the legend
-# plt.figure(figsize=(10, 6))
-# create_legend(color_map)
-# plt.axis('off')
-# plt.show()
-    
-
-
-
-
-
-
-
-         

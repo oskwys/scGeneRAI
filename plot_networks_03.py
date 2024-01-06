@@ -202,7 +202,7 @@ data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.
 
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
 
-df_clinical_features = f.add_cluster0(df_clinical_features)
+df_clinical_features = f.add_cluster2(df_clinical_features)
 
 
 samples_groups = f.get_samples_by_group(df_clinical_features)
@@ -832,6 +832,12 @@ cluster_labels = fcluster(Z_x, t=cutoff, criterion='distance')
 edges_cluster2 = pd.Series(list(edges_all_filtered.index))[cluster_labels==2]
 nodes_cluster2 = list(set(edges_cluster2.str.split('-',expand = True).melt()['value'].to_list()))
 nodes_cluster2 .sort()
+edges_cluster2 = list(edges_cluster2)
+edges_cluster2.sort()
+
+
+cluster_labels = fcluster(Z_y, t=7, criterion='distance')
+samples_cluster2 = pd.Series(samples)[cluster_labels==2].to_list()
 
 # %%%% network stats
 def calculate_combined_network_metrics(G, edge_subset, nodes_cluster2):

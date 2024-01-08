@@ -425,7 +425,7 @@ if get_LRP_median_matrix:
 
     np_lrp_temp = np.zeros((temp.shape[0],len(samples)) )
 
-    for i, sample_name in enumerate(samples[:10]):
+    for i, sample_name in enumerate(samples):
         print(i)
         data_temp = lrp_dict[sample_name]
         np_lrp_temp[:, i] = data_temp['LRP'].values

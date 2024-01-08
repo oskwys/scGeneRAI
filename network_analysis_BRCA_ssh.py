@@ -89,7 +89,7 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n = len(lrp_files)  
+n = 20#len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()
@@ -437,12 +437,13 @@ if get_LRP_median_matrix:
     lrp_median_df = pd.DataFrame()
     print(lrp_median)
     lrp_median_df ['LRP_median'] = lrp_median
-    lrp_median_df[['source_gene', 'target_gene']] =   temp[['source_gene', 'target_gene']]
-    
+    lrp_median_df['source_gene'] = temp['source_gene'].to_list()
+    lrp_median_df['target_gene'] = temp['target_gene'].to_list()
+
     lrp_median_df_doubled = pd.DataFrame()
-    lrp_median_df_doubled ['source_gene'] = lrp_median_df['target_gene']
-    lrp_median_df_doubled ['target_gene'] = lrp_median_df['source_gene']
-    lrp_median_df_doubled['LRP_median'] = lrp_median_df['LRP_median']
+    lrp_median_df_doubled ['source_gene'] = lrp_median_df['target_gene'].copy()
+    lrp_median_df_doubled ['target_gene'] = lrp_median_df['source_gene'].copy()
+    lrp_median_df_doubled['LRP_median'] = lrp_median_df['LRP_median'].copy()
     
     lrp_median_df = pd.concat((lrp_median_df, lrp_median_df_doubled)).reset_index(drop=True)
     lrp_median_df_pivot = lrp_median_df.pivot_table(columns = 'target_gene', values = 'LRP_median', index = 'source_gene')
@@ -460,14 +461,15 @@ if get_LRP_median_matrix:
     print(np_lrp_temp)
     lrp_mean = np.nanmean(np_lrp_temp, axis = 1)
     lrp_mean_df = pd.DataFrame()
-    print(lrp_mean_df)
+    print(lrp_mean)
     lrp_mean_df ['LRP_mean'] = lrp_mean
-    lrp_mean_df[['source_gene', 'target_gene']] =   temp[['source_gene', 'target_gene']]
-    
+    lrp_mean_df['source_gene'] = temp['source_gene'].to_list()
+    lrp_mean_df['target_gene'] = temp['target_gene'].to_list()
+
     lrp_mean_df_doubled = pd.DataFrame()
-    lrp_mean_df_doubled ['source_gene'] = lrp_mean_df['target_gene']
-    lrp_mean_df_doubled ['target_gene'] = lrp_mean_df['source_gene']
-    lrp_mean_df_doubled['LRP_mean'] = lrp_mean_df['LRP_mean']
+    lrp_mean_df_doubled ['source_gene'] = lrp_mean_df['target_gene'].copy()
+    lrp_mean_df_doubled ['target_gene'] = lrp_mean_df['source_gene'].copy()
+    lrp_mean_df_doubled['LRP_mean'] = lrp_mean_df['LRP_mean'].copy()
     
     lrp_mean_df = pd.concat((lrp_mean_df, lrp_mean_df_doubled)).reset_index(drop=True)
     lrp_mean_df_pivot = lrp_mean_df.pivot_table(columns = 'target_gene', values = 'LRP_mean', index = 'source_gene')

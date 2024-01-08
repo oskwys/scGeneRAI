@@ -35,8 +35,8 @@ plot_clustermaps_pathway = False
 plot_umaps = False
 get_top1000 = False
 
-get_top1000_noexpexp = True
-get_pathway_LRP = True
+get_top1000_noexpexp = False
+get_pathway_LRP = False
 get_LRP_median_matrix = True
 # %% load data
 
@@ -432,8 +432,10 @@ if get_LRP_median_matrix:
         
     
     # median LRP matrix
+    print(np_lrp_temp)
     lrp_median = np.nanmedian(np_lrp_temp, axis = 1)
     lrp_median_df = pd.DataFrame()
+    print(lrp_median)
     lrp_median_df ['LRP_median'] = lrp_median
     lrp_median_df[['source_gene', 'target_gene']] =   temp[['source_gene', 'target_gene']]
     

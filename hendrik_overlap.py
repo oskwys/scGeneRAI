@@ -44,12 +44,22 @@ genes_cluster2 = [x.split('_')[0] for x in genes_cluster2]
 
 path = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\ReprRes_J_Lehtio_1411-v1.1.0\NBISweden-ReprRes_J_Lehtio_1411-652291d\Data'
 
-df1 = pd.read_excel(os.path.join(path, 'Genelists-summary160606.xlsx'), engine = 'openpyxl')
+df11 = pd.read_excel(os.path.join(path, 'Genelists-summary160606.xlsx'), engine = 'openpyxl', sheet_name = 0, dtype= 'str')
+#df11['source'] = 'From proteinatlas n databases'
+df12 = pd.read_excel(os.path.join(path, 'Genelists-summary160606.xlsx'), engine = 'openpyxl', sheet_name = 1, dtype= 'str')
+#df12['source'] = 'signatures and mut'
+df13 = pd.read_excel(os.path.join(path, 'Genelists-summary160606.xlsx'), engine = 'openpyxl', sheet_name = 2, dtype= 'str')
+#df13['source'] = 'None-tumor'
 df2 = pd.read_excel(os.path.join(path,'COSMIC_n_BC_drivers.xlsx'), engine = 'openpyxl')
+#df2['source'] = 'COSMIC_n_BC_drivers'
 df3 = pd.read_excel(os.path.join(path,'KEGG_n_Hallmark_genes_for_mRNA-protein_corr.xlsx'), engine = 'openpyxl')
+#df3['source'] = 'KEGG_n_Hallmark_genes_for_mRNA-protein_corr'
 
 
-df = pd.concat((df1, df2, df3),axis=1)
+df = pd.concat((df11, df12, df13, df2, df3),axis=1)
+
+columns_ = len(df11.columns) * ['From proteinatlas n databases'] + len(df12.columns) * ['signatures and mut'] + len(df13.columns) * ['None-tumor'] + len(df2.columns) * ['COSMIC_n_BC_drivers'] + len(df3.columns) * ['KEGG_n_Hallmark_genes_for_mRNA-protein_corr']
+
 
 dict_ = {}
 for col in df.columns:
@@ -85,4 +95,5 @@ for col in dict_.keys():
 
 
 overlap_df = pd.DataFrame(dict_overlap).T
+overlap_df['Source'] = columns_
 overlap_df.to_excel(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\top1000_5300\overlap_hendrik_cluster2_genes.xlsx')

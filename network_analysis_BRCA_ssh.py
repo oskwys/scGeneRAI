@@ -453,3 +453,28 @@ if get_LRP_median_matrix:
 
     lrp_median_df_pivot.to_csv(os.path.join(path_to_save, 'lrp_median_matrix.csv'))
     
+    
+    
+    
+    # mean LRP matrix
+    print(np_lrp_temp)
+    lrp_mean = np.nanmean(np_lrp_temp, axis = 1)
+    lrp_mean_df = pd.DataFrame()
+    print(lrp_mean_df)
+    lrp_mean_df ['LRP_mean'] = lrp_mean
+    lrp_mean_df[['source_gene', 'target_gene']] =   temp[['source_gene', 'target_gene']]
+    
+    lrp_mean_df_doubled = pd.DataFrame()
+    lrp_mean_df_doubled ['source_gene'] = lrp_mean_df['target_gene']
+    lrp_mean_df_doubled ['target_gene'] = lrp_mean_df['source_gene']
+    lrp_mean_df_doubled['LRP_mean'] = lrp_mean_df['LRP_mean']
+    
+    lrp_mean_df = pd.concat((lrp_mean_df, lrp_mean_df_doubled)).reset_index(drop=True)
+    lrp_mean_df_pivot = lrp_mean_df.pivot_table(columns = 'target_gene', values = 'LRP_mean', index = 'source_gene')
+
+    lrp_mean_pivot = lrp_mean_df_pivot.fillna(0).values + lrp_mean_df_pivot.T.fillna(0).values - np.diag(np.diag(lrp_mean_df_pivot.values))
+    np.fill_diagonal(lrp_mean_pivot, 0)
+    lrp_mean_df_pivot = pd.DataFrame(lrp_mean_pivot, index = lrp_mean_df_pivot.index, columns = lrp_mean_df_pivot.columns)
+
+    lrp_mean_df_pivot.to_csv(os.path.join(path_to_save, 'lrp_mean_matrix.csv'))
+    

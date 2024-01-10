@@ -34,7 +34,7 @@ importlib.reload(f)
 
 path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
 #path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
-
+#path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
 path_to_save = '/home/d07321ow/scratch/results_LRP_BRCA/networks'
 #path_to_save = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\networks'
 
@@ -62,8 +62,9 @@ samples_groups = f.get_samples_by_group(df_clinical_features)
 
 
 # %%
-topn = 100
-edges_to_select = pd.read_csv(os.path.join(path_to_save, 'edges_to_select_{}.csv'.format(topn)), index_col = 0)['edge'].to_list()
+topn = 1000
+#edges_to_select = pd.read_csv(os.path.join(path_to_save, 'edges_to_select_{}.csv'.format(topn)), index_col = 0)['edge'].to_list()
+edges_to_select = pd.read_csv(os.path.join(path_to_save, 'edges_to_select_1000_noexpexp.csv'.format(topn)), index_col = 0)['edge'].to_list()
 
 
 # %%% load LRP data
@@ -109,7 +110,8 @@ print(end_time - start_time)
 
 
 LRP_pd = pd.DataFrame(LRP_matrix, columns = samples_to_pd, index = edges)
-LRP_pd.to_csv(os.path.join(path_to_save, 'LRP_individual_top{}.csv'.format(topn)))
+#LRP_pd.to_csv(os.path.join(path_to_save, 'LRP_individual_top{}.csv'.format(topn)))
+LRP_pd.to_csv(os.path.join(path_to_save, 'LRP_individual_top1000_noexpexp.csv')
 
 
 #sns.clustermap(LRP_pd, method = 'ward')

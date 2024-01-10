@@ -67,7 +67,6 @@ plt.savefig(os.path.join(path_to_save, 'baselines_clustermap_expression_raw.png'
 
 fig,ax = plt.subplots()
 ax.hist(df_exp.values.ravel(), bins = 30)
-LRP_pd.melt().describe()
 
 data_to_clustermap = data_to_model.iloc[:, 0:603]
 
@@ -122,16 +121,50 @@ data_to_corr = data_to_model.iloc[:, 0:603]
 # %%%% pearson
 corr_pearson = data_to_corr.corr(method = 'pearson').abs()
 
+
+data_to_dendrogram = corr_pearson.values
+Z = linkage(data_to_dendrogram, method='ward')
+
+cutoff = 18
+
+fig, ax = plt.subplots(figsize=(12, 3))
+dn = dendrogram(
+    Z, 
+    color_threshold=cutoff, 
+    above_threshold_color='gray', 
+    #truncate_mode='lastp',  # show only the last p merged clusters
+    #p=30,  # show only the last 12 merged clusters
+    show_leaf_counts=False,  # show the number of samples in each cluster
+    ax=ax
+)
+
+# Draw a line to signify the cutoff on the dendrogram
+plt.axhline(y=cutoff, color='r', linestyle='--')
+
+ 
+cluster_labels = fcluster(Z, t=cutoff, criterion='distance')
+unique_labels, counts = np.unique(cluster_labels, return_counts=True)
+
 row_colors = f.map_cluset2_genes(data_to_corr.columns).to_list()
 
 g = sns.clustermap(corr_pearson, method = 'ward', vmin = 0.00, vmax = 1, cmap = 'jet', yticklabels = False, xticklabels = False,
-               #mask = LRP_pd<0.01, 
+               row_linkage = Z, col_linkage = Z, 
                col_colors = row_colors,
                row_colors = row_colors)
 g.ax_heatmap.set_xlabel('Genes')
 g.ax_heatmap.set_ylabel('Genes')
 
 plt.savefig(os.path.join(path_to_save, 'baselines_clustermap_expression_inputdata_pearson_corr.png'))
+
+
+
+genes = list(corr_pearson.index)
+df_genes = pd.DataFrame()
+df_genes['genes'] = genes
+df_genes['cluster'] = cluster_labels
+df_genes.pivot(columns = 'cluster').to_excel(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\exp_spearmancorr_clusters.xlsx')
+
+
 
 
 # %%%% pearson masked r < X

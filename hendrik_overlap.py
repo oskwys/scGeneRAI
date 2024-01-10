@@ -97,3 +97,100 @@ for col in dict_.keys():
 overlap_df = pd.DataFrame(dict_overlap).T
 overlap_df['Source'] = columns_
 overlap_df.to_excel(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\top1000_5300\overlap_hendrik_cluster2_genes.xlsx')
+
+# %% compute overlap with expexp_lrp_mean_clusters
+
+expexp_cluster_genes = pd.read_excel(os.path.join(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples', 'expexp_lrp_mean_clusters.xlsx'), engine = 'openpyxl', header =1)
+
+dict_overlap = {}
+for cluster_id in expexp_cluster_genes.columns[1:]:
+    print(cluster_id)
+    dict_overlap[cluster_id] = {}
+    
+    genes_cluster = expexp_cluster_genes[cluster_id].dropna().to_list()
+    genes_cluster = [x.replace('_exp','') for x in genes_cluster]
+    
+    for col in dict_.keys():
+        vals = dict_[col]
+        
+        intersection = list(set(genes_cluster).intersection(set(vals)))
+        intersection.sort()
+        overlap_size = len(intersection)
+        overlap_ratio = overlap_size / len(genes_cluster)
+        overlap_ratio_to_col = overlap_size / len(vals)
+        
+        dict_overlap[cluster_id][col] = {
+            'intersection': intersection,
+            'overlap_size': overlap_size,
+            'overlap_ratio': overlap_ratio,
+            'columns_size': len(vals),
+            'overlap_ratio_to_col': overlap_ratio_to_col
+        }
+
+# Flatten the dictionary and create a DataFrame
+rows = []
+for cluster_id, nested_dict in dict_overlap.items():
+    for col, data_dict in nested_dict.items():
+        row = {
+            'cluster_id': cluster_id,
+            'column': col,
+            **data_dict  # This unpacks all key-value pairs from data_dict into the row
+        }
+        rows.append(row)
+
+overlap_df = pd.DataFrame(rows)
+overlap_df.to_excel(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\overlap_hendrik_expexp.xlsx')
+
+# %% compute overlap with exp_spearmancorr_clusters
+
+exp_spearman_cluster_genes = pd.read_excel(os.path.join(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples', 'exp_spearmancorr_clusters.xlsx'), engine = 'openpyxl', header =1)
+
+dict_overlap = {}
+for cluster_id in exp_spearman_cluster_genes.columns[1:]:
+    print(cluster_id)
+    dict_overlap[cluster_id] = {}
+    
+    genes_cluster = expexp_cluster_genes[cluster_id].dropna().to_list()
+    genes_cluster = [x.replace('_exp','') for x in genes_cluster]
+    
+    for col in dict_.keys():
+        vals = dict_[col]
+        
+        intersection = list(set(genes_cluster).intersection(set(vals)))
+        intersection.sort()
+        overlap_size = len(intersection)
+        overlap_ratio = overlap_size / len(genes_cluster)
+        overlap_ratio_to_col = overlap_size / len(vals)
+        
+        dict_overlap[cluster_id][col] = {
+            'intersection': intersection,
+            'overlap_size': overlap_size,
+            'overlap_ratio': overlap_ratio,
+            'columns_size': len(vals),
+            'overlap_ratio_to_col': overlap_ratio_to_col
+        }
+
+# Flatten the dictionary and create a DataFrame
+rows = []
+for cluster_id, nested_dict in dict_overlap.items():
+    for col, data_dict in nested_dict.items():
+        row = {
+            'cluster_id': cluster_id,
+            'column': col,
+            **data_dict  # This unpacks all key-value pairs from data_dict into the row
+        }
+        rows.append(row)
+
+overlap_df = pd.DataFrame(rows)
+overlap_df.to_excel(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\overlap_hendrik_exp_spearman.xlsx')
+
+
+
+
+
+
+
+
+
+
+

@@ -54,7 +54,7 @@ print('Samples: ', len(set(samples)))
 # %%% get sample goups
 
 df_clinical_features = df_clinical_features[df_clinical_features['bcr_patient_barcode'].isin(samples)].reset_index(drop=True)
-df_clinical_features = f.add_cluster0(df_clinical_features)
+df_clinical_features = f.add_cluster2(df_clinical_features)
 
 
 

@@ -35,7 +35,8 @@ importlib.reload(f)
  #%%
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
  
-path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
+#path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
+path_to_data = r'G:\My Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples'
 df = pd.read_csv(os.path.join(path_to_data, 'lrp_mean_matrix.csv'))
 
 df = df.set_index('source_gene')
@@ -127,6 +128,56 @@ df_genes['genes'] = genes
 df_genes['cluster'] = cluster_labels
 df_genes.pivot(columns = 'cluster').to_excel(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\expexp_lrp_mean_clusters.xlsx')
 
+
+
+# %% plot only no-exp genes
+
+df_noexp = pd.read_csv(os.path.join(path_to_data, 'lrp_mean_matrix.csv'))
+df_noexp= df_noexp.set_index('source_gene')
+cols = df_noexp.columns
+cols = [x for x in cols if '_exp' not in x ]
+df_noexp = df_noexp[cols]
+df_noexp = df_noexp.loc[df_noexp.index.isin(cols)]
+
+
+data_to_dendrogram = df_noexp.T.values
+Z = linkage(data_to_dendrogram, method='ward')
+
+# Define the cutoff threshold to determine the clusters
+cutoff = .2
+
+# Calculate the dendrogram
+fig, ax = plt.subplots(figsize=(12, 3))
+dn = dendrogram(
+    Z, 
+    color_threshold=cutoff, 
+    above_threshold_color='gray', 
+    #truncate_mode='lastp',  # show only the last p merged clusters
+    #p=30,  # show only the last 12 merged clusters
+    show_leaf_counts=False,  # show the number of samples in each cluster
+    ax=ax
+)
+
+# Draw a line to signify the cutoff on the dendrogram
+plt.axhline(y=cutoff, color='r', linestyle='--')
+
+ 
+cluster_labels = fcluster(Z, t=cutoff, criterion='distance')
+unique_labels, counts = np.unique(cluster_labels, return_counts=True)
+
+
+sns.clustermap(df_noexp, method = 'ward', mask = (df_noexp == 0) , cmap = 'jet', 
+               row_linkage = Z, col_linkage = Z,
+               yticklabels = False, xticklabels = False,)
+
+sns.histplot(df_noexp.values.ravel())
+
+
+genes = list(df_noexp.index)
+df_genes = pd.DataFrame()
+df_genes['genes'] = genes
+df_genes['cluster'] = cluster_labels
+df_genes.pivot(columns = 'cluster').to_excel(r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\results_all_samples\expexp_lrp_mean_clusters.xlsx')
 
 
 

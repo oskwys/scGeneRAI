@@ -37,9 +37,11 @@ get_top1000 = False
 
 get_top1000_noexpexp = False
 get_pathway_LRP = False
-get_LRP_median_matrix = True
+get_LRP_median_matrix = False
+get_top_lrp = True
 # %% load data
 
+path_to_data = r'G:\My Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
 path_to_data = '/home/d07321ow/scratch/scGeneRAI/data/data_BRCA'
 #path_to_data = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
 
@@ -48,9 +50,11 @@ path_to_save = '/home/d07321ow/scratch/results_LRP_BRCA/networks'
 
 
 #path_to_pathways = r'C:\Users\d07321ow\Documents\GitHub\scGeneRAI\PATHWAYS'
+path_to_pathways = r'C:\Users\owysocky\Documents\GitHub\scGeneRAI\PATHWAYS'
 path_to_pathways ='/home/d07321ow/scratch/scGeneRAI/PATHWAYS'
 
 #path_to_lrp_results = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\results'
+path_to_lrp_results = r'G:\My Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\results'
 path_to_lrp_results = '/home/d07321ow/scratch/results_LRP_BRCA/results'
 
 data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.get_input_data(path_to_data)
@@ -89,7 +93,7 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n = 20#len(lrp_files)  
+n = len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()
@@ -479,4 +483,209 @@ if get_LRP_median_matrix:
     lrp_mean_df_pivot = pd.DataFrame(lrp_mean_pivot, index = lrp_mean_df_pivot.index, columns = lrp_mean_df_pivot.columns)
 
     lrp_mean_df_pivot.to_csv(os.path.join(path_to_save, 'lrp_mean_matrix.csv'))
+
+
+
+
+
+
+
+# %% get LRP top values
+def get_median_or_mean_from_all_LRP(lrp_np, temp, index_, type_ = 'mean'):
+    
+    if type_ == 'median':
+        lrp_temp = np.nanmedian(lrp_np, axis = 1)
+    elif type_ == 'mean':
+        lrp_temp = np.nanmean(lrp_np, axis = 1)
+    lrp_df = pd.DataFrame()
+    print(lrp_temp)
+    lrp_df ['LRP'] = lrp_temp
+    lrp_df['source_gene'] = temp.loc[index_,'source_gene'].to_list()
+    lrp_df['target_gene'] = temp.loc[index_,'target_gene'].to_list()
+    lrp_df['edge'] =  temp.loc[index_,'edge'].to_list()
+    lrp_df['edge_type'] =  temp.loc[index_,'edge_type'].to_list()
+    lrp_df = lrp_df.reset_index()
+    lrp_df = lrp_df.sort_values(by = 'LRP', ascending = False).reset_index(drop = True)
+    return lrp_df
+    
+temp = lrp_dict['TCGA-3C-AAAU'].copy()
+temp = f.add_edge_colmn(temp)
+
+if get_top_lrp:
+
+    np_lrp_temp = np.zeros((temp.shape[0],len(samples)) )
+
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    
+    # median LRP matrix
+    print(np_lrp_temp)
+    
+    # exp
+    index_ = temp['edge_type'].str.contains('exp')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topexp_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topexp_median = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    # mut
+    index_ = temp['edge_type'].str.contains('mut')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topmut_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topmut_median = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    # del
+    index_ = temp['edge_type'].str.contains('del')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topdel_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topdel_median = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    # amp
+    index_ = temp['edge_type'].str.contains('amp')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topamp_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topamp_median = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    # fus
+    index_ = temp['edge_type'].str.contains('fus')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topfus_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topfus_median = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    
+    # exp-exp
+    index_ = temp['edge_type'].str.contains('exp-exp')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topexpexp_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topexpexp_median = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    # mut-mut
+    index_ = temp['edge_type'].str.contains('mut-mut')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topmutmut_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topmutmut_median = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    # del-del
+    index_ = temp['edge_type'].str.contains('del-del')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topdeldel_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topdeldel_median = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    # amp-amp
+    index_ = temp['edge_type'].str.contains('amp-amp')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topampamp_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topampamp_median = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    # fus-fus
+    index_ = temp['edge_type'].str.contains('fus-fus')
+    np_lrp_temp = np.zeros((index_.sum(),len(samples)) )
+    for i, sample_name in enumerate(samples):
+        print(i)
+        data_temp = lrp_dict[sample_name]
+        data_temp = data_temp[index_]
+        
+        np_lrp_temp[:, i] = data_temp['LRP'].values
+        
+    lrp_topfusfus_mean = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'mean')
+    lrp_topfusfus_median  = get_median_or_mean_from_all_LRP(np_lrp_temp, temp, index_, type_ = 'median')
+    
+    
+    lrp_topexp_mean  .to_csv(os.path.join(path_to_save , 'lrp_topexp_mean .csv'))
+    lrp_topexp_median  .to_csv(os.path.join(path_to_save , 'lrp_topexp_mean .csv'))
+           
+    lrp_topmut_mean  .to_csv(os.path.join(path_to_save , 'lrp_topmut_mean .csv'))
+    lrp_topmut_median  .to_csv(os.path.join(path_to_save , 'lrp_topmut_mean .csv'))
+    
+    lrp_topdel_mean  .to_csv(os.path.join(path_to_save , 'lrp_topdel_mean .csv'))
+    lrp_topdel_median  .to_csv(os.path.join(path_to_save , 'lrp_topdel_mean .csv'))
+        
+    lrp_topamp_mean  .to_csv(os.path.join(path_to_save , 'lrp_topamp_mean .csv'))
+    lrp_topamp_median  .to_csv(os.path.join(path_to_save , 'lrp_topamp_mean .csv'))
+        
+    lrp_topfus_mean  .to_csv(os.path.join(path_to_save , 'lrp_topfus_mean .csv'))
+    lrp_topfus_median  .to_csv(os.path.join(path_to_save , 'lrp_topfus_mean .csv'))   
+    
+    
+    lrp_topexpexp_mean  .to_csv(os.path.join(path_to_save , 'lrp_topexpexp_mean .csv'))
+    lrp_topexpexp_median  .to_csv(os.path.join(path_to_save , 'lrp_topexpexp_mean .csv'))
+            
+    lrp_topmutmut_mean  .to_csv(os.path.join(path_to_save , 'lrp_topmutmut_mean .csv'))
+    lrp_topmutmut_median  .to_csv(os.path.join(path_to_save , 'lrp_topmutmut_mean .csv'))
+            
+    lrp_topdeldel_mean  .to_csv(os.path.join(path_to_save , 'lrp_topdeldel_mean .csv'))
+    lrp_topdeldel_median  .to_csv(os.path.join(path_to_save , 'lrp_topdeldel_mean .csv'))
+    
+    lrp_topampamp_mean  .to_csv(os.path.join(path_to_save , 'lrp_topampamp_mean .csv'))
+    lrp_topampamp_median  .to_csv(os.path.join(path_to_save , 'lrp_topampamp_mean .csv'))
+            
+    lrp_topfusfus_mean  .to_csv(os.path.join(path_to_save , 'lrp_topfusfus_mean .csv'))
+    lrp_topfusfus_median  .to_csv(os.path.join(path_to_save , 'lrp_topfusfus_mean .csv'))
+    
+    
     

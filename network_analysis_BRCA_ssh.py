@@ -63,7 +63,7 @@ data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.
 
 # %% get samples
 samples = f.get_samples_with_lrp(path_to_lrp_results)
-#samples = samples[:10]
+samples = samples[:50]
 print('Samples: ', len(samples))
 print('Samples: ', len(set(samples)))
 # %%% get sample goups
@@ -96,7 +96,7 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n = len(lrp_files)  
+n = 50#len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()

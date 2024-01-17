@@ -589,43 +589,31 @@ if get_stat_diff_groups:
 
     for group in list(samples_groups.keys()):
         print(group)
-        
-        subgroup1 = list(samples_groups[group].keys())[0]
-        subgroup2 = list(samples_groups[group].keys())[1]
+
+        subgroup_keys = list(subgroups.keys())
+        subgroup1, subgroup2 = subgroup_keys[0], subgroup_keys[1]
         print(group, subgroup1, subgroup2)
         
-            
         samples_subgroup1 = samples_groups[group][subgroup1]
         samples_subgroup2 = samples_groups[group][subgroup2]
         
-        
-
-        np_lrp_temp1 = np.zeros((temp.shape[0],len(samples_subgroup1)) )
-        np_lrp_temp2 = np.zeros((temp.shape[0],len(samples_subgroup2)) )
-        
+        np_lrp_temp1 = np.zeros((temp.shape[0], len(samples_subgroup1)))
+        np_lrp_temp2 = np.zeros((temp.shape[0], len(samples_subgroup2)))
         
         for i, sample_name in enumerate(samples_subgroup1):
-            print(i)
-            data_temp = lrp_dict[sample_name]
-            np_lrp_temp1[:, i] = data_temp['LRP'].values
+            np_lrp_temp1[:, i] = lrp_dict[sample_name]['LRP'].values
         
         for i, sample_name in enumerate(samples_subgroup2):
-            print(i)
-            data_temp = lrp_dict[sample_name]
-            np_lrp_temp2[:, i] = data_temp['LRP'].values
-
-        # compare rows
+            np_lrp_temp2[:, i] = lrp_dict[sample_name]['LRP'].values
+    
+        # Compare rows
         mwu_res = []
         for pair_i in range(temp.shape[0]):
-            print(pair_i)
             x1 = np_lrp_temp1[pair_i, :]
             x2 = np_lrp_temp2[pair_i, :]
-
+    
             mwu = pg.mwu(x1, x2).values[0]
-            mwu_res .append(mwu)
-
-        mwu_df = pd.DataFrame(mwu_res)
-        mwu_df.columns = ['U-val', 'alternative', 'p-val', 'RBC', 'CLES']
+            mwu_res.append(mwu)
 
         mwu_df.to_csv(os.path.join(path_to_save, 'mwu_edges_LRP_{}.csv'.format(group)))
 
@@ -634,55 +622,47 @@ if get_stat_diff_groups:
 
 if get_stat_diff_groups:
     import pingouin as pg
-    n_genes = len(set(np.unique(temp[['source_gene', 'target_gene']].values)))
-    for group in list(samples_groups.keys()):
+    gene_set = set(temp['source_gene']).union(temp['target_gene'])
+    n_genes = len(gene_set)
+    gene_list = sorted(list(gene_set))  # Create a consistent ordered list of genes
+    
+    for group, subgroups in samples_groups.items():
         print(group)
         
-        subgroup1 = list(samples_groups[group].keys())[0]
-        subgroup2 = list(samples_groups[group].keys())[1]
+        subgroup_keys = list(subgroups)
+        subgroup1, subgroup2 = subgroup_keys[0], subgroup_keys[1]
         print(group, subgroup1, subgroup2)
-        
-            
-        samples_subgroup1 = samples_groups[group][subgroup1]
-        samples_subgroup2 = samples_groups[group][subgroup2]
-        
-        
-
-        np_lrp_temp1 = np.zeros((n_genes,len(samples_subgroup1)) )
-        np_lrp_temp2 = np.zeros((n_genes,len(samples_subgroup2)) )
-        
-        
+    
+        samples_subgroup1 = subgroups[subgroup1]
+        samples_subgroup2 = subgroups[subgroup2]
+    
+        np_lrp_temp1 = np.zeros((n_genes, len(samples_subgroup1)))
+        np_lrp_temp2 = np.zeros((n_genes, len(samples_subgroup2)))
+    
         for i, sample_name in enumerate(samples_subgroup1):
-            print(subgroup1, ': ', i)
             data_temp = lrp_dict[sample_name]
-            
-            source_sum = data_temp[['source_gene','LRP']].groupby('source_gene').sum()
-            target_sum = data_temp[['target_gene','LRP']].groupby('target_gene').sum()
-            
-            sum_ = source_sum.add(target_sum, fill_value=0)
-            np_lrp_temp1[:, i] = sum_['LRP'].values
-        
+            sum_ = data_temp.groupby('source_gene')['LRP'].sum().add(
+                data_temp.groupby('target_gene')['LRP'].sum(), fill_value=0
+            ).reindex(gene_list, fill_value=0)
+    
+            np_lrp_temp1[:, i] = sum_.values
+    
         for i, sample_name in enumerate(samples_subgroup2):
-            print(subgroup2, ': ', i)
             data_temp = lrp_dict[sample_name]
-            source_sum = data_temp[['source_gene','LRP']].groupby('source_gene').sum()
-            target_sum = data_temp[['target_gene','LRP']].groupby('target_gene').sum()
-            
-            sum_ = source_sum.add(target_sum, fill_value=0)
-            np_lrp_temp2[:, i] = sum_['LRP'].values
-
-        # compare genes
+            sum_ = data_temp.groupby('source_gene')['LRP'].sum().add(
+                data_temp.groupby('target_gene')['LRP'].sum(), fill_value=0
+            ).reindex(gene_list, fill_value=0)
+    
+            np_lrp_temp2[:, i] = sum_.values
+    
+        # Compare genes
         mwu_res = []
         for gene_i in range(n_genes):
-            print('MWU genes: ', gene_i, '/' , n_genes)
             x1 = np_lrp_temp1[gene_i, :]
             x2 = np_lrp_temp2[gene_i, :]
-
+    
             mwu = pg.mwu(x1, x2).values[0]
-            mwu_res .append(mwu)
-
-        mwu_df = pd.DataFrame(mwu_res)
-        mwu_df.columns = ['U-val', 'alternative', 'p-val', 'RBC', 'CLES']
+            mwu_res.append(mwu)
 
         mwu_df.to_csv(os.path.join(path_to_save, 'mwu_sum_LRP_genes_{}.csv'.format(group)))
 

@@ -592,7 +592,7 @@ if get_stat_diff_groups:
     for group in list(samples_groups.keys()):
         print(group)
 
-        subgroup_keys = list(subgroups.keys())
+        subgroup_keys = list(samples_groups[group].keys())
         subgroup1, subgroup2 = subgroup_keys[0], subgroup_keys[1]
         print(group, subgroup1, subgroup2)
         
@@ -616,7 +616,7 @@ if get_stat_diff_groups:
     
             mwu = pg.mwu(x1, x2).values[0]
             mwu_res.append(mwu)
-
+        mwu_df = pd.DataFrame(mwu_res, columns=['U-val', 'alternative', 'p-val', 'RBC', 'CLES'])
         mwu_df.to_csv(os.path.join(path_to_save, 'mwu_edges_LRP_{}.csv'.format(group)))
 
 
@@ -631,7 +631,7 @@ if get_stat_diff_groups:
     for group, subgroups in samples_groups.items():
         print(group)
         
-        subgroup_keys = list(subgroups)
+        subgroup_keys = list(samples_groups[group].keys())
         subgroup1, subgroup2 = subgroup_keys[0], subgroup_keys[1]
         print(group, subgroup1, subgroup2)
     
@@ -665,7 +665,8 @@ if get_stat_diff_groups:
     
             mwu = pg.mwu(x1, x2).values[0]
             mwu_res.append(mwu)
-
+        
+        mwu_df = pd.DataFrame(mwu_res, columns=['U-val', 'alternative', 'p-val', 'RBC', 'CLES'])
         mwu_df.to_csv(os.path.join(path_to_save, 'mwu_sum_LRP_genes_{}.csv'.format(group)))
 
 

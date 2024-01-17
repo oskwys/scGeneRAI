@@ -63,7 +63,7 @@ data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.
 
 # %% get samples
 samples = f.get_samples_with_lrp(path_to_lrp_results)
-samples = samples[:50]
+#samples = samples[:50]
 print('Samples: ', len(samples))
 print('Samples: ', len(set(samples)))
 # %%% get sample goups
@@ -96,7 +96,7 @@ for file in os.listdir(path_to_lrp_results):
         lrp_files.append(file)
         
         
-n = 50#len(lrp_files)  
+n = len(lrp_files)  
 
 #network_data = pd.DataFrame()
 start_time = datetime.now()
@@ -588,7 +588,7 @@ if get_stat_diff_groups:
     import pingouin as pg
 #    temp = lrp_dict['TCGA-3C-AAAU']
     temp = lrp_dict['TCGA-EW-A1P0']
-    
+    temp = f.add_edge_colmn(temp)
     for group in list(samples_groups.keys()):
         print(group)
 
@@ -617,6 +617,8 @@ if get_stat_diff_groups:
             mwu = pg.mwu(x1, x2).values[0]
             mwu_res.append(mwu)
         mwu_df = pd.DataFrame(mwu_res, columns=['U-val', 'alternative', 'p-val', 'RBC', 'CLES'])
+        mwu_df['edge'] = temp['edge']
+        #mwu_df['edge_type'] = temp['edge_type']
         mwu_df.to_csv(os.path.join(path_to_save, 'mwu_edges_LRP_{}.csv'.format(group)))
 
 
@@ -667,6 +669,7 @@ if get_stat_diff_groups:
             mwu_res.append(mwu)
         
         mwu_df = pd.DataFrame(mwu_res, columns=['U-val', 'alternative', 'p-val', 'RBC', 'CLES'])
+        mwu_df['genes'] = n_genes
         mwu_df.to_csv(os.path.join(path_to_save, 'mwu_sum_LRP_genes_{}.csv'.format(group)))
 
 

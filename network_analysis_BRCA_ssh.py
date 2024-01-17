@@ -511,8 +511,7 @@ def get_median_or_mean_from_all_LRP(lrp_np, temp, index_, type_ = 'mean'):
     lrp_df = lrp_df.sort_values(by = 'LRP', ascending = False).reset_index(drop = True)
     return lrp_df
     
-temp = lrp_dict['TCGA-3C-AAAU'].copy()
-temp = f.add_edge_colmn(temp)
+
 
 
 def calculate_lrp_measures(lrp_dict, samples, temp, edge_types, add_name = ''):
@@ -559,6 +558,8 @@ def save_lrp_results(results, path_to_save):
         df.to_csv(os.path.join(path_to_save, filename))
 
 if get_top_lrp:
+    temp = lrp_dict['TCGA-3C-AAAU'].copy()
+    temp = f.add_edge_colmn(temp)
     edge_types = ['exp', 'mut', 'del', 'amp', 'fus', 'exp-exp', 'mut-mut', 'del-del', 'amp-amp', 'fus-fus']
     results = calculate_lrp_measures(lrp_dict, samples, temp, edge_types, add_name = 'all_')
     save_lrp_results(results, path_to_save)
@@ -567,7 +568,8 @@ if get_top_lrp:
 
 if get_top_lrp_groups:
     edge_types = ['exp', 'mut', 'del', 'amp', 'fus', 'exp-exp', 'mut-mut', 'del-del', 'amp-amp', 'fus-fus']
-    
+    temp = lrp_dict['TCGA-3C-AAAU'].copy()
+    temp = f.add_edge_colmn(temp)
     for group in list(samples_groups.keys()):
         print(group)
         

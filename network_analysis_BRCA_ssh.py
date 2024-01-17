@@ -367,10 +367,10 @@ if get_top1000_noexpexp:
     
     
 # %% get LRP only for interaction including PATHWAY genes
-temp = lrp_dict['TCGA-3C-AAAU']
-
 
 if get_pathway_LRP:
+    temp = lrp_dict['TCGA-3C-AAAU']
+
 
     for pathway in genes_pathways['Pathway'].unique():
         genes = genes_pathways.loc[genes_pathways['Pathway'] == pathway, 'cce_match'].to_list()
@@ -425,10 +425,10 @@ if get_pathway_LRP:
 
 
 # %% get LRP median clustermap matix
-temp = lrp_dict['TCGA-3C-AAAU']
 
 
 if get_LRP_median_matrix:
+    temp = lrp_dict['TCGA-3C-AAAU']
 
     np_lrp_temp = np.zeros((temp.shape[0],len(samples)) )
 
@@ -581,12 +581,12 @@ if get_top_lrp_groups:
 
 # %% compute statistcal difference between groups in LRP
 
-temp = lrp_dict['TCGA-3C-AAAU']
-        
-    
+
 if get_stat_diff_groups:
     import pingouin as pg
-
+#    temp = lrp_dict['TCGA-3C-AAAU']
+    temp = lrp_dict['TCGA-EW-A1P0']
+    
     for group in list(samples_groups.keys()):
         print(group)
 

@@ -595,7 +595,7 @@ def get_mean_or_median_lrp_from_np(np_lrp, temp, type_ = 'mean'):
     
     lrp_df = pd.DataFrame()
     print(lrp_temp)
-    lrp_df ['LRP'] = np_lrp
+    lrp_df ['LRP'] = lrp_temp
     lrp_df['source_gene'] = temp.loc[:,'source_gene'].to_list()
     lrp_df['target_gene'] = temp.loc[:,'target_gene'].to_list()
     lrp_df['edge'] =  temp.loc[:,'edge'].to_list()

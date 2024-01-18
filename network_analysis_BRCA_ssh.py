@@ -37,10 +37,11 @@ get_top1000 = False
 
 get_top1000_noexpexp = False
 get_pathway_LRP = False
-get_LRP_median_matrix = True
+get_LRP_median_matrix = False
 get_top_lrp = False
 get_top_lrp_groups = False
 get_stat_diff_groups = False
+get_mean_lrp_groups = True
 # %% load data
 
 path_to_data = r'G:\My Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
@@ -583,6 +584,63 @@ if get_top_lrp_groups:
     
             results = calculate_lrp_measures(lrp_dict, samples_subgroup, temp, edge_types, add_name = subgroup)
             save_lrp_results(results, path_to_save)
+# %% get median and mean lrp for each group
+
+def get_mean_or_median_lrp_from_np(np_lrp, temp, type_ = 'mean'):
+        
+    if type_ == 'median':
+        lrp_temp = np.nanmedian(np_lrp, axis = 1)
+    elif type_ == 'mean':
+        lrp_temp = np.nanmean(np_lrp, axis = 1)
+    
+    lrp_df = pd.DataFrame()
+    print(lrp_temp)
+    lrp_df ['LRP'] = np_lrp
+    lrp_df['source_gene'] = temp.loc[:,'source_gene'].to_list()
+    lrp_df['target_gene'] = temp.loc[:,'target_gene'].to_list()
+    lrp_df['edge'] =  temp.loc[:,'edge'].to_list()
+    lrp_df['edge_type'] =  temp.loc[:,'edge_type'].to_list()
+    lrp_df = lrp_df.reset_index()
+    
+    return lrp_df
+
+
+    
+
+if get_mean_lrp_groups:
+#    temp = lrp_dict['TCGA-3C-AAAU']
+    temp = lrp_dict['TCGA-EW-A1P0']
+    temp = f.add_edge_colmn(temp)
+    for group in list(samples_groups.keys()):
+        print(group)
+
+        subgroup_keys = list(samples_groups[group].keys())
+        subgroup1, subgroup2 = subgroup_keys[0], subgroup_keys[1]
+        print(group, subgroup1, subgroup2)
+        
+        samples_subgroup1 = samples_groups[group][subgroup1]
+        samples_subgroup2 = samples_groups[group][subgroup2]
+        
+        np_lrp_temp1 = np.zeros((temp.shape[0], len(samples_subgroup1)))
+        np_lrp_temp2 = np.zeros((temp.shape[0], len(samples_subgroup2)))
+        
+        for i, sample_name in enumerate(samples_subgroup1):
+            np_lrp_temp1[:, i] = lrp_dict[sample_name]['LRP'].values
+        
+        for i, sample_name in enumerate(samples_subgroup2):
+            np_lrp_temp2[:, i] = lrp_dict[sample_name]['LRP'].values
+        
+        df_1 = get_mean_or_median_lrp_from_np(np_lrp_temp1, temp, type_ = 'mean')
+        df_2 = get_mean_or_median_lrp_from_np(np_lrp_temp2, temp, type_ = 'mean')
+            
+        df_1.to_csv(os.path.join(path_to_save, 'lrp_mean_{}.csv'.format(subgroup1)))
+        df_2.to_csv(os.path.join(path_to_save, 'lrp_mean_{}.csv'.format(subgroup2)))
+        
+        df_1 = get_mean_or_median_lrp_from_np(np_lrp_temp1, temp, type_ = 'median')
+        df_2 = get_mean_or_median_lrp_from_np(np_lrp_temp2, temp, type_ = 'median')
+            
+        df_1.to_csv(os.path.join(path_to_save, 'lrp_median_{}.csv'.format(subgroup1)))
+        df_2.to_csv(os.path.join(path_to_save, 'lrp_median_{}.csv'.format(subgroup2)))
 
 # %% compute statistcal difference between groups in LRP
 

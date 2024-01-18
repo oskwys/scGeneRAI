@@ -41,7 +41,8 @@ get_LRP_median_matrix = False
 get_top_lrp = False
 get_top_lrp_groups = False
 get_stat_diff_groups = False
-get_mean_lrp_groups = True
+get_mean_lrp_groups = False
+get_sum_lrp_groups = True
 # %% load data
 
 path_to_data = r'G:\My Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
@@ -642,6 +643,54 @@ if get_mean_lrp_groups:
         df_1.to_csv(os.path.join(path_to_save, 'lrp_median_{}.csv'.format(subgroup1)))
         df_2.to_csv(os.path.join(path_to_save, 'lrp_median_{}.csv'.format(subgroup2)))
 
+
+
+if get_sum_lrp_groups:
+#    temp = lrp_dict['TCGA-3C-AAAU']
+    temp = lrp_dict['TCGA-EW-A1P0']
+    temp = f.add_edge_colmn(temp)
+    for group in list(samples_groups.keys()):
+        print(group)
+
+        subgroup_keys = list(samples_groups[group].keys())
+        subgroup1, subgroup2 = subgroup_keys[0], subgroup_keys[1]
+        print(group, subgroup1, subgroup2)
+    
+        samples_subgroup1 = subgroups[subgroup1]
+        samples_subgroup2 = subgroups[subgroup2]
+    
+        np_lrp_temp1 = np.zeros((n_genes, len(samples_subgroup1)))
+        np_lrp_temp2 = np.zeros((n_genes, len(samples_subgroup2)))
+    
+        for i, sample_name in enumerate(samples_subgroup1):
+            data_temp = lrp_dict[sample_name]
+            sum_ = data_temp.groupby('source_gene')['LRP'].sum().add(
+                data_temp.groupby('target_gene')['LRP'].sum(), fill_value=0
+            ).reindex(gene_list, fill_value=0)
+    
+            np_lrp_temp1[:, i] = sum_.values
+    
+        for i, sample_name in enumerate(samples_subgroup2):
+            data_temp = lrp_dict[sample_name]
+            sum_ = data_temp.groupby('source_gene')['LRP'].sum().add(
+                data_temp.groupby('target_gene')['LRP'].sum(), fill_value=0
+            ).reindex(gene_list, fill_value=0)
+    
+            np_lrp_temp2[:, i] = sum_.values
+        
+        df_1 = get_mean_or_median_lrp_from_np(np_lrp_temp1, temp, type_ = 'mean')
+        df_2 = get_mean_or_median_lrp_from_np(np_lrp_temp2, temp, type_ = 'mean')
+            
+        df_1.to_csv(os.path.join(path_to_save, 'lrp_sum_mean_{}.csv'.format(subgroup1)))
+        df_2.to_csv(os.path.join(path_to_save, 'lrp_sum_mean_{}.csv'.format(subgroup2)))
+        
+        df_1 = get_mean_or_median_lrp_from_np(np_lrp_temp1, temp, type_ = 'median')
+        df_2 = get_mean_or_median_lrp_from_np(np_lrp_temp2, temp, type_ = 'median')
+            
+        df_1.to_csv(os.path.join(path_to_save, 'lrp_sum_median_{}.csv'.format(subgroup1)))
+        df_2.to_csv(os.path.join(path_to_save, 'lrp_sum_median_{}.csv'.format(subgroup2)))
+        
+        
 # %% compute statistcal difference between groups in LRP
 
 

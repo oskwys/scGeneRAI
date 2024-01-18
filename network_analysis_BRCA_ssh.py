@@ -649,6 +649,12 @@ if get_sum_lrp_groups:
 #    temp = lrp_dict['TCGA-3C-AAAU']
     temp = lrp_dict['TCGA-EW-A1P0']
     temp = f.add_edge_colmn(temp)
+    
+    gene_set = set(temp['source_gene']).union(temp['target_gene'])
+    n_genes = len(gene_set)
+    gene_list = sorted(list(gene_set))  # Create a consistent ordered list of genes
+    
+    
     for group in list(samples_groups.keys()):
         print(group)
 
@@ -656,8 +662,8 @@ if get_sum_lrp_groups:
         subgroup1, subgroup2 = subgroup_keys[0], subgroup_keys[1]
         print(group, subgroup1, subgroup2)
     
-        samples_subgroup1 = subgroups[subgroup1]
-        samples_subgroup2 = subgroups[subgroup2]
+        samples_subgroup1 = samples_groups[group][subgroup1]
+        samples_subgroup2 = samples_groups[group][subgroup2]
     
         np_lrp_temp1 = np.zeros((n_genes, len(samples_subgroup1)))
         np_lrp_temp2 = np.zeros((n_genes, len(samples_subgroup2)))

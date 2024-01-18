@@ -37,10 +37,10 @@ get_top1000 = False
 
 get_top1000_noexpexp = False
 get_pathway_LRP = False
-get_LRP_median_matrix = False
+get_LRP_median_matrix = True
 get_top_lrp = False
 get_top_lrp_groups = False
-get_stat_diff_groups = True
+get_stat_diff_groups = False
 # %% load data
 
 path_to_data = r'G:\My Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
@@ -447,6 +447,8 @@ if get_LRP_median_matrix:
     lrp_median_df['source_gene'] = temp['source_gene'].to_list()
     lrp_median_df['target_gene'] = temp['target_gene'].to_list()
 
+    lrp_median_df.to_csv(os.path.join(path_to_save, 'lrp_median_list.csv'))
+
     lrp_median_df_doubled = pd.DataFrame()
     lrp_median_df_doubled ['source_gene'] = lrp_median_df['target_gene'].copy()
     lrp_median_df_doubled ['target_gene'] = lrp_median_df['source_gene'].copy()
@@ -458,7 +460,7 @@ if get_LRP_median_matrix:
     lrp_median_pivot = lrp_median_df_pivot.fillna(0).values + lrp_median_df_pivot.T.fillna(0).values - np.diag(np.diag(lrp_median_df_pivot.values))
     np.fill_diagonal(lrp_median_pivot, 0)
     lrp_median_df_pivot = pd.DataFrame(lrp_median_pivot, index = lrp_median_df_pivot.index, columns = lrp_median_df_pivot.columns)
-
+    
     lrp_median_df_pivot.to_csv(os.path.join(path_to_save, 'lrp_median_matrix.csv'))
     
     
@@ -472,6 +474,7 @@ if get_LRP_median_matrix:
     lrp_mean_df ['LRP_mean'] = lrp_mean
     lrp_mean_df['source_gene'] = temp['source_gene'].to_list()
     lrp_mean_df['target_gene'] = temp['target_gene'].to_list()
+    lrp_mean_df.to_csv(os.path.join(path_to_save, 'lrp_mean_list.csv'))
 
     lrp_mean_df_doubled = pd.DataFrame()
     lrp_mean_df_doubled ['source_gene'] = lrp_mean_df['target_gene'].copy()

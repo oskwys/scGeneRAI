@@ -65,7 +65,7 @@ data_to_model, df_exp, df_mut, df_amp, df_del, df_fus, df_clinical_features = f.
 
 # %% get samples
 samples = f.get_samples_with_lrp(path_to_lrp_results)
-#samples = samples[:50]
+#samples = samples[:10]
 print('Samples: ', len(samples))
 print('Samples: ', len(set(samples)))
 # %%% get sample goups
@@ -684,19 +684,34 @@ if get_sum_lrp_groups:
     
             np_lrp_temp2[:, i] = sum_.values
         
-        df_1 = get_mean_or_median_lrp_from_np(np_lrp_temp1, temp, type_ = 'mean')
-        df_2 = get_mean_or_median_lrp_from_np(np_lrp_temp2, temp, type_ = 'mean')
-            
-        df_1.to_csv(os.path.join(path_to_save, 'lrp_sum_mean_{}.csv'.format(subgroup1)))
-        df_2.to_csv(os.path.join(path_to_save, 'lrp_sum_mean_{}.csv'.format(subgroup2)))
+        print(np_lrp_temp1.shape ,np_lrp_temp2.shape)
+        # mean
+        df_1 = pd.DataFrame()
+        df_1 ['LRP_sum_mean'] = np.nanmean(np_lrp_temp1, axis = 1)
+        df_1 ['gene'] = gene_list
         
-        df_1 = get_mean_or_median_lrp_from_np(np_lrp_temp1, temp, type_ = 'median')
-        df_2 = get_mean_or_median_lrp_from_np(np_lrp_temp2, temp, type_ = 'median')
-            
-        df_1.to_csv(os.path.join(path_to_save, 'lrp_sum_median_{}.csv'.format(subgroup1)))
-        df_2.to_csv(os.path.join(path_to_save, 'lrp_sum_median_{}.csv'.format(subgroup2)))
+        df_2 = pd.DataFrame()
+        df_2 ['LRP_sum_mean'] = np.nanmean(np_lrp_temp2, axis = 1)
+        df_2 ['gene'] = gene_list
         
+        df = df_1.merge(df_2, on = 'gene',suffixes=('_'+subgroup1, '_'+subgroup2))
+        df.to_csv(os.path.join(path_to_save, 'lrp_sum_mean_{}.csv'.format(group)))
+
+        print(df.head())
+
+        # median
+        df_1 = pd.DataFrame()
+        df_1 ['LRP_sum_median'] = np.nanmedian(np_lrp_temp1, axis = 1)
+        df_1 ['gene'] = gene_list
         
+        df_2 = pd.DataFrame()
+        df_2 ['LRP_sum_median'] = np.nanmedian(np_lrp_temp2, axis = 1)
+        df_2 ['gene'] = gene_list
+        
+        df = df_1.merge(df_2, on = 'gene',suffixes=('_'+subgroup1, '_'+subgroup2))
+        df.to_csv(os.path.join(path_to_save, 'lrp_sum_median_{}.csv'.format(group)))
+        print(df.head())
+
 # %% compute statistcal difference between groups in LRP
 
 

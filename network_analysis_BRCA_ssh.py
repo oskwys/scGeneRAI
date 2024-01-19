@@ -660,6 +660,7 @@ if get_sum_lrp_matrix:
     
 
     for i, sample_name in enumerate(samples):
+        print(i, sample_name)
         data_temp = lrp_dict[sample_name]
         sum_ = data_temp.groupby('source_gene')['LRP'].sum().add(
             data_temp.groupby('target_gene')['LRP'].sum(), fill_value=0
@@ -667,10 +668,10 @@ if get_sum_lrp_matrix:
 
         np_lrp_temp[:, i] = sum_.values
         
-    df = pd.DataFrame()
-    df ['LRP_sum_mean'] = np.nanmean(np_lrp_temp, axis = 1)
-    df ['gene'] = gene_list            
-    df.to_csv(os.path.join(path_to_save, 'lrp_sum_median.csv'))
+    df = pd.DataFrame(np_lrp_temp)
+    df ['gene'] = gene_list        
+    df = df.set_index('gene')    
+    df.to_csv(os.path.join(path_to_save, 'lrp_sum_mean.csv'))
     print(df.head())
     
     

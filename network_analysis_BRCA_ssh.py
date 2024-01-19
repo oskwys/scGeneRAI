@@ -42,7 +42,8 @@ get_top_lrp = False
 get_top_lrp_groups = False
 get_stat_diff_groups = False
 get_mean_lrp_groups = False
-get_sum_lrp_groups = True
+get_sum_lrp_groups = False
+get_sum_lrp_matrix =True 
 # %% load data
 
 path_to_data = r'G:\My Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
@@ -643,8 +644,39 @@ if get_mean_lrp_groups:
         df_1.to_csv(os.path.join(path_to_save, 'lrp_median_{}.csv'.format(subgroup1)))
         df_2.to_csv(os.path.join(path_to_save, 'lrp_median_{}.csv'.format(subgroup2)))
 
+# %% get_sum_lrp_matrix
 
+if get_sum_lrp_matrix:
+#    temp = lrp_dict['TCGA-3C-AAAU']
+    temp = lrp_dict['TCGA-EW-A1P0']
+    temp = f.add_edge_colmn(temp)
+    
+    gene_set = set(temp['source_gene']).union(temp['target_gene'])
+    n_genes = len(gene_set)
+    gene_list = sorted(list(gene_set))  # Create a consistent ordered list of genes
+    
 
+    np_lrp_temp = np.zeros((n_genes, len(samples)))
+    
+
+    for i, sample_name in enumerate(samples):
+        data_temp = lrp_dict[sample_name]
+        sum_ = data_temp.groupby('source_gene')['LRP'].sum().add(
+            data_temp.groupby('target_gene')['LRP'].sum(), fill_value=0
+        ).reindex(gene_list, fill_value=0)
+
+        np_lrp_temp[:, i] = sum_.values
+        
+    df = pd.DataFrame()
+    df ['LRP_sum_mean'] = np.nanmean(np_lrp_temp, axis = 1)
+    df ['gene'] = gene_list            
+    df.to_csv(os.path.join(path_to_save, 'lrp_sum_median.csv'))
+    print(df.head())
+    
+    
+    
+# %% get_sum_lrp_groups       
+     
 if get_sum_lrp_groups:
 #    temp = lrp_dict['TCGA-3C-AAAU']
     temp = lrp_dict['TCGA-EW-A1P0']

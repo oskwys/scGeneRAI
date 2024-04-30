@@ -43,7 +43,8 @@ get_top_lrp_groups = False
 get_stat_diff_groups = False
 get_mean_lrp_groups = False
 get_sum_lrp_groups = False
-get_sum_lrp_matrix =True 
+get_sum_lrp_matrix = False
+get_lrp_stats_within_sample = True
 # %% load data
 
 path_to_data = r'G:\My Drive\SAFE_AI\CCE_DART\KI_dataset\data_to_BRCA_model'
@@ -837,12 +838,34 @@ if get_stat_diff_groups:
         mwu_df.to_csv(os.path.join(path_to_save, 'mwu_sum_LRP_genes_{}.csv'.format(group)))
 
 
+# %% get lrp stats within sample
 
+if get_lrp_stats_within_sample:
 
+    stats_dict = {}
 
+    for i, sample_name in enumerate(samples):
 
+        data_temp = lrp_dict[sample_name]['LRP']
+        print(data_temp.head())
+        q1 = np.nanquantile(data_temp, .25)
+        q3 = np.nanquantile(data_temp, .75)
+        mean = np.nanmean(data_temp)
+        median = np.nanmedian(data_temp)
+        std = np.nanstd(data_temp)
+        sum_ = np.nansum(data_temp)
+        
+        stats_dict[sample_name] = {'mean_LRP':mean,
+                                   'median_LRP':median,
+                                   'sum_LRP':sum_,
+                                   'std_LRP':std,
+                                   'q1_LRP':q1,
+                                   'q3_LRP':q3}
+        
 
-
+    results = pd.DataFrame.from_dict(stats_dict).T
+    
+    results.to_csv(os.path.join(path_to_save, 'LRP_stats_within_sample.csv'))
 
 
 

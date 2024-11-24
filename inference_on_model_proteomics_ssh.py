@@ -30,7 +30,7 @@ device = 'cuda'
 
 file_name = 'model_BRCA_GenProt_batch5_nepochs500_depth2_lr02.pkl'
 #path_to_model = r'C:\Users\d07321ow\Documents\GitHub\scGeneRAI'
-path_to_model = '/home/d07321ow/scratch/results_LRP_BRCA_Proteomics'
+path_to_model = '/home/d07321ow/scratch/scGeneRAI'
 
 data_temp = data.copy()
 

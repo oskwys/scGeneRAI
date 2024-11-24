@@ -70,7 +70,7 @@ cluster_labels = fcluster(Z, t=cutoff, criterion='distance')
 unique_labels, counts = np.unique(cluster_labels, return_counts=True)
 
 
-sns.clustermap(df, method = 'ward', mask = (df == 0) , cmap = 'jet', 
+sns.clustermap(df, method = 'ward', mask = (df == 0) , cmap = 'jet', vmax = .02,
                row_linkage = Z, col_linkage = Z,
                yticklabels = False, xticklabels = False,)
 

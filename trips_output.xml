@@ -1,0 +1,121 @@
+<?xml version="1.0" ?>
+<ekb>
+	<input type="text">
+		<paragraphs>
+			<paragraph file="/Users/wbeaumont/drum/etc/Data/WP/TEXT00156_IO-2120741" id="paragraph155">MAP2K1 phosphorylates MAPK3 at Thr-202 and Tyr-204</paragraph>
+		</paragraphs>
+		<sentences>
+			<sentence id="283" pid="paragraph155">MAP2K1 phosphorylates MAPK3 at Thr-202 and Tyr-204</sentence>
+		</sentences>
+	</input>
+	<EVENT end="50" id="V2120801" lisp="(ONT::EVENT ONT::V2120801 ONT::PHOSPHORYLATION :AGENT ONT::V2120797 :AFFECTED ONT::V2120811 :SITEMOD (ONT::AT-LOC W::AT) :SITE ONT::V2120846 :FORCE ONT::TRUE :DRUM ((:DRUM (TERM :ID GO::|0006468| :NAME &quot;protein phosphorylation&quot; :SCORE 0.85366 :MATCHES ((MATCH :SCORE 0.85366 :MATCHED &quot;protein phosphorylation&quot; :STATUS &quot;name&quot; :EXACT 2)) :ONT-TYPES (ONT::POST-TRANSLATIONAL-MODIFICATION)))) :TENSE W::PRES)" paragraph="paragraph155" rule="-RULE60_4_AGENT_AFFECTED-LOC4-GD" start="0" uttnum="283">
+		<type>ONT::PHOSPHORYLATION</type>
+		<force>ONT::TRUE</force>
+		<predicate end="50" id="V2120801" start="0">
+			<type>ONT::PHOSPHORYLATION</type>
+			<text>MAP2K1 phosphorylates MAPK3 at Thr-202 and Tyr-204</text>
+		</predicate>
+		<arg1 end="7" id="V2120797" role=":AGENT" start="0">
+			<type>ONT::GENE-PROTEIN</type>
+			<text normalization="">MAP2K1</text>
+		</arg1>
+		<arg2 end="28" id="V2120811" role=":AFFECTED" start="22">
+			<type>ONT::GENE-PROTEIN</type>
+			<text normalization="">MAPK3</text>
+		</arg2>
+		<site end="50" id="V2120846" start="31">
+			<type>ONT::MOLECULAR-SITE</type>
+			<text normalization="">Thr-202 and Tyr-204</text>
+		</site>
+		<drum-terms>
+			<drum-term dbid="GO:0006468" match-score="0.85366" matched-name="protein phosphorylation" name="protein phosphorylation">
+				<types>
+					<type>ONT::POST-TRANSLATIONAL-MODIFICATION</type>
+				</types>
+			</drum-term>
+		</drum-terms>
+		<text>MAP2K1 phosphorylates MAPK3 at Thr-202 and Tyr-204</text>
+	</EVENT>
+	<TERM dbid="NCIT:C17808|NCIT:C21222|UP:Q02750|HGNC:6840" end="7" id="V2120797" lisp="(ONT::TERM ONT::V2120797 ONT::GENE-PROTEIN :NAME W::MAP-2-K-1 :DRUM ((:DRUM (TERM :ID HGNC::|6840| :NAME &quot;mitogen-activated protein kinase kinase 1&quot; :SCORE 0.85366 :MATCHES ((MATCH :SCORE 0.85366 :MATCHED &quot;MAP2K1&quot; :STATUS &quot;Approved Symbol&quot; :EXACT 2) (MATCH :SCORE 0.85366 :MATCHED &quot;MAP2K1&quot; :STATUS &quot;Approved Symbol&quot; :MAYBE-DEPLURALIZED 1 :SURELY-DEPLURALIZED 0 :DEPLURALIZATION-SCORE 1 :EXACT 2) (MATCH :SCORE 0.85217 :MATCHED &quot;MAP2K1&quot; :STATUS &quot;Approved Symbol&quot; :MAYBE-DEPLURALIZED 2 :SURELY-DEPLURALIZED 0 :DEPLURALIZATION-SCORE 0.85528755 :EXACT 1 :NO-CAPS-SINGLE-CAP 1)) :DBXREFS (UP::Q02750) :ONT-TYPES (ONT::GENE)) (TERM :ID NCIT::C17808 :NAME &quot;&lt;http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C17808&gt;&quot; :SCORE 0.70732 :MATCHES ((MATCH :SCORE 0.70732 :MATCHED &quot;MAP2K1&quot; :STATUS &quot;synonym&quot; :EXACT 2) (MATCH :SCORE 0.70732 :MATCHED &quot;MAP2K1&quot; :STATUS &quot;synonym&quot; :MAYBE-DEPLURALIZED 1 :SURELY-DEPLURALIZED 0 :DEPLURALIZATION-SCORE 1 :EXACT 2) (MATCH :SCORE 0.70582 :MATCHED &quot;MAP2K1&quot; :STATUS &quot;synonym&quot; :MAYBE-DEPLURALIZED 2 :SURELY-DEPLURALIZED 0 :DEPLURALIZATION-SCORE 0.85528755 :EXACT 1 :NO-CAPS-SINGLE-CAP 1)) :ONT-TYPES (ONT::PROTEIN)) (TERM :ID NCIT::C21222 :NAME &quot;&lt;http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C21222&gt;&quot; :SCORE 0.70732 :MATCHES ((MATCH :SCORE 0.70732 :MATCHED &quot;MAP2K1&quot; :STATUS &quot;synonym&quot; :EXACT 2) (MATCH :SCORE 0.70732 :MATCHED &quot;MAP2K1&quot; :STATUS &quot;synonym&quot; :MAYBE-DEPLURALIZED 1 :SURELY-DEPLURALIZED 0 :DEPLURALIZATION-SCORE 1 :EXACT 2) (MATCH :SCORE 0.70582 :MATCHED &quot;MAP2K1&quot; :STATUS &quot;synonym&quot; :MAYBE-DEPLURALIZED 2 :SURELY-DEPLURALIZED 0 :DEPLURALIZATION-SCORE 0.85528755 :EXACT 1 :NO-CAPS-SINGLE-CAP 1)) :ONT-TYPES (ONT::GENE)))))" paragraph="paragraph155" rule="-SIMPLE-REF" start="0" uttnum="283">
+		<type>ONT::GENE-PROTEIN</type>
+		<name>MAP-2-K-1</name>
+		<drum-terms>
+			<drum-term dbid="HGNC:6840" match-score="0.85366" matched-name="MAP2K1" name="mitogen-activated protein kinase kinase 1">
+				<types>
+					<type>ONT::GENE</type>
+				</types>
+				<xrefs>
+					<xref dbid="UP:Q02750"/>
+				</xrefs>
+			</drum-term>
+			<drum-term dbid="NCIT:C17808" match-score="0.70732" matched-name="MAP2K1" name="&lt;http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C17808&gt;">
+				<types>
+					<type>ONT::PROTEIN</type>
+				</types>
+			</drum-term>
+			<drum-term dbid="NCIT:C21222" match-score="0.70732" matched-name="MAP2K1" name="&lt;http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C21222&gt;">
+				<types>
+					<type>ONT::GENE</type>
+				</types>
+			</drum-term>
+		</drum-terms>
+		<text>MAP2K1</text>
+	</TERM>
+	<TERM dbid="HGNC:6877|UP:P27361|NCIT:C17408|NCIT:C21226" end="28" id="V2120811" lisp="(ONT::TERM ONT::V2120811 ONT::GENE-PROTEIN :NAME W::MAPK-3 :DRUM ((:DRUM (TERM :ID HGNC::|6877| :NAME &quot;mitogen-activated protein kinase 3&quot; :SCORE 0.85366 :MATCHES ((MATCH :SCORE 0.85366 :MATCHED &quot;MAPK3&quot; :STATUS &quot;Approved Symbol&quot; :EXACT 1)) :DBXREFS (UP::P27361) :ONT-TYPES (ONT::GENE)) (TERM :ID NCIT::C17408 :NAME &quot;&lt;http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C17408&gt;&quot; :SCORE 0.70732 :MATCHES ((MATCH :SCORE 0.70732 :MATCHED &quot;MAPK3&quot; :STATUS &quot;synonym&quot; :EXACT 1)) :ONT-TYPES (ONT::PROTEIN)) (TERM :ID NCIT::C21226 :NAME &quot;&lt;http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C21226&gt;&quot; :SCORE 0.70732 :MATCHES ((MATCH :SCORE 0.70732 :MATCHED &quot;MAPK3&quot; :STATUS &quot;synonym&quot; :EXACT 1)) :ONT-TYPES (ONT::GENE)))))" paragraph="paragraph155" rule="-SIMPLE-REF" start="22" uttnum="283">
+		<type>ONT::GENE-PROTEIN</type>
+		<name>MAPK-3</name>
+		<drum-terms>
+			<drum-term dbid="HGNC:6877" match-score="0.85366" matched-name="MAPK3" name="mitogen-activated protein kinase 3">
+				<types>
+					<type>ONT::GENE</type>
+				</types>
+				<xrefs>
+					<xref dbid="UP:P27361"/>
+				</xrefs>
+			</drum-term>
+			<drum-term dbid="NCIT:C17408" match-score="0.70732" matched-name="MAPK3" name="&lt;http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C17408&gt;">
+				<types>
+					<type>ONT::PROTEIN</type>
+				</types>
+			</drum-term>
+			<drum-term dbid="NCIT:C21226" match-score="0.70732" matched-name="MAPK3" name="&lt;http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C21226&gt;">
+				<types>
+					<type>ONT::GENE</type>
+				</types>
+			</drum-term>
+		</drum-terms>
+		<text>MAPK3</text>
+	</TERM>
+	<TERM end="50" id="V2120846" paragraph="paragraph155" rule="-LOGICALOP-REF" start="31" uttnum="283">
+		<type>ONT::MOLECULAR-SITE</type>
+		<aggregate operator="AND">
+			<member id="V2120842"/>
+			<member id="V2120865"/>
+		</aggregate>
+		<text normalization="">Thr-202 and Tyr-204</text>
+	</TERM>
+	<TERM end="39" id="V2120842" lisp="(ONT::TERM ONT::V2120842 ONT::MOLECULAR-SITE :NAME W::THR-PUNC-MINUS-202 :DRUM ((:DRUM (AA-SITE :NAME &quot;Threonine&quot; :LETTER &quot;T&quot; :INDEX 202))))" paragraph="paragraph155" rule="-SIMPLE-REF" start="31" uttnum="283">
+		<type>ONT::MOLECULAR-SITE</type>
+		<name>THR-202</name>
+		<features>
+			<site>
+				<name>Threonine</name>
+				<code>T</code>
+				<pos>202</pos>
+			</site>
+		</features>
+		<text>Thr-202</text>
+	</TERM>
+	<TERM end="50" id="V2120865" lisp="(ONT::TERM ONT::V2120865 ONT::MOLECULAR-SITE :NAME W::TYR-PUNC-MINUS-204 :DRUM ((:DRUM (AA-SITE :NAME &quot;Tyrosine&quot; :LETTER &quot;Y&quot; :INDEX 204))))" paragraph="paragraph155" rule="-SIMPLE-REF" start="43" uttnum="283">
+		<type>ONT::MOLECULAR-SITE</type>
+		<name>TYR-204</name>
+		<features>
+			<site>
+				<name>Tyrosine</name>
+				<code>Y</code>
+				<pos>204</pos>
+			</site>
+		</features>
+		<text>Tyr-204</text>
+	</TERM>
+</ekb>

@@ -250,6 +250,20 @@ for group in list(samples_groups.keys()):
     plt.savefig(os.path.join(path_to_save , 'histogram_LRP_sum_vs_CLES_{}'.format(group) + '.pdf'), format = 'pdf')
     
     
+    # PLOT CLES vs DIFF LRP
+    fig, axs = plt.subplots(figsize = (7,4))
+    ax=axs
+    sns.scatterplot(x=df_lrp[col1] - df_lrp[col2], y=df['CLES'], hue = df_lrp['type'], ax=ax, alpha = 0.5, s = 10)
+    ax.axhline(0.6, linestyle = '--', color = 'black', linewidth= 0.5)
+    ax.axhline(0.4, linestyle = '--', color = 'black', linewidth= 0.5)
+    ax.get_legend().remove()
+    ax.set_title(subgroup1)
+    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    ax.set_xlabel('LRP_sum_diff')
+    plt.tight_layout() 
+    plt.savefig(os.path.join(path_to_save , 'histogram_LRP_sum_diff_vs_CLES_{}'.format(group) + '.pdf'), format = 'pdf')
+    
+    
     # PLOT LOWESS LRP COL1 vs COL2
     fig, ax = plt.subplots(figsize = (4,4))
     sns.regplot(x=df_lrp[col1], y=df_lrp[col2], ax=ax, line_kws={'color': 'red'}, lowess=True, scatter=False)

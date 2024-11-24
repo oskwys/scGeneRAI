@@ -19,6 +19,13 @@ import matplotlib.cm as cm
 # %%
 path1 = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\results_0\results'
 path2 = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\results_0_v2\results'
+
+G:\My Drive\SAFE_AI\CCE_DART\scGeneRAI_results\model_BRCA_20230904\LRP\results
+
+path1 = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\results_0\results'
+path2 = r'C:\Users\d07321ow\Google Drive\SAFE_AI\CCE_DART\scGeneRAI_results\results_0_v2\results'
+
+
 files = os.listdir(path1)
 files_2 = os.listdir(path2)
 

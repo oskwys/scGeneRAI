@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?><OAI-PMH
+	xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd"><responseDate>2024-10-28T15:52:05Z</responseDate><request verb="GetRecord" identifier="oai:pubmedcentral.nih.gov:8511698" metadataPrefix="pmc">https:/www.ncbi.nlm.nih.gov/pmc/oai/oai.cgi</request><GetRecord><record><header><identifier>oai:pubmedcentral.nih.gov:8511698</identifier><datestamp>2021-10-14</datestamp><setSpec>frontimmu</setSpec><setSpec>pmc-open</setSpec></header><metadata><article xmlns="https://jats.nlm.nih.gov/ns/archiving/1.3/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ali="http://www.niso.org/schemas/ali/1.0/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xsi:schemaLocation="https://jats.nlm.nih.gov/ns/archiving/1.3/ https://jats.nlm.nih.gov/archiving/1.3/xsd/JATS-archivearticle1-3.xsd" dtd-version="1.3" xml:lang="en" article-type="case-report">
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Front Immunol</journal-id>
+      <journal-id journal-id-type="iso-abbrev">Front Immunol</journal-id>
+      <journal-id journal-id-type="publisher-id">Front. Immunol.</journal-id>
+      <journal-title-group>
+        <journal-title>Frontiers in Immunology</journal-title>
+      </journal-title-group>
+      <issn pub-type="epub">1664-3224</issn>
+      <publisher>
+        <publisher-name>Frontiers Media S.A.</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="accession">PMC8511698</article-id>
+      <article-id pub-id-type="pmcid">PMC8511698</article-id>
+      <article-id pub-id-type="pmc-uid">8511698</article-id>
+      <article-id pub-id-type="pmid">34659249</article-id>
+      <article-id pub-id-type="doi">10.3389/fimmu.2021.749204</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Immunology</subject>
+          <subj-group>
+            <subject>Case Report</subject>
+          </subj-group>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Case Report: Immune and Genomic Characteristics Associated With Hyperprogression in a Patient With Metastatic Deficient Mismatch Repair Gastrointestinal Cancer Treated With Anti-PD-1 Antibody</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Zhou</surname>
+            <given-names>Wenyue</given-names>
+          </name>
+          <xref rid="aff1" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="fn002" ref-type="author-notes">
+<sup>†</sup>
+</xref>
+          <uri xlink:href="https://loop.frontiersin.org/people/1487459"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Zhou</surname>
+            <given-names>Yuwen</given-names>
+          </name>
+          <xref rid="aff1" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="fn002" ref-type="author-notes">
+<sup>†</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Yi</surname>
+            <given-names>Cheng</given-names>
+          </name>
+          <xref rid="aff1" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="fn001" ref-type="author-notes">
+<sup>†</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Shu</surname>
+            <given-names>Xinyao</given-names>
+          </name>
+          <xref rid="aff1" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Wei</surname>
+            <given-names>Guixia</given-names>
+          </name>
+          <xref rid="aff1" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <uri xlink:href="https://loop.frontiersin.org/people/1471513"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Chen</surname>
+            <given-names>Xiaorong</given-names>
+          </name>
+          <xref rid="aff1" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Shen</surname>
+            <given-names>Xudong</given-names>
+          </name>
+          <xref rid="aff2" ref-type="aff">
+<sup>2</sup>
+</xref>
+          <uri xlink:href="https://loop.frontiersin.org/people/1473976"/>
+        </contrib>
+        <contrib contrib-type="author" corresp="yes">
+          <name>
+            <surname>Qiu</surname>
+            <given-names>Meng</given-names>
+          </name>
+          <xref rid="aff1" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="fn001" ref-type="author-notes">
+<sup>*</sup>
+</xref>
+          <uri xlink:href="https://loop.frontiersin.org/people/828633"/>
+        </contrib>
+      </contrib-group>
+      <aff id="aff1">
+<sup>1</sup>
+<institution>Department of Oncology, West China Hospital, Sichuan University</institution>, <addr-line>Chengdu</addr-line>, <country>China</country>
+</aff>
+      <aff id="aff2">
+<sup>2</sup>
+<institution>The Medical Department, 3D Medicines Inc.</institution>, <addr-line>Shanghai</addr-line>, <country>China</country>
+</aff>
+      <author-notes>
+        <fn fn-type="edited-by">
+          <p>Edited by: Benjamin Frey, University Hospital Erlangen, Germany</p>
+        </fn>
+        <fn fn-type="edited-by">
+          <p>Reviewed by: Zhang Xiaotian, Peking University Cancer Hospital, China; Abdolreza Sotoodeh Jahromi, Jahrom University of Medical Sciences, Iran</p>
+        </fn>
+        <corresp id="fn001">*Correspondence: Meng Qiu, <email xlink:href="mailto:qiumeng33@hotmail.com">qiumeng33@hotmail.com</email>
+</corresp>
+        <fn fn-type="equal" id="fn002">
+          <p>†These authors share first authorship</p>
+        </fn>
+        <fn fn-type="other" id="fn003">
+          <p>This article was submitted to Cancer Immunity and Immunotherapy, a section of the journal Frontiers in Immunology</p>
+        </fn>
+      </author-notes>
+      <pub-date pub-type="epub">
+        <day>29</day>
+        <month>9</month>
+        <year>2021</year>
+      </pub-date>
+      <pub-date pub-type="collection">
+        <year>2021</year>
+      </pub-date>
+      <volume>12</volume>
+      <elocation-id>749204</elocation-id>
+      <history>
+        <date date-type="received">
+          <day>29</day>
+          <month>7</month>
+          <year>2021</year>
+        </date>
+        <date date-type="accepted">
+          <day>10</day>
+          <month>9</month>
+          <year>2021</year>
+        </date>
+      </history>
+      <permissions>
+        <copyright-statement>Copyright © 2021 Zhou, Zhou, Yi, Shu, Wei, Chen, Shen and Qiu</copyright-statement>
+        <copyright-year>2021</copyright-year>
+        <copyright-holder>Zhou, Zhou, Yi, Shu, Wei, Chen, Shen and Qiu</copyright-holder>
+        <license>
+          <ali:license_ref specific-use="textmining" content-type="ccbylicense">https://creativecommons.org/licenses/by/4.0/</ali:license_ref>
+          <license-p>This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY). The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms.</license-p>
+        </license>
+      </permissions>
+      <abstract>
+        <p>Microsatellite instability-high/deficient mismatch repair (MSI-H/dMMR) status of tumors is a distinct predictive biomarker of immune checkpoint inhibitors (ICIs) for colorectal and non-colorectal cancer populations. The overall response rate (ORR) varies from approximately 40% to 60%, indicating that nearly half of MSI-H tumors do not respond to ICIs. The mechanism of response heterogeneity in MSI-H/dMMR cancers is unclear. Some patients who have been treated with ICIs have developed a novel pattern of progression called hyperprogression, which is defined as unexpected accelerated tumor growth. No case of MSI-H/dMMR immunotherapy-associated hyperprogression has been reported in the literature. Here, we present the case of a patient with dMMR gastrointestinal cancer who suffered hyperprogressive disease (HPD) after treatment with nivolumab. We explored the potential mechanisms of HPD by clinical, immune, and genomic characteristics. Extremely high levels of serum LDH, low TMB and TILs, and the disruption of TGFβ signaling, may be related to hyperprogression.</p>
+      </abstract>
+      <kwd-group>
+        <kwd>MSI-H/dMMR</kwd>
+        <kwd>immune checkpoint inhibitors</kwd>
+        <kwd>hyperprogression</kwd>
+        <kwd>gastrointestinal cancer</kwd>
+        <kwd>case report</kwd>
+      </kwd-group>
+      <counts>
+        <fig-count count="2"/>
+        <table-count count="0"/>
+        <equation-count count="0"/>
+        <ref-count count="39"/>
+        <page-count count="6"/>
+        <word-count count="2670"/>
+      </counts>
+    </article-meta>
+  </front>
+  <body>
+    <sec id="s1">
+      <title>1 Introduction</title>
+      <p>About 2–4% of diagnosed cancer patients are subtyped as “microsatellite instability-high (MSI-H)” or “deficient in mismatch repair (dMMR)” (<xref rid="B1" ref-type="bibr">1</xref>) Tumors with these genetic characteristics generally have exceptionally high tumor mutation burden and enriched infiltration of immune cells. These tumors are also known as “hot tumor” (<xref rid="B2" ref-type="bibr">2</xref>). Several vital clinical trials have confirmed that the microsatellite instability-high/deficient mismatch repair (MSI-H/dMMR) status is a distinct predictive biomarker of ICIs for colorectal (<xref rid="B3" ref-type="bibr">3</xref>) and non-colorectal (<xref rid="B1" ref-type="bibr">1</xref>, <xref rid="B4" ref-type="bibr">4</xref>, <xref rid="B5" ref-type="bibr">5</xref>) cancer populations. The overall response rate (ORRs) varies from approximately 40% to 60% (<xref rid="B1" ref-type="bibr">1</xref>, <xref rid="B3" ref-type="bibr">3</xref>, <xref rid="B6" ref-type="bibr">6</xref>, <xref rid="B7" ref-type="bibr">7</xref>). Based on the different responses to immunotherapy, this phenomenon attracts significant interest in the heterogeneity and relevant mechanisms of MSI-H/dMMR cancer.</p>
+      <p>In contrast to chemotherapy and other types of anti-tumor therapy, immunotherapy-induced progression patterns are distinctive, including pseudoprogression and hyperprogression disease (HPD) (<xref rid="B8" ref-type="bibr">8</xref>). Pseudoprogression is defined as an initial increase in the tumor burden followed by a later or dissociated response (<xref rid="B9" ref-type="bibr">9</xref>). On the other hand, HPD manifests as rapid tumor growth combined with poor overall survival. The acknowledged mechanisms and valuable predictors of HPD remain largely unclear. There is evidence that some gene variations and clinical characteristics may be involved in the mechanism of HPD in different types of cancer. In non-small cell lung cancer and melanoma, patients who harbor MDM2/MDM4 amplification and EGFR alterations are reported to be more likely to develop hyperprogression (<xref rid="B10" ref-type="bibr">10</xref>–<xref rid="B12" ref-type="bibr">12</xref>). In contrast, those harboring the TP53 mutation without co-existence of STK11 or EGFR mutation have a high CD8 T cell density and, thus, a high response to ICIs (<xref rid="B10" ref-type="bibr">10</xref>). Approximately 1–6% of gastrointestinal cancer patients exhibit hyperprogression (HPD) (<xref rid="B13" ref-type="bibr">13</xref>). With respect to HPD in MSI-H/dMMR cancers, these phenomena and the mechanisms have not been reported.</p>
+      <p>Here, we present the first case of a patient with dMMR gastrointestinal cancer with primary resistance to immunotherapy, who experienced HPD after two doses of nivolumab. Nivolumab is a programmed death receptor-1 (PD-1)-blocking antibody and is approved for different types of cancer. Rapid hyperprogression was not observed. Pre-immunotherapy circulating tumor DNA (ctDNA) analysis using 150-gene panel next-generation sequencing, immunohistochemistry, multiplex fluorescence immunohistochemistry (mIHC), and blood inflammatory indexes were used to examine the immune microenvironment as well as the patient’s genomic and clinical features. We also explored possible mechanisms of HPD. Furthermore, we identified the underlying mechanism and demonstrated the importance of personalized treatment for clinical practice.</p>
+    </sec>
+    <sec id="s2">
+      <title>2 Case Description</title>
+      <sec id="s2_1">
+        <title>2.1 Case Presentation</title>
+        <p>A 47-year-old male patient presented with constant abdominal pain for 4 months and was sent to the hospital for physical examination in October 2017. Computed tomography (CT) revealed multiple masses in the pancreatic body and both the lungs, with enlarged abdominal and supraclavicular lymph nodes, suggesting a heavy tumor load. The patient underwent supraclavicular lymph node dissection. Immunohistochemistry results suggested poorly differentiated metastatic adenocarcinoma. Based on CT imaging, the doctor-in-charge diagnosed that the tumor originated from the pancreas. Gemcitabine plus paclitaxel (Abraxane) chemotherapy was used as first-line treatment. Two months later, follow-up CT revealed tumor progression in both the lungs (<xref rid="f1" ref-type="fig">
+<bold>Figure 1A</bold>
+</xref>). Positron-emission tomography–CT revealed increased intake of <sup>18</sup>F-fluorodeoxyglucose in the intestinal mesentery, cervicothoracic, abdominal lymph nodes, and both the lungs, indicating significant tumor load once again (<xref rid="f1" ref-type="fig">
+<bold>Figure 1D</bold>
+</xref>). One enlarged abnormal cervical lymph node was punctured for examination because the patient refused dissection biopsy and immunohistochemistry was used to analyze the possible site of origin, tumor expression of MMR protein, and gene variation. Immunohistochemistry (IHC) of the second biopsy indicated that the tumor most likely originated from the gastrointestinal duct (IHC showed CDX2 positivity as shown in <xref rid="f1" ref-type="fig">
+<bold>Figure 1B</bold>
+</xref>, microscopic magnification ×100). A 5–10% loss of MLH1 and PMS2 protein expression and PD-L1 expression was also observed (<xref rid="f1" ref-type="fig">
+<bold>Figures 1C, D</bold>
+</xref>, microscopic magnification ×100), suggesting a dMMR status in this patient. With a performance status (PS) score of 1, nivolumab (200 mg every 2 weeks) was used as second-line treatment. Unfortunately, 1.5 month after the commencement of nivolumab (one dose of nivolumab), the patient experienced rapid deterioration in lung function, including obvious dyspnea and lethargy, and his performance status score deteriorated to 3. A follow-up chest CT scan confirmed rapid metastatic progression in the lungs and lymph nodes (<xref rid="f1" ref-type="fig">
+<bold>Figure 1A</bold>
+</xref>). Moreover, laboratory tests revealed significant high serum lactate dehydrogenase (1360 IU/L, ranging from to 110-220 IU/L). Two days later, the patient died of respiratory failure.</p>
+        <fig position="float" id="f1">
+          <label>Figure 1</label>
+          <caption>
+            <p>Radiologic images before and after nivolumab showing distinct TGR differences. <bold>(A)</bold> Representative computed tomography scans of the patient’s lung before, at baseline, and during treatment. <bold>(B)</bold> Second immunohistochemistry (IHC) showing CDX2 positivity, indicating that the possible original tumor site may be the gastrointestinal duct. <bold>(C)</bold> Second IHC indicating a PD-L1 expression rate of 5–10%. <bold>(D)</bold> Second IHC showing loss of MMR protein expression; <bold>*</bold>loss of MLH1 protein expression; <bold>**</bold>loss of expression of PMS2 protein. <bold>(E)</bold> Positron emission tomography/computed tomography (PET-CT) scan suggesting extensive tumor burden.</p>
+          </caption>
+          <graphic xlink:href="fimmu-12-749204-g001" position="float"/>
+        </fig>
+      </sec>
+      <sec id="s2_2">
+        <title>2.2 Diagnostic Assessments</title>
+        <sec id="s2_2_1">
+          <title>2.2.1 Blood Test and Biopsy</title>
+          <p>Serum lactate dehydrogenase and other blood tests were obtained the day before each treatment. The dissected lymph supraclavicular lymph node, and punctured cervical lymph node tissues were obtained under ultrasound and CT guidance, respectively.</p>
+        </sec>
+        <sec id="s2_2_2">
+          <title>2.2.2 Diagnosis of HPD</title>
+          <p>Currently, the most accepted definition of HPD is based on the study by Baptiste et al. (<xref rid="B9" ref-type="bibr">9</xref>) which detailed the following criteria: time to failure &lt;2 months and TGK<sub>exp</sub>: TGK<sub>ref</sub> &gt;2. Tumor growth kinetics (TGK) are estimated to quantitatively assess the progression of the patient. According to Baptiste’s definition, our patient’s TGK<sub>exp</sub> and TGK<sub>ref</sub> were 2.1 and 0.7.8, respectively, and the ratio (TGK<sub>exp</sub>: TGK<sub>ref</sub>) was 2.18. This value was calculated with reference to a single lesion, but the CT scan revealed a large number of newly developed lesions (<xref rid="f1" ref-type="fig">
+<bold>Figure 1A</bold>
+</xref>). The tumor growth curve as shown in <xref rid="f1" ref-type="fig">
+<bold>Figure 1E</bold>
+</xref> also indicated explosive tumor progression. The time to failure of the patient was 1.5 months. The ratio of TGK<sub>exp</sub> and TGK<sub>ref</sub> was 2.18. As such, he met the definition of immunotherapy hyperprogression.</p>
+        </sec>
+        <sec id="s2_2_3">
+          <title>2.2.3 Gene Analysis</title>
+          <p>A 150-gene panel next generation sequencing (NGS) of circulating tumor DNA analysis (3D Medicines Co., Shanghai) before administration of nivolumab revealed six gene mutations with high frequency, including MLH1 p.N287Kfs (56.32%), TCF7L2 p.K462Sfs (36.85%), TP53 p.H179Y (41.4%), ACVR2A p.K437Rfs (69.51%), TGFBR2 p.K128Sfs (66.46%), and TSC1 p.T635Rfs (5.41%). Tumor NGS was detected <italic>via</italic> the punctured tissues. Three mutation genes were inspected (<xref rid="f2" ref-type="fig">
+<bold>Figure 2D</bold>
+</xref>), including MLH1 p.N287Kfs (34.3%), TP53 p.H179Y (38.4%), and TSC1 p.T635Rfs (1.7%). Tumor mutation burden (TMB) was also calculated. With a TMB of 7.26 Muts/Mb, the tumor was categorized as low TMB.</p>
+          <fig position="float" id="f2">
+            <label>Figure 2</label>
+            <caption>
+              <p>Results showing tumor microenvironment and genomic mutation copies alteration in autopsy specimens. <bold>(A)</bold> Representative images of PanCK (pan cytokeratin), CD56, CD8, CD68, and HLA-DR as shown by mIHC. Nuclei (blue) and counterstained by DAPI. Original magnification ×200. <bold>(B)</bold> Tumor proportion score (TPS) and combined positive score (CPS). <bold>(C)</bold> Quantification results of TIL percentages by mIHC in the tumor stroma and margin. <bold>(D)</bold> Alteration of the genomic mutation copies before and after immunotherapy.</p>
+            </caption>
+            <graphic xlink:href="fimmu-12-749204-g002" position="float"/>
+          </fig>
+        </sec>
+        <sec id="s2_2_4">
+          <title>2.2.4 Analysis of the Tumor Immune Microenvironment</title>
+          <p>To further explore the possible refractory mechanism of HPD in this patient, the lymph node tissue tumor microenvironment (TME) of the patient was examined and PD-L1 protein expression was detected in the formalin-fixed, paraffin-embedded (FFPE) punctured tumor tissues using the Dako PD-L1 IHC 22C3 pharmDx assay. The expression levels of CD8+, CD68+, CD56+ cells, pan cytokeratin, and HLA-DR were assessed and calculated using multiplex fluorescence immunohistochemistry (mIHC). Quantitative analysis of the tumor microenvironment showed that the degree of CD8+, CD68+, and CD56+ cells in the tumor stroma, and tumor region, were 0.59% and 1.28%, respectively, along with 0.15%, 0.30%, and 0.63% and 0.49%, respectively (<xref rid="f2" ref-type="fig">
+<bold>Figure 2C</bold>
+</xref>).</p>
+        </sec>
+      </sec>
+    </sec>
+    <sec id="s3">
+      <title>3 Discussion</title>
+      <p>This is the first reported case of HPD in MSI-H/dMMR gastrointestinal cancer, with no HPD-related gene mutation found in our patient. This is also the first report to demonstrate characteristics such as performance status, laboratory tests, TMB, TME, and tumor immune infiltrations (TILs) factors, and some gene alterations, to explain the case better.</p>
+      <p>Some clinical parameters are reliable predictive prognostic factors for patients with ICI-treated cancer. Studies have shown that high levels of serum lactate dehydrogenase (LDH), tumor burden, and poor performance status are independent baseline factors associated with hyperprogression (<xref rid="B14" ref-type="bibr">14</xref>, <xref rid="B15" ref-type="bibr">15</xref>). According to the authors, LDH levels are strongly correlated with prognosis. The prognosis of patients within the normal range is within 16.1 months, but decreases to 2.3 months for those with LDH levels 2.5 times above the upper limit. The authors also demonstrated that low tumor burden and good performance status are also characteristics of favorable OS. As described, the patient had poor performance status, high LDH level, and a rather high tumor burden. The unfortunate outcome was consistent with previous conclusions.</p>
+      <p>In this case, the patient went through HPD although his TMB was 7.26 Muts/Mb (150-gene panel). TMB is stratified into two subtypes: low and high TMB. High TMB is usually defined as above the median burden based on whole exome sequencing (WES) or different gene panels (<xref rid="B16" ref-type="bibr">16</xref>). Optimal TMB cut-offs vary among different studies. However, levels lower than 10 Muts/Mb are generally categorized as low (<xref rid="B1" ref-type="bibr">1</xref>, <xref rid="B11" ref-type="bibr">11</xref>, <xref rid="B17" ref-type="bibr">17</xref>). TMB is a reliable efficacy factor for immunotherapy (<xref rid="B11" ref-type="bibr">11</xref>, <xref rid="B18" ref-type="bibr">18</xref>–<xref rid="B21" ref-type="bibr">21</xref>). Studies have demonstrated that those with low TMB, as seen in this case, showed less favorable survival rate (<xref rid="B11" ref-type="bibr">11</xref>, <xref rid="B17" ref-type="bibr">17</xref>, <xref rid="B18" ref-type="bibr">18</xref>, <xref rid="B20" ref-type="bibr">20</xref>–<xref rid="B24" ref-type="bibr">24</xref>). MSI-H/dMMR tumors are identified with high clonality of non-synonymous mutations (also high TMB), leading to the presence of robust altered proteins, known as neoantigens (<xref rid="B25" ref-type="bibr">25</xref>). Neoantigens are thought to be relevant to tumor control, as they can be targeted by the immune system, leading to a series of cytolytic activities of the immune cells (<xref rid="B1" ref-type="bibr">1</xref>, <xref rid="B3" ref-type="bibr">3</xref>, <xref rid="B25" ref-type="bibr">25</xref>–<xref rid="B27" ref-type="bibr">27</xref>). With ORRs varies from 31.7% to 40% (<xref rid="B3" ref-type="bibr">3</xref>, <xref rid="B28" ref-type="bibr">28</xref>, <xref rid="B29" ref-type="bibr">29</xref>), nivolumab was approved for the treatment of melanoma, pancreatic, colorectal cancer, gastric cancer and so on. The intolerance and toxicities are mostly immune-mediated, along with infusion-related reactions and embryo-fatal adverse events. In this case, it is not hard to speculate that the low TMB reflected a minimal neoantigen, and was thus refractory to nivolumab. Hence, it is reasonable to assume that the heterogeneity of dMMR is partially responsible for the low levels of TMB and hyperprogression.</p>
+      <p>Heterogeneity of MSI-H/dMMR TILs was also observed by Harry H. Yoon et al. (<xref rid="B30" ref-type="bibr">30</xref>) TILs have been considered as positive prognostic predictive factors in tumor patients since the early 1900s. It is widely acknowledged that CD8+ TIL percentage is the most important predictive factor in immunotherapy (<xref rid="B31" ref-type="bibr">31</xref>). Compared with the MSS/pMMR status, CD3+ and CD8+ TILs are significantly more abundant in MSI-H/dMMR patients (<xref rid="B30" ref-type="bibr">30</xref>). In this case, as shown in <xref rid="f2" ref-type="fig">
+<bold>Figures 2A, C</bold>
+</xref>, CD8+ lymphocytes, CD68+ macrophages, and CD56+ NK cell infiltration percentages were rather low. The PD-L1 assay (<xref rid="f2" ref-type="fig">
+<bold>Figure 2A</bold>
+</xref>, original magnification ×200) also revealed extremely low lymphocytes. According to Yoon et al., lower TILs in dMMR are associated with younger, non-smoking, and low histological grade patients. The tumor proportion score (TPS) and combined positive score (CPS) were also examined (<xref rid="f2" ref-type="fig">
+<bold>Figure 2B</bold>
+</xref>, original magnification ×200). The patient’s TPS and CPS were 0% and 0%, respectively (Dako 22C3 pharmDx, Santa Barbara, CA).</p>
+      <p>TME is classified into four types based on T cell infiltration and the presence of PD-L1 (<xref rid="B32" ref-type="bibr">32</xref>), and TME type III was categorized in this case. While T cell infiltration was observed in the patient, it appears that some unknown mechanisms prevented the effector T cells from functioning normally. A recent study also described that abnormal function of effector T cells may be a hindrance to their proliferation, execution, and maturation in immunotherapy-resistant TME type III patients (<xref rid="B33" ref-type="bibr">33</xref>). In addition, TILs in the tumor context have been proven to be a major positive prognostic predictive factor (<xref rid="B34" ref-type="bibr">34</xref>). Hence, low TIL percentages in patients cannot be neglected when attempting to elucidate the mechanism. Finally, although not yet listed as a negative factor of immunotherapy, some studies have indicated that TGFβ signaling could restrict T cells movement in TM. This then leads to a lack of response to anti-PD therapy and hyperprogression (<xref rid="B35" ref-type="bibr">35</xref>, <xref rid="B36" ref-type="bibr">36</xref>).</p>
+      <p>Recent studies of TGFβ signaling may elucidate the possible mechanisms of hyperprogression. TGFβ is a bifunctional regulator that plays an important role in tumor initiation and progression, and deletions in the TGFBR2 gene loci can lead to TGFβ signaling disruption. Studies have confirmed that TGFβ-derived epithelial-mesenchymal transition (EMT) can increase mesenchymal cells and lead to tissue fibrosis (<xref rid="B34" ref-type="bibr">34</xref>, <xref rid="B37" ref-type="bibr">37</xref>). The pivotal role of TGFβ in tumor microenvironment (TME) fibrogenesis suggests that TGFβ signaling may restrict T cell movement and counteract anti-tumor immunity (<xref rid="B35" ref-type="bibr">35</xref>). TGFβ also plays a vital role in immunotherapy. By limiting the infiltration of inflammatory/immune cells, it could suppress CD8+ T cells and NK cell-mediated anti-tumor response (<xref rid="B38" ref-type="bibr">38</xref>). TGFβ inhibits T cell proliferation at the transcriptional level and represses their cytotoxic activity, resulting in tumor progression, and in some cases, hyperprogression. Xiong et al. found regulated TGFβ in the consistent sequencing of two patients with HPD (<xref rid="B36" ref-type="bibr">36</xref>). Unfortunately, our patient did not exhibit such a tendency (<xref rid="f2" ref-type="fig">
+<bold>Figure 2D</bold>
+</xref>), but the small sample size in the study by Xiong et al. limited its credibility. Although TGFβ has not yet been confirmed as a negative regulator in immunotherapy, it is a new mechanism that merits further exploration. Apart from TGFβ, deregulated WNT signaling could also increase resistance to TILs, as long as there is activation of epithelial-to-mesenchymal transition (EMT), and both methods could limit the infiltration of TILs, especially CD8+ lymph cells (<xref rid="B39" ref-type="bibr">39</xref>). In conclusion, TGFβ activation and WNT deregulation may explain the reason for nivolumab resistance and hyperprogression in this case.</p>
+      <p>Thus, HPD is a comprehensive-cause phenomenon. Studies have suggested that poor clinical characteristics, such as low TMB, heterogeneity of MSI-H/dMMR status, low levels of TILs, TGFBR2 alteration, and TME type III patients could develop mechanism-unknown immune resistance. In this case, they may also lead to HPD.</p>
+    </sec>
+    <sec sec-type="data-availability" id="s4">
+      <title>Data Availability Statement</title>
+      <p>The original contributions presented in the study are publicly available. This data can be found here: <uri xlink:href="https://www.ncbi.nlm.nih.gov/sra/PRJNA756873">https://www.ncbi.nlm.nih.gov/sra/PRJNA756873</uri>.</p>
+    </sec>
+    <sec id="s5">
+      <title>Ethics Statement</title>
+      <p>This study was approved by the institutional review board of the West China Medical College of Sichuan University (ethical approval letter 20211077). The patient provided informed consent for his treatments, the collection and study of his blood and tissue samples. All procedures were conducted according to the Declaration of Helsinki. Written informed consent was obtained from the participant for the publication of this case report.</p>
+    </sec>
+    <sec sec-type="author-contributions" id="s6">
+      <title>Author Contributions</title>
+      <p>MQ conceived the idea of the article. WZ mainly takes charge of writing and figure-making. YZ and CY plays a guiding role in article revision, polish, genetic analysis, and ethical review. All authors contributed to the revision and discussion. All authors contributed to the article and approved the submitted version.</p>
+    </sec>
+    <sec sec-type="COI-statement" id="s7">
+      <title>Conflict of Interest</title>
+      <p>XDS is employed by 3D Medicines Inc.</p>
+      <p>The remaining authors declare that the research was conducted in the absence of any commercial or financial relationships that could be construed as a potential conflict of interest.</p>
+    </sec>
+    <sec sec-type="disclaimer" id="s8">
+      <title>Publisher’s Note</title>
+      <p>All claims expressed in this article are solely those of the authors and do not necessarily represent those of their affiliated organizations, or those of the publisher, the editors and the reviewers. Any product that may be evaluated in this article, or claim that may be made by its manufacturer, is not guaranteed or endorsed by the publisher.</p>
+    </sec>
+  </body>
+  <back>
+    <ack>
+      <title>Acknowledgments</title>
+      <p>We would like to thank the patient and his family for their understanding and 3D Medicine Company for their help with the study.</p>
+    </ack>
+    <ref-list>
+      <title>References</title>
+      <ref id="B1">
+        <label>1</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Marabelle</surname><given-names>A</given-names></name><name><surname>Le</surname><given-names>DT</given-names></name><name><surname>Ascierto</surname><given-names>PA</given-names></name><name><surname>Di Giacomo</surname><given-names>AM</given-names></name><name><surname>Jesus-Acosta</surname><given-names>A D</given-names></name><name><surname>Delord</surname><given-names>J-P</given-names></name><etal/></person-group>. <article-title>Efficacy of Pembrolizumab in Patients With Noncolorectal High Microsatellite Instability or Mismatch Repair-Deficient Cancer, Results From the Phase II KEYNOTE-158 Study</article-title>. <source>J Clin Oncol</source> (<year>2019</year>) <volume>37</volume>:<fpage>1</fpage>–<lpage>10</lpage>. doi: <pub-id pub-id-type="doi">10.1200/JCO.19.02105</pub-id>
+<pub-id pub-id-type="pmid">30422740</pub-id></mixed-citation>
+      </ref>
+      <ref id="B2">
+        <label>2</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Galon</surname><given-names>J</given-names></name><name><surname>Bruni</surname><given-names>D</given-names></name></person-group>. <article-title>Approaches to Treat Immune Hot, Altered and Cold Tumours With Combination Immunotherapies</article-title>. <source>Nat Rev Drug Discov</source> (<year>2019</year>) <volume>18</volume>(<issue>3</issue>):<fpage>197</fpage>–<lpage>218</lpage>. doi: <pub-id pub-id-type="doi">10.1038/s41573-018-0007-y</pub-id>
+<pub-id pub-id-type="pmid">30610226</pub-id></mixed-citation>
+      </ref>
+      <ref id="B3">
+        <label>3</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Overman</surname><given-names>MJ</given-names></name><name><surname>McDermott</surname><given-names>R</given-names></name><name><surname>Leach</surname><given-names>JL</given-names></name><name><surname>Lonardi</surname><given-names>S</given-names></name><name><surname>Lenz</surname><given-names>H-J</given-names></name><name><surname>Morse</surname><given-names>MA</given-names></name><etal/></person-group>. <article-title>Nivolumab in Patients With Metastatic DNA Mismatch Repair-Deficient or Microsatellite Instability-High Colorectal Cancer (CheckMate 142): An Open-Label, Multicentre, Phase 2 Study</article-title>. <source>Lancet Oncol</source> (<year>2017</year>) <volume>18</volume>(<issue>9</issue>):<page-range>1182–91</page-range>. doi: <pub-id pub-id-type="doi">10.1016/S1470-2045(17)30422-9</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B4">
+        <label>4</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Smith</surname><given-names>KN</given-names></name><name><surname>Le</surname><given-names>DT</given-names></name><name><surname>Durham</surname><given-names>JN</given-names></name></person-group>. <article-title>Mismatch-Repair Deficiency Predicts Response of Solid Tumors to PD-1 Blockade</article-title>. <source>Science</source> (<year>2017</year>) <volume>357</volume>:<page-range>409–13</page-range>. doi: <pub-id pub-id-type="doi">10.1126/science.aan6733</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B5">
+        <label>5</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Le</surname><given-names>DT</given-names></name><name><surname>Uram</surname><given-names>JN</given-names></name><name><surname>Wang</surname><given-names>H</given-names></name><name><surname>Bartlett</surname><given-names>BR</given-names></name><name><surname>Kemberling</surname><given-names>H</given-names></name><name><surname>Eyring</surname><given-names>AD</given-names></name><etal/></person-group>. <article-title>PD-1 Blockade in Tumors With Mismatch-Repair Deficiency</article-title>. <source>N Engl J Med</source> (<year>2015</year>) <volume>372</volume>(<issue>26</issue>):<page-range>2509–20</page-range>. doi: <pub-id pub-id-type="doi">10.1056/NEJMoa1500596</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B6">
+        <label>6</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Muro</surname><given-names>K</given-names></name><name><surname>Chung</surname><given-names>HC</given-names></name><name><surname>Shankaran</surname><given-names>V</given-names></name><name><surname>Geva</surname><given-names>R</given-names></name><name><surname>Catenacci</surname><given-names>D</given-names></name><name><surname>Gupta</surname><given-names>S</given-names></name><etal/></person-group>. <article-title>Pembrolizumab for Patients With PD-L1-Positive Advanced Gastric Cancer (KEYNOTE-012): A Multicentre, Open-Label, Phase 1b Trial</article-title>. <source>Lancet Oncol</source> (<year>2016</year>) <volume>17</volume>(<issue>6</issue>):<page-range>717–26</page-range>. doi: <pub-id pub-id-type="doi">10.1016/S1470-2045(16)00175-3</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B7">
+        <label>7</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Le</surname><given-names>DT</given-names></name><name><surname>Kim</surname><given-names>TW</given-names></name><name><surname>Cutsem</surname><given-names>EV</given-names></name><name><surname>Geva</surname><given-names>R</given-names></name><name><surname>Jäger</surname><given-names>D</given-names></name><name><surname>Hara</surname><given-names>H</given-names></name><etal/></person-group>. <article-title>Phase II Open-Label Study of Pembrolizumab in Treatment-Refractory, Microsatellite Instability-High/Mismatch Repair-Deficient Metastatic Colorectal Cancer: KEYNOTE-164</article-title>. <source>J Clin Oncol</source> (<year>2019</year>) <volume>38</volume>:<page-range>11–9</page-range>. doi: <pub-id pub-id-type="doi">10.1200/JCO.19.02107</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B8">
+        <label>8</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Fuentes-Antras</surname><given-names>J</given-names></name><name><surname>Provencio</surname><given-names>M</given-names></name><name><surname>Diaz-Rubio</surname><given-names>E</given-names></name></person-group>. <article-title>Hyperprogression as a Distinct Outcome After Immunotherapy</article-title>. <source>Cancer Treat Rev</source> (<year>2018</year>) <volume>70</volume>:<fpage>16</fpage>–<lpage>21</lpage>. doi: <pub-id pub-id-type="doi">10.1016/j.ctrv.2018.07.006</pub-id>
+<pub-id pub-id-type="pmid">30053725</pub-id></mixed-citation>
+      </ref>
+      <ref id="B9">
+        <label>9</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Kas</surname><given-names>B</given-names></name><name><surname>Talbot</surname><given-names>H</given-names></name><name><surname>Ferrara</surname><given-names>R</given-names></name><name><surname>Richard</surname><given-names>C</given-names></name><name><surname>Lamarque</surname><given-names>JP</given-names></name><name><surname>Pitre-Champagnat</surname><given-names>S</given-names></name><etal/></person-group>. <article-title>Clarification of Definitions of Hyperprogressive Disease During Immunotherapy for Non-Small Cell Lung Cancer</article-title>. <source>JAMA Oncol</source> (<year>2020</year>) <volume>6</volume>(<issue>7</issue>):<page-range>1039–46</page-range>. doi: <pub-id pub-id-type="doi">10.1001/jamaoncol.2020.1634</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B10">
+        <label>10</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Biton</surname><given-names>J</given-names></name><name><surname>Mansuet-Lupo</surname><given-names>A</given-names></name><name><surname>Pecuchet</surname><given-names>N</given-names></name><name><surname>Alifano</surname><given-names>M</given-names></name><name><surname>Ouakrim</surname><given-names>H</given-names></name><name><surname>Arrondeau</surname><given-names>J</given-names></name><etal/></person-group>. <article-title>TP53, STK11, and EGFR Mutations Predict Tumor Immune Profile and the Response to Anti-PD-1 in Lung Adenocarcinoma</article-title>. <source>Clin Cancer Res</source> (<year>2018</year>) <volume>24</volume>(<issue>22</issue>):<page-range>5710–23</page-range>. doi: <pub-id pub-id-type="doi">10.1158/1078-0432.CCR-18-0163</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B11">
+        <label>11</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Samstein</surname><given-names>RM</given-names></name><name><surname>Lee</surname><given-names>CH</given-names></name><name><surname>Shoushtari</surname><given-names>AN</given-names></name><name><surname>Hellmann</surname><given-names>MD</given-names></name><name><surname>Shen</surname><given-names>R</given-names></name><name><surname>Janjigian</surname><given-names>YY</given-names></name><etal/></person-group>. <article-title>Tumor Mutational Load Predicts Survival After Immunotherapy Across Multiple Cancer Types</article-title>. <source>Nat Genet</source> (<year>2019</year>) <volume>51</volume>(<issue>2</issue>):<page-range>202–6</page-range>. doi: <pub-id pub-id-type="doi">10.1038/s41588-018-0312-8</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B12">
+        <label>12</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Gatalica</surname><given-names>Z</given-names></name><name><surname>Xiu</surname><given-names>J</given-names></name><name><surname>Swensen</surname><given-names>J</given-names></name><name><surname>Vranic</surname><given-names>S</given-names></name></person-group>. <article-title>Comprehensive Analysis of Cancers of Unknown Primary for the Biomarkers of Response to Immune Checkpoint Blockade Therapy</article-title>. <source>Eur J Cancer</source> (<year>2018</year>) <volume>94</volume>:<page-range>179–86</page-range>. doi: <pub-id pub-id-type="doi">10.1016/j.ejca.2018.02.021</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B13">
+        <label>13</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Champiat</surname><given-names>S</given-names></name><name><surname>Dercle</surname><given-names>L</given-names></name><name><surname>Ammari</surname><given-names>S</given-names></name><name><surname>Massard</surname><given-names>C</given-names></name><name><surname>Hollebecque</surname><given-names>A</given-names></name><name><surname>Postel-Vinay</surname><given-names>S</given-names></name><etal/></person-group>. <article-title>Hyperprogressive Disease Is a New Pattern of Progression in Cancer Patients Treated by Anti-PD-1/PD-L1</article-title>. <source>Clin Cancer Res</source> (<year>2017</year>) <volume>23</volume>(<issue>8</issue>):<page-range>1920–8</page-range>. doi: <pub-id pub-id-type="doi">10.1158/1078-0432.CCR-16-1741</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B14">
+        <label>14</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Weide</surname><given-names>B</given-names></name><name><surname>Martens</surname><given-names>A</given-names></name><name><surname>Hassel</surname><given-names>JC</given-names></name><name><surname>Berking</surname><given-names>C</given-names></name><name><surname>Postow</surname><given-names>MA</given-names></name><name><surname>Bisschop</surname><given-names>K</given-names></name><etal/></person-group>. <article-title>Baseline Biomarkers for Outcome of Melanoma Patients Treated With Pembrolizumab</article-title>. <source>Clin Cancer Res</source> (<year>2016</year>) <volume>22</volume>(<issue>22</issue>):<page-range>5487–96</page-range>. doi: <pub-id pub-id-type="doi">10.1158/1078-0432.CCR-16-0127</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B15">
+        <label>15</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Kim</surname><given-names>JY</given-names></name><name><surname>Lee</surname><given-names>KH</given-names></name><name><surname>Kang</surname><given-names>J</given-names></name><name><surname>Borcoman</surname><given-names>E</given-names></name><name><surname>Saada-Bouzid</surname><given-names>E</given-names></name><name><surname>Kronbichler</surname><given-names>A</given-names></name><etal/></person-group>. <article-title>Hyperprogressive Disease During Anti-PD-1 (PDCD1)/PD-L1 (CD274) Therapy: A Systematic Review and Meta-Analysis</article-title>. <source>Cancers (Basel)</source> (<year>2019</year>) <volume>11</volume>(<issue>11</issue>):<fpage>1699</fpage>. doi: <pub-id pub-id-type="doi">10.3390/cancers11111699</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B16">
+        <label>16</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Rizvi</surname><given-names>NA</given-names></name><name><surname>Hellmann</surname><given-names>MD</given-names></name><name><surname>Snyder</surname><given-names>A</given-names></name><name><surname>Kvistborg</surname><given-names>P</given-names></name><name><surname>Makarov</surname><given-names>V</given-names></name><name><surname>Havel</surname><given-names>JJ</given-names></name><etal/></person-group>. <article-title>Mutational Landscape Determines Sensitivity to PD-1 Blockade in Non–Small Cell Lung Cancer</article-title>. <source>Science</source> (<year>2016</year>) <volume>348</volume>(<issue>6230</issue>):<page-range>124–8</page-range>. doi: <pub-id pub-id-type="doi">10.1126/science.aaa1348</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B17">
+        <label>17</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Chida</surname><given-names>K</given-names></name><name><surname>Kawazoe</surname><given-names>A</given-names></name><name><surname>Kawazu</surname><given-names>M</given-names></name><name><surname>Suzuki</surname><given-names>T</given-names></name><name><surname>Nakamura</surname><given-names>Y</given-names></name><name><surname>Nakatsura</surname><given-names>T</given-names></name><etal/></person-group>. <article-title>A Low Tumor Mutational Burden and PTEN Mutations are Predictors of a Negative Response to PD-1 Blockade in MSI-H/dMMR Gastrointestinal Tumors</article-title>. <source>Clin Cancer Res</source> (<year>2021</year>) <volume>27</volume>:<page-range>3714–24</page-range>. doi: <pub-id pub-id-type="doi">10.1158/1078-0432.CCR-21-0401</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B18">
+        <label>18</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Leslie</surname><given-names>M</given-names></name></person-group>. <article-title>High TMB Predicts Immunotherapy Benefit</article-title>. <source>Cancer Discov</source> (<year>2018</year>) <volume>8</volume>(<issue>6</issue>):<fpage>668</fpage>. doi: <pub-id pub-id-type="doi">10.1158/2159-8290.CD-NB2018-048</pub-id>
+<pub-id pub-id-type="pmid">29661758</pub-id></mixed-citation>
+      </ref>
+      <ref id="B19">
+        <label>19</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Saâda-Bouzid</surname><given-names>E</given-names></name><name><surname>Defaucheux</surname><given-names>C</given-names></name><name><surname>Karabajakian</surname><given-names>A</given-names></name><name><surname>Coloma</surname><given-names>VP</given-names></name><name><surname>Servois</surname><given-names>V</given-names></name><name><surname>Paoletti</surname><given-names>X</given-names></name><etal/></person-group>. <article-title>Hyperprogression During Anti-PD-1/PD-L1 Therapy in Patients With Recurrent and/or Metastatic Head and Neck Squamous Cell Carcinoma</article-title>. <source>Ann Oncol</source> (<year>2017</year>) <volume>28</volume>(<issue>7</issue>):<fpage>1605</fpage>–<lpage>1611</lpage>. doi: <pub-id pub-id-type="doi">10.1093/annonc/mdx178</pub-id>
+<pub-id pub-id-type="pmid">28419181</pub-id></mixed-citation>
+      </ref>
+      <ref id="B20">
+        <label>20</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Cristescu</surname><given-names>R</given-names></name><name><surname>Mogg</surname><given-names>R</given-names></name><name><surname>Ayers</surname><given-names>M</given-names></name><name><surname>Albright</surname><given-names>A</given-names></name><name><surname>Murphy</surname><given-names>E</given-names></name><name><surname>Yearley</surname><given-names>J</given-names></name><etal/></person-group>. <article-title>Pan-Tumor Genomic Biomarkers for PD-1 Checkpoint Blockade-Based Immunotherapy</article-title>. <source>Science</source> (<year>2018</year>) <volume>362</volume>(<issue>6411</issue>):<fpage>eaar3593</fpage>. doi: <pub-id pub-id-type="doi">10.1126/science.aar3593</pub-id>
+<pub-id pub-id-type="pmid">30309915</pub-id></mixed-citation>
+      </ref>
+      <ref id="B21">
+        <label>21</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Jones</surname><given-names>S</given-names></name><name><surname>Anagnostou</surname><given-names>V</given-names></name><name><surname>Lytle</surname><given-names>K</given-names></name><name><surname>Parpart-Li</surname><given-names>S</given-names></name><name><surname>Nesselbush</surname><given-names>M</given-names></name><name><surname>Riley</surname><given-names>DR</given-names></name><etal/></person-group>. <article-title>Personalized Genomic Analyses for Cancer Mutation Discovery and Interpretation</article-title>. <source>Cancer</source> (<year>2015</year>) <volume>7</volume>(<issue>283</issue>):<fpage>283ra53</fpage>. doi: <pub-id pub-id-type="doi">10.1126/scitranslmed.aaa7161</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B22">
+        <label>22</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Liu</surname><given-names>L</given-names></name><name><surname>Bai</surname><given-names>X</given-names></name><name><surname>Wang</surname><given-names>J</given-names></name><name><surname>Tang</surname><given-names>XR</given-names></name><name><surname>Wu</surname><given-names>DH</given-names></name><name><surname>Du</surname><given-names>SS</given-names></name><etal/></person-group>. <article-title>Combination of TMB and CNA Stratifies Prognostic and Predictive Responses to Immunotherapy Across Metastatic Cancer</article-title>. <source>Clin Cancer Res</source> (<year>2019</year>) <volume>25</volume>(<issue>24</issue>):<page-range>7413–23</page-range>. doi: <pub-id pub-id-type="doi">10.1158/1078-0432.CCR-19-0558</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B23">
+        <label>23</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Petrelli</surname><given-names>F</given-names></name><name><surname>Ghidini</surname><given-names>M</given-names></name><name><surname>Ghidini</surname><given-names>A</given-names></name><name><surname>Tomasello</surname><given-names>G</given-names></name></person-group>. <article-title>Outcomes Following Immune Checkpoint Inhibitor Treatment of Patients With Microsatellite Instability-High Cancers: A Systematic Review and Meta-Analysis</article-title>. <source>JAMA Oncol</source> (<year>2020</year>) <volume>6</volume>(<issue>7</issue>):<page-range>1068–71</page-range>. doi: <pub-id pub-id-type="doi">10.1001/jamaoncol.2020.1046</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B24">
+        <label>24</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Lu</surname><given-names>S</given-names></name><name><surname>Stein</surname><given-names>JE</given-names></name><name><surname>Rimm</surname><given-names>DL</given-names></name><name><surname>Wang</surname><given-names>DW</given-names></name><name><surname>Bell</surname><given-names>JM</given-names></name><name><surname>Johnson</surname><given-names>DB</given-names></name><etal/></person-group>. <article-title>Comparison of Biomarker Modalities for Predicting Response to PD-1/PD-L1 Checkpoint Blockade: A Systematic Review and Meta-Analysis</article-title>. <source>JAMA Oncol</source> (<year>2019</year>) <volume>5</volume>(<issue>8</issue>):<page-range>1195–204</page-range>. doi: <pub-id pub-id-type="doi">10.1001/jamaoncol.2019.1549</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B25">
+        <label>25</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Baretti</surname><given-names>M</given-names></name><name><surname>Le</surname><given-names>DT</given-names></name></person-group>. <article-title>DNA Mismatch Repair in Cancer</article-title>. <source>Pharmacol Ther</source> (<year>2018</year>) <volume>189</volume>:<fpage>45</fpage>–<lpage>62</lpage>. doi: <pub-id pub-id-type="doi">10.1016/j.pharmthera.2018.04.004</pub-id>
+<pub-id pub-id-type="pmid">29669262</pub-id></mixed-citation>
+      </ref>
+      <ref id="B26">
+        <label>26</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Yang</surname><given-names>W</given-names></name><name><surname>Lee</surname><given-names>KW</given-names></name><name><surname>Srivastava</surname><given-names>RM</given-names></name><name><surname>Kuo</surname><given-names>F</given-names></name><name><surname>Krishna</surname><given-names>C</given-names></name><name><surname>Chowell</surname><given-names>D</given-names></name><etal/></person-group>. <article-title>Immunogenic Neoantigens Derived From Gene Fusions Stimulate T Cell Responses</article-title>. <source>Nat Med</source> (<year>2019</year>) <volume>25</volume>(<issue>5</issue>):<page-range>767–75</page-range>. doi: <pub-id pub-id-type="doi">10.1038/s41591-019-0434-2</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B27">
+        <label>27</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Schumacher</surname><given-names>TN</given-names></name><name><surname>Schreiber</surname><given-names>RD</given-names></name></person-group>. <article-title>Neoantigens in Cancer Immunotherapy</article-title>. <source>Science</source> (<year>2015</year>) <volume>348</volume>(<issue>6230</issue>):<fpage>69</fpage>–<lpage>74</lpage>. doi: <pub-id pub-id-type="doi">10.1126/science.aaa4971</pub-id>
+<pub-id pub-id-type="pmid">25838375</pub-id></mixed-citation>
+      </ref>
+      <ref id="B28">
+        <label>28</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Weber</surname><given-names>JS</given-names></name><name><surname>D’Angelo</surname><given-names>SP</given-names></name><name><surname>Minor</surname><given-names>D</given-names></name><name><surname>Hodi</surname><given-names>FS</given-names></name><name><surname>Gutzmer</surname><given-names>R</given-names></name><name><surname>Neyns</surname><given-names>B</given-names></name><etal/></person-group>. <article-title>Nivolumab Versus Chemotherapy in Patients With Advanced Melanoma Who Progressed After Anti-CTLA-4 Treatment (CheckMate 037): A Randomised, Controlled, Open-Label, Phase 3 Trial</article-title>. <source>Lancet Oncol</source> (<year>2015</year>) <volume>16</volume>(<issue>4</issue>):<page-range>375–84</page-range>. doi: <pub-id pub-id-type="doi">10.1016/S1470-2045(15)70076-8</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B29">
+        <label>29</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Robert</surname><given-names>C</given-names></name><name><surname>Long</surname><given-names>GV</given-names></name><name><surname>Brady</surname><given-names>B</given-names></name><name><surname>Dutriaux</surname><given-names>C</given-names></name><name><surname>Maio</surname><given-names>M</given-names></name><name><surname>Mortier</surname><given-names>L</given-names></name><etal/></person-group>. <article-title>Nivolumab in Previously Untreated Melanoma Without BRAF Mutation</article-title>. <source>N Engl J Med</source> (<year>2015</year>) <volume>372</volume>(<issue>4</issue>):<page-range>320–30</page-range>. doi: <pub-id pub-id-type="doi">10.1056/NEJMoa1412082</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B30">
+        <label>30</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Yoon</surname><given-names>HH</given-names></name><name><surname>Shi</surname><given-names>Q</given-names></name><name><surname>Heying</surname><given-names>EN</given-names></name><name><surname>Muranyi</surname><given-names>A</given-names></name><name><surname>Bredno</surname><given-names>J</given-names></name><name><surname>Ough</surname><given-names>F</given-names></name><etal/></person-group>. <article-title>Intertumoral Heterogeneity of CD3(+) and CD8(+) T-Cell Densities in the Microenvironment of DNA Mismatch-Repair-Deficient Colon Cancers: Implications for Prognosis</article-title>. <source>Clin Cancer Res</source> (<year>2019</year>) <volume>25</volume>(<issue>1</issue>):<page-range>125–33</page-range>. doi: <pub-id pub-id-type="doi">10.1158/1078-0432.CCR-18-1984</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B31">
+        <label>31</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Chiou</surname><given-names>SH</given-names></name><name><surname>Sheu</surname><given-names>BC</given-names></name><name><surname>Chang</surname><given-names>WC</given-names></name><name><surname>Huang</surname><given-names>SC</given-names></name><name><surname>Hong-Nerng</surname><given-names>H</given-names></name></person-group>. <article-title>Current Concepts of Tumor-Infiltrating Lymphocytes in Human Malignancies</article-title>. <source>J Reprod Immunol</source> (<year>2005</year>) <volume>67</volume>(<issue>1-2</issue>):<fpage>35</fpage>–<lpage>50</lpage>. doi: <pub-id pub-id-type="doi">10.1016/j.jri.2005.06.002</pub-id>
+<pub-id pub-id-type="pmid">16111767</pub-id></mixed-citation>
+      </ref>
+      <ref id="B32">
+        <label>32</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Taube</surname><given-names>JM</given-names></name><name><surname>Anders</surname><given-names>RA</given-names></name><name><surname>Young</surname><given-names>GD</given-names></name><name><surname>Xu</surname><given-names>H</given-names></name><name><surname>Sharma</surname><given-names>R</given-names></name><name><surname>McMiller</surname><given-names>TL</given-names></name><etal/></person-group>. <article-title>Colocalization of Inflammatory Response With B7-H1 Expression in Human Melanocytic Lesions Supports an Adaptive Resistance Mechanism of Immune Escape</article-title>. <source>Sci Trans Med</source> (<year>2012</year>) <volume>4</volume>(<issue>127</issue>):<fpage>127ra37</fpage>. doi: <pub-id pub-id-type="doi">10.1126/scitranslmed.3003689</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B33">
+        <label>33</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Kim</surname><given-names>TK</given-names></name><name><surname>Herbst</surname><given-names>RS</given-names></name><name><surname>Chen</surname><given-names>L</given-names></name></person-group>. <article-title>Defining and Understanding Adaptive Resistance in Cancer Immunotherapy</article-title>. <source>Trends Immunol</source> (<year>2018</year>) <volume>39</volume>(<issue>8</issue>):<page-range>624–31</page-range>. doi: <pub-id pub-id-type="doi">10.1016/j.it.2018.05.001</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B34">
+        <label>34</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Bremnes</surname><given-names>RM</given-names></name><name><surname>Busund</surname><given-names>L-T</given-names></name><name><surname>Kilvær</surname><given-names>TL</given-names></name><name><surname>Andersen</surname><given-names>S</given-names></name><name><surname>Richardsen</surname><given-names>E</given-names></name><name><surname>Paulsen</surname><given-names>EE</given-names></name><etal/></person-group>. <article-title>The Role of Tumor-Infiltrating Lymphocytes in Development, Progression, and Prognosis of Non–Small Cell Lung Cancer</article-title>. <source>J Thorac Oncol</source> (<year>2016</year>) <volume>11</volume>(<issue>6</issue>):<fpage>789</fpage>–<lpage>800</lpage>. doi: <pub-id pub-id-type="doi">10.1016/j.jtho.2016.01.015</pub-id>
+<pub-id pub-id-type="pmid">26845192</pub-id></mixed-citation>
+      </ref>
+      <ref id="B35">
+        <label>35</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Mariathasan</surname><given-names>S</given-names></name><name><surname>Turley</surname><given-names>SJ</given-names></name><name><surname>Nickles</surname><given-names>D</given-names></name><name><surname>Castiglioni</surname><given-names>A</given-names></name><name><surname>Yuen</surname><given-names>K</given-names></name><name><surname>Wang</surname><given-names>Y</given-names></name><etal/></person-group>. <article-title>TGFbeta Attenuates Tumour Response to PD-L1 Blockade by Contributing to Exclusion of T Cells</article-title>. <source>Nature</source> (<year>2018</year>) <volume>554</volume>(<issue>7693</issue>):<page-range>544–8</page-range>. doi: <pub-id pub-id-type="doi">10.1038/nature25501</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B36">
+        <label>36</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Xiong</surname><given-names>D</given-names></name><name><surname>Wang</surname><given-names>Y</given-names></name><name><surname>Singavi</surname><given-names>AK</given-names></name><name><surname>Mackinnon</surname><given-names>AC</given-names></name><name><surname>George</surname><given-names>B</given-names></name><name><surname>You</surname><given-names>M</given-names></name></person-group>. <article-title>Immunogenomic Landscape Contributes to Hyperprogressive Disease After Anti-PD-1 Immunotherapy for Cancer</article-title>. <source>iScience</source> (<year>2018</year>) <volume>9</volume>:<page-range>258–77</page-range>. doi: <pub-id pub-id-type="doi">10.1016/j.isci.2018.10.021</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B37">
+        <label>37</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Morikawa</surname><given-names>M</given-names></name><name><surname>Derynck</surname><given-names>R</given-names></name><name><surname>Miyazono</surname><given-names>K</given-names></name></person-group>. <article-title>TGF-Beta and the TGF-Beta Family: Context-Dependent Roles in Cell and Tissue Physiology</article-title>. <source>Cold Spring Harb Perspect Biol</source> (<year>2016</year>) <volume>8</volume>(<issue>5</issue>):<elocation-id>a021873</elocation-id>. doi: <pub-id pub-id-type="doi">10.1101/cshperspect.a021873</pub-id>
+<pub-id pub-id-type="pmid">27141051</pub-id></mixed-citation>
+      </ref>
+      <ref id="B38">
+        <label>38</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Yang</surname><given-names>L</given-names></name><name><surname>Pang</surname><given-names>Y</given-names></name><name><surname>Moses</surname><given-names>HL</given-names></name></person-group>. <article-title>TGF-Beta and Immune Cells: An Important Regulatory Axis in the Tumor Microenvironment and Progression</article-title>. <source>Trends Immunol</source> (<year>2010</year>) <volume>31</volume>(<issue>6</issue>):<page-range>220–7</page-range>. doi: <pub-id pub-id-type="doi">10.1016/j.it.2010.04.002</pub-id>
+</mixed-citation>
+      </ref>
+      <ref id="B39">
+        <label>39</label>
+        <mixed-citation publication-type="journal">
+<person-group person-group-type="author"><name><surname>Galluzzi</surname><given-names>L</given-names></name><name><surname>Spranger</surname><given-names>S</given-names></name><name><surname>Fuchs</surname><given-names>E</given-names></name><name><surname>Lopez-Soto</surname><given-names>A</given-names></name></person-group>. <article-title>WNT Signaling in Cancer Immunosurveillance</article-title>. <source>Trends Cell Biol</source> (<year>2019</year>) <volume>29</volume>(<issue>1</issue>):<fpage>44</fpage>–<lpage>65</lpage>. doi: <pub-id pub-id-type="doi">10.1016/j.tcb.2018.08.005</pub-id>
+<pub-id pub-id-type="pmid">30220580</pub-id></mixed-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>
+
+</metadata></record></GetRecord></OAI-PMH>

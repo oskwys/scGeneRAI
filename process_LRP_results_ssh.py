@@ -45,8 +45,6 @@ get_topN_node_type = args.get_topN_node_type
 
 
 # %%% load LRP data
-
-
 lrp_files = f.get_lrp_files(path_to_lrp_results)
 samples = f.get_samples_with_lrp(lrp_files)
 # samples = samples[:10]
@@ -54,10 +52,10 @@ print("Samples: ", len(samples))
 print("Samples: ", len(set(samples)))
 
 start_time = datetime.now()
-lrp_dict = f.load_lrp_data(lrp_files[:20], path_to_lrp_results)
+lrp_dict = f.load_lrp_data(lrp_files, path_to_lrp_results)
 end_time = datetime.now()
 print(end_time - start_time)
-print(lrp_files[:20])
+print(lrp_files)
 n = len(lrp_files)
 print("Number of LRP files: ", n)
 
@@ -68,8 +66,8 @@ print("Number of LRP files: ", n)
 if get_topN:
 
     df_topn = pd.DataFrame(np.zeros((get_topN_topn, len(samples)), dtype="str"), columns=samples)
-    print(samples[:20])
-    for i, sample_name in enumerate(samples[:20]):
+    print(samples)
+    for i, sample_name in enumerate(samples):
         print('get_topN: ', i, sample_name)
         data_temp = lrp_dict[sample_name]
         data_temp = f.filter_and_sort_data(data_temp, get_topN_node_type, get_topN_topn)
@@ -91,6 +89,9 @@ if get_topN:
             path_to_save, "df_topn_for_individuals_top{}_{}.csv".format(get_topN_topn, get_topN_node_type)
         )
     )
+    # print that the data is saved
+    print("df_topn saved to: ", os.path.join(path_to_save, "df_topn_for_individuals_top{}_{}.csv".format(get_topN_topn, get_topN_node_type)))
+
 
     unique_edges_df = f.count_unique_edges_in_df_topn(df_topn)
 
@@ -100,3 +101,5 @@ if get_topN:
             "unique_edges_count_in_top_{}_{}.csv".format(get_topN_topn, str(get_topN_node_type)),
         )
     )
+    # print that unique_edges_df is saved
+    print("unique_edges_df saved to: ", os.path.join(path_to_save, "unique_edges_count_in_top_{}_{}.csv".format(get_topN_topn, str(get_topN_node_type))))

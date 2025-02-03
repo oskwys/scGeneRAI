@@ -69,7 +69,6 @@ def load_lrp_file(file_name: str, path_to_lrp_results: str, lrp_dict: dict) -> N
     if len(file_parts) < 3:
         raise ValueError(f"Filename {file_name} does not have the expected format.")
     sample_name = file_parts[2]
-    print(file_name)
     data_temp = pd.read_pickle(
         os.path.join(path_to_lrp_results, file_name),
         compression="infer",

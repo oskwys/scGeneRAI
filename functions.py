@@ -135,12 +135,12 @@ def get_samples_with_lrp(path_to_lrp_results, starts_with="LRP_"):
         starts_with (str, optional): The prefix that filenames should start with. Defaults to "LRP_".
 
     Returns:
-        list: A sorted list of sample identifiers extracted from the filenames.
+        list: A list of sample identifiers extracted from the filenames.
     """
     files = [f for f in os.listdir(path_to_lrp_results) if f.startswith(starts_with)]
     print(files)
     samples = [file.split("_")[2] for file in files]
-    samples.sort()
+    
     return samples
 
 def remove_same_source_target(data: pd.DataFrame) -> pd.DataFrame:

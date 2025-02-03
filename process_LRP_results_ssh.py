@@ -56,7 +56,7 @@ print("Samples: ", len(set(samples)))
 lrp_files = f.get_lrp_files(path_to_lrp_results)
 
 start_time = datetime.now()
-lrp_dict = f.load_lrp_data(lrp_files, path_to_lrp_results)
+lrp_dict = f.load_lrp_data(lrp_files[:50], path_to_lrp_results)
 end_time = datetime.now()
 print(end_time - start_time)
 
@@ -74,7 +74,7 @@ if get_topN:
     for i, sample_name in enumerate(samples):
         print(i)
         data_temp = lrp_dict[sample_name]
-        data_temp = f.filter_and_sort(data_temp, get_topN_node_type, toget_topN_topnpn)
+        data_temp = f.filter_and_sort_data(data_temp, get_topN_node_type, get_topN_topn)
         data_temp = f.add_edge_colmn(data_temp)
         f.add_to_main_df_topn(df_topn, sample_name, data_temp)
 

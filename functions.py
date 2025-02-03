@@ -20,11 +20,208 @@ import pyarrow.feather as feather
 from datetime import datetime
 
 
-def get_samples_with_lrp(path_to_lrp_results, starts_with='LRP_'):
+from typing import List
+
+def get_lrp_files(path_to_lrp_results: str) -> List[str]:
+    """
+    Retrieves a list of files starting with "LRP" from the specified directory.
+    Args:
+        path_to_lrp_results (str): The path to the directory containing LRP result files.
+    Returns:
+        list: A list of filenames that start with "LRP".
+    Raises:
+        FileNotFoundError: If the specified directory does not exist or if no LRP files are found in the directory.
+    """
+    if not os.path.exists(path_to_lrp_results):
+        raise FileNotFoundError(f"The directory {path_to_lrp_results} does not exist.")
+
+    lrp_files = []
+    for file in os.listdir(path_to_lrp_results):
+        if file.startswith("LRP"):
+            lrp_files.append(file)
+
+    if not lrp_files:
+        raise FileNotFoundError(
+            f"No LRP files found in the directory {path_to_lrp_results}."
+            )
+    
+    return lrp_files
+
+
+def load_lrp_file(file_name: str, path_to_lrp_results: str, lrp_dict: dict) -> None:
+    """
+    Loads an LRP (Layer-wise Relevance Propagation) result file, processes it, and stores it in a dictionary.
+
+    Args:
+        file_name (str): The name of the LRP result file. The filename is expected to have at least three parts separated by underscores.
+        path_to_lrp_results (str): The directory path where the LRP result files are stored.
+        lrp_dict (dict): A dictionary to store the processed LRP data, with the sample name as the key.
+
+    Raises:
+        ValueError: If the filename does not have the expected format (at least three parts separated by underscores).
+
+    Returns:
+        None: The function updates the lrp_dict in place.
+    """
+    file_parts = file_name.split("_")
+    if len(file_parts) < 3:
+        raise ValueError(f"Filename {file_name} does not have the expected format.")
+    sample_name = file_parts[2]
+    print(file_name)
+    data_temp = pd.read_pickle(
+        os.path.join(path_to_lrp_results, file_name),
+        compression="infer",
+        storage_options=None,
+    )
+    data_temp = remove_same_source_target(data_temp)
+    lrp_dict[sample_name] = data_temp
+
+
+def load_lrp_data(lrp_files: list[str], path_to_lrp_results: str) -> dict:
+    """
+    Loads LRP (Layer-wise Relevance Propagation) data from a list of files and stores it in a dictionary.
+    Args:
+        lrp_files (list[str]): A list of filenames containing LRP data.
+        path_to_lrp_results (str): The path to the directory where the LRP result files are located.
+    Returns:
+        dict: A dictionary containing the loaded LRP data.
+    """
+    lrp_dict = {}
+    n = len(lrp_files)
+
+    for i in range(n):
+        load_lrp_file(lrp_files[i], path_to_lrp_results, lrp_dict)
+
+    return lrp_dict
+
+
+def filter_and_sort_data(data_temp: pd.DataFrame, node_type: str = None, topn: int = 100) -> pd.DataFrame:
+    """
+    Filters and sorts a DataFrame based on the presence of a specified node type in the 
+    'source_gene' or 'target_gene' columns, and returns the top N rows sorted by the 
+    'LRP' column in descending order.
+
+    Args:
+        data_temp (pd.DataFrame): The input DataFrame containing the data to be filtered 
+                                  and sorted.
+        node_type (str, optional): The node type to filter the 'source_gene' and 'target_gene' 
+                                   columns by. Defaults to None.
+        topn (int): The number of top rows to return after sorting.
+
+    Returns:
+        pd.DataFrame: The filtered and sorted DataFrame with an additional edge column.
+    """
+    if node_type is not None:
+        data_temp = data_temp[
+            (data_temp["source_gene"].str.contains(node_type)) |
+            (data_temp["target_gene"].str.contains(node_type))
+        ]
+    data_temp = data_temp.sort_values("LRP", ascending=False)
+    data_temp = data_temp.iloc[:topn, :]
+    data_temp = add_edge_column(data_temp)
+    return data_temp
+
+
+
+def get_samples_with_lrp(path_to_lrp_results, starts_with="LRP_"):
+    """
+    Retrieves sample identifiers from filenames in a specified directory that start with a given prefix.
+
+    Args:
+        path_to_lrp_results (str): The path to the directory containing LRP result files.
+        starts_with (str, optional): The prefix that filenames should start with. Defaults to "LRP_".
+
+    Returns:
+        list: A list of sample identifiers extracted from the filenames.
+    """
     files = [f for f in os.listdir(path_to_lrp_results) if f.startswith(starts_with)]
     print(files)
-    samples = [file.split('_')[2] for file in files]
+    samples = [file.split("_")[2] for file in files]
     return samples
+
+def remove_same_source_target(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Removes rows where 'source_gene' is the same as 'target_gene'.
+
+    Args:
+        data (pd.DataFrame): The input DataFrame containing 'source_gene' and 'target_gene' columns.
+
+    Returns:
+        pd.DataFrame: The filtered DataFrame.
+    """
+    if not isinstance(data, pd.DataFrame):
+        raise ValueError("Input data must be a pandas DataFrame.")
+    if 'source_gene' not in data.columns or 'target_gene' not in data.columns:
+        raise ValueError("DataFrame must contain 'source_gene' and 'target_gene' columns.")
+
+    data = data[data['source_gene'] != data['target_gene']]
+    return data
+
+
+def add_edge_column(edges: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds 'edge' and 'edge_type' columns to the given DataFrame.
+    The 'edge' column is created by concatenating the 'source_gene' and 'target_gene' columns with ' - '.
+    The 'edge_type' column is created by splitting the 'source_gene' and 'target_gene' columns on '_',
+    taking the second part, sorting them, and then joining them with '-'.
+    Parameters:
+    edges (pd.DataFrame): A DataFrame containing 'source_gene' and 'target_gene' columns.
+    Returns:
+    pd.DataFrame: The input DataFrame with added 'edge' and 'edge_type' columns.
+    """
+    edges['edge'] = edges['source_gene'] + ' - ' + edges['target_gene']
+
+    edges['edge_type'] = (
+                edges['source_gene'].str.split('_', expand=True).iloc[:, 1] + ' - ' + edges['target_gene'].str.split(
+            '_', expand=True).iloc[:, 1]).str.split(' - ').apply(np.sort).str.join('-')
+
+    return edges
+
+
+def add_to_main_df_topn(df_topn: pd.DataFrame, sample_name: str, data_temp: pd.DataFrame) -> None:
+    """
+    Adds the 'edge' values from the data_temp DataFrame to the df_topn DataFrame under the column named sample_name.
+
+    Parameters:
+    df_topn (pd.DataFrame): The main DataFrame to which the 'edge' values will be added.
+    sample_name (str): The name of the column in df_topn where the 'edge' values will be stored.
+    data_temp (pd.DataFrame): The DataFrame containing the 'edge' values to be added to df_topn.
+
+    Returns:
+    None
+    """
+    df_topn[sample_name] = data_temp['edge'].values
+
+def count_unique_edges_in_df_topn(df_topn: pd.DataFrame):
+    """
+    Count unique edges in the given DataFrame and return a DataFrame with the counts.
+    Parameters:
+    df_topn (pd.DataFrame): A DataFrame containing edges.
+    Returns:
+    pd.DataFrame: A DataFrame with two columns: 'edge' and 'count', where 'edge' 
+                  represents the unique edges and 'count' represents their respective counts.
+    """
+    unique_edges, unique_edges_count = np.unique(
+        df_topn.values.ravel(), return_counts=True
+    )
+
+    unique_edges_df = pd.DataFrame(
+        [unique_edges, unique_edges_count]
+    ).T  # , columns = )
+    unique_edges_df.columns = ["edge", "count"]
+    return unique_edges_df
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def get_input_data(path_to_data):
@@ -185,73 +382,6 @@ import os
 from datetime import datetime
 
 
-def create_folder_with_datetime(absolute_path):
-    # Ensure the provided path exists; if not, create it
-    if not os.path.exists(absolute_path):
-        os.makedirs(absolute_path)
-
-    # Get the current date and time
-    now = datetime.now()
-    folder_name = "results_" + now.strftime("%Y-%m-%d %H-%M-%S")
-
-    # Combine the absolute path with the new folder name
-    full_path = os.path.join(absolute_path, folder_name)
-
-    # Create the new folder at the specified location
-    if not os.path.exists(full_path):
-        os.makedirs(full_path)
-        print(f"Folder '{folder_name}' created at {full_path}!")
-    else:
-        print(f"Folder '{full_path}' already exists!")
-
-    return full_path
-
-
-def get_shap_martix(shap_values_comb_mean_dict, super_cols, s, n_features, shap_values_type='abs_mean_global'):
-    shap_matrix = np.zeros((s, n_features))
-    for column in super_cols:
-        print(column)
-
-        shap_temp = shap_values_comb_mean_dict[column][shap_values_type]
-
-        shap_matrix[int(column.split('_')[0]), int(column.split('_')[1])] = shap_temp
-
-    return shap_matrix
-
-
-def get_metrics_all(xgboost_eval_dict, s, iterations_per_feature):
-    r2_pd_all = pd.DataFrame(np.zeros(iterations_per_feature))
-    mape_pd_all = pd.DataFrame(np.zeros(iterations_per_feature))
-    mse_pd_all = pd.DataFrame(np.zeros(iterations_per_feature))
-
-    for i in range(s):
-        print('Feature: ', i)
-        r2_i = []
-        mse_i = []
-        mape_i = []
-        for iter_ in range(iterations_per_feature):
-            # performance
-            r2_i.append(xgboost_eval_dict[str(i)][iter_]['r2'])
-            mse_i.append(xgboost_eval_dict[str(i)][iter_]['mse'])
-            mape_i.append(xgboost_eval_dict[str(i)][iter_]['mape'])
-
-        r2_pd_all[i] = r2_i
-        mse_pd_all[i] = mse_i
-        mape_pd_all[i] = mape_i
-
-    r2_pd_all = r2_pd_all.melt(var_name='target_feature', value_name='r2')
-
-    mse_pd_all = mse_pd_all.melt(var_name='target_feature', value_name='mse')
-
-    mape_pd_all = mape_pd_all.melt(var_name='target_feature', value_name='mape')
-
-    return r2_pd_all, mse_pd_all, mape_pd_all
-
-
-def remove_same_source_target(data):
-    data = data[data['source_gene'] != data['target_gene']]
-
-    return data
 
 
 def get_node_colors(network):
@@ -261,6 +391,7 @@ def get_node_colors(network):
     colors[colors.str.contains('del')] = 'green'
     colors[colors.str.contains('amp')] = 'orange'
     colors[colors.str.contains('fus')] = 'magenta'
+    colors[colors.str.contains('prot')] = 'black'
 
     return list(colors.values)
 
@@ -332,7 +463,7 @@ def remove_exp_string(edges_df):
 
 # def plot_network_(edges, node_colors, top_n, subtype, i, file, path_to_save, layout=None, pos = None):
 #     G = nx.from_pandas_edgelist(edges, source='source_gene', target='target_gene', edge_attr='LRP')
-#     degrees = np.array(list(nx.degree_centrality(G).values())) 
+#     degrees = np.array(list(nx.degree_centrality(G).values()))
 #     degrees = degrees / np.max(degrees) * 500
 #     #nx.draw(network, with_labels=True, node_color='white', width = edges['LRP']*100, node_size = network.degree)
 
@@ -354,13 +485,13 @@ def remove_exp_string(edges_df):
 #     edge_colors =cm.Greys((widths  - np.min(widths) )/ (np.max(widths) - np.min(widths)))
 
 #     fig,ax = plt.subplots(figsize=  (15,15))
-#     nx.draw(G, with_labels=True, 
+#     nx.draw(G, with_labels=True,
 #             node_color=node_colors,
 #             width = widths,
 #             pos = pos, font_size = 6,
-#             #cmap = colors, 
-#             edge_color = edge_colors , 
-#             ax=ax,  
+#             #cmap = colors,
+#             edge_color = edge_colors ,
+#             ax=ax,
 #             #node_size = degrees
 #             node_size = 100)
 #     plt.savefig(os.path.join(path_to_save , 'network_{}_{}_{}_{}.svg'.format(file, top_n, subtype, i)), format = 'svg')
@@ -390,34 +521,6 @@ def add_suffixes_to_genes(genes):
     return gene_names
 
 
-def add_edge_colmn(edges):
-    edges['edge'] = edges['source_gene'] + ' - ' + edges['target_gene']
-
-    edges['edge_type'] = (
-                edges['source_gene'].str.split('_', expand=True).iloc[:, 1] + ' - ' + edges['target_gene'].str.split(
-            '_', expand=True).iloc[:, 1]).str.split(' - ').apply(np.sort).str.join('-')
-
-    '''edges['edge_type'] = 'exp-exp'
-    edges.loc[ edges['edge'].str.contains('mut') & edges['edge'].str.contains('exp') , 'edge_type'] = 'mut-exp'
-    edges.loc[ edges['edge'].str.contains('mut') & edges['edge'].str.contains('amp') , 'edge_type'] = 'mut-amp'
-    edges.loc[ edges['edge'].str.contains('mut') & edges['edge'].str.contains('del') , 'edge_type'] = 'mut-del'
-    edges.loc[ edges['edge'].str.contains('mut') & edges['edge'].str.contains('fus') , 'edge_type'] = 'mut-fus'
-    
-    edges.loc[ edges['edge'].str.contains('amp') & edges['edge'].str.contains('exp') , 'edge_type'] = 'amp-exp'
-    edges.loc[ edges['edge'].str.contains('amp') & edges['edge'].str.contains('del') , 'edge_type'] = 'amp-del'
-    edges.loc[ edges['edge'].str.contains('amp') & edges['edge'].str.contains('fus') , 'edge_type'] = 'amp-fus'
-    
-    
-    edges.loc[ edges['edge'].str.contains('del') & edges['edge'].str.contains('exp') , 'edge_type'] = 'del-exp'
-    edges.loc[ edges['edge'].str.contains('del') & edges['edge'].str.contains('del') , 'edge_type'] = 'del-fus'
-    
-    edges.loc[ edges['source_gene'].str.contains('mut') & edges['target_gene'].str.contains('mut') , 'edge_type'] = 'mut-mut'
-    edges.loc[ edges['source_gene'].str.contains('amp') & edges['target_gene'].str.contains('amp') , 'edge_type'] = 'amp-amp'
-    edges.loc[ edges['source_gene'].str.contains('del') & edges['target_gene'].str.contains('del') , 'edge_type'] = 'del-del'
-    edges.loc[ edges['source_gene'].str.contains('fus') & edges['target_gene'].str.contains('fus') , 'edge_type'] = 'fus-fus'
-    '''
-
-    return edges
 
 
 def get_lrp_dict_filtered_pd(lrp_dict_filtered, pathway='PI3K'):
@@ -637,164 +740,4 @@ def plot_network_(edges, path_to_save, layout=None, pos=None, title='', name_to_
 
     # plt.savefig(os.path.join(path_to_save , name_to_save + '.svg'), format = 'svg')
     # plt.savefig(os.path.join(path_to_save , name_to_save + '.png'), dpi = 300)
-
-
-def add_cluster0(df_clinical_features):
-    cluster0_samples = ['TCGA-B6-A0RT', 'TCGA-E9-A243', 'TCGA-AO-A0JC', 'TCGA-LL-A5YO',
-                        'TCGA-E9-A22D', 'TCGA-E2-A1B5', 'TCGA-AR-A1AX', 'TCGA-EW-A1OV',
-                        'TCGA-C8-A12V', 'TCGA-AR-A252', 'TCGA-BH-A0H5', 'TCGA-AQ-A7U7',
-                        'TCGA-A2-A0EQ', 'TCGA-AO-A128', 'TCGA-E2-A1II', 'TCGA-BH-A1F0',
-                        'TCGA-E9-A248', 'TCGA-A8-A08H', 'TCGA-EW-A1P7', 'TCGA-A2-A0CR',
-                        'TCGA-D8-A73U', 'TCGA-OL-A66I', 'TCGA-A2-A0CL', 'TCGA-E9-A2JT',
-                        'TCGA-A2-A25F', 'TCGA-A2-A0YK', 'TCGA-GM-A2DO', 'TCGA-AR-A1AJ',
-                        'TCGA-GM-A2DI', 'TCGA-PE-A5DE', 'TCGA-E2-A108', 'TCGA-AR-A0TS',
-                        'TCGA-AR-A0TT', 'TCGA-S3-AA15', 'TCGA-A2-A04Q', 'TCGA-A2-A0ST',
-                        'TCGA-AC-A2FB', 'TCGA-AR-A1AW', 'TCGA-A8-A0A7', 'TCGA-AR-A1AO',
-                        'TCGA-A2-A0EP', 'TCGA-BH-A209', 'TCGA-EW-A1IZ', 'TCGA-S3-AA17',
-                        'TCGA-E2-A1B6', 'TCGA-E9-A1NE', 'TCGA-BH-A0W5']
-
-    df_clinical_features['cluster0'] = 0
-    df_clinical_features.loc[df_clinical_features['bcr_patient_barcode'].isin(cluster0_samples), 'cluster0'] = 1
-
-    return df_clinical_features
-
-
-def add_cluster2(df_clinical_features):
-    cluster2_samples = ['TCGA-B6-A0RT',
-                        'TCGA-E9-A243',
-                        'TCGA-AO-A0JC',
-                        'TCGA-LL-A5YO',
-                        'TCGA-E9-A22D',
-                        'TCGA-LD-A9QF',
-                        'TCGA-E2-A1B5',
-                        'TCGA-AR-A1AX',
-                        'TCGA-EW-A1OV',
-                        'TCGA-C8-A12V',
-                        'TCGA-AR-A252',
-                        'TCGA-BH-A0H5',
-                        'TCGA-AQ-A7U7',
-                        'TCGA-A2-A0EQ',
-                        'TCGA-AO-A128',
-                        'TCGA-E2-A1II',
-                        'TCGA-BH-A1F0',
-                        'TCGA-E9-A248',
-                        'TCGA-A8-A08H',
-                        'TCGA-OL-A5RY',
-                        'TCGA-EW-A1P7',
-                        'TCGA-A2-A0CR',
-                        'TCGA-D8-A73U',
-                        'TCGA-OL-A66I',
-                        'TCGA-A2-A0CL',
-                        'TCGA-E9-A2JT',
-                        'TCGA-A2-A25F',
-                        'TCGA-AQ-A04J',
-                        'TCGA-A2-A0YK',
-                        'TCGA-GM-A2DO',
-                        'TCGA-AR-A1AJ',
-                        'TCGA-GM-A2DI',
-                        'TCGA-PE-A5DE',
-                        'TCGA-E2-A108',
-                        'TCGA-AR-A0TS',
-                        'TCGA-AR-A0TT',
-                        'TCGA-S3-AA15',
-                        'TCGA-A2-A04Q',
-                        'TCGA-A2-A0ST',
-                        'TCGA-A8-A07U',
-                        'TCGA-AC-A2FB',
-                        'TCGA-AR-A1AW',
-                        'TCGA-A8-A0A7',
-                        'TCGA-AR-A1AO',
-                        'TCGA-LL-A5YN',
-                        'TCGA-A2-A0EP',
-                        'TCGA-A2-A3XZ',
-                        'TCGA-BH-A209',
-                        'TCGA-EW-A1IZ',
-                        'TCGA-S3-AA17',
-                        'TCGA-E2-A1B6',
-                        'TCGA-E9-A1NE',
-                        'TCGA-BH-A0W5']
-
-    df_clinical_features['cluster2'] = 0
-    df_clinical_features.loc[df_clinical_features['bcr_patient_barcode'].isin(cluster2_samples), 'cluster2'] = 1
-
-    return df_clinical_features
-
-
-def map_cluset2_genes(column_list):
-    cluster2_genes = ['B2M_exp',
-                      'BCL11B_exp',
-                      'BIRC3_exp',
-                      'BTK_exp',
-                      'CARD11_exp',
-                        'CASP8_exp',
-                        'CCND2_exp',
-                        'CCR4_exp',
-                        'CCR7_exp',
-                        'CD274_exp',
-                        'CD28_exp',
-                        'CD74_exp',
-                        'CD79A_exp',
-                        'CD79B_exp',
-                        'CHST11_exp',
-                        'CIITA_exp',
-                        'CSF1R_exp',
-                        'CXCR4_exp',
-                        'CYLD_exp',
-                        'CYSLTR2_exp',
-                        'EBF1_exp',
-                        'EML4_exp',
-                        'FAS_exp',
-                        'FCGR2B_exp',
-                        'FCRL4_exp',
-                        'FLI1_exp',
-                        'FOXO1_exp',
-                        'IKZF1_exp',
-                        'IL7R_exp',
-                        'IRF4_exp',
-                        'JAK2_exp',
-                        'JAK3_exp',
-                        'KAT2B_exp',
-                        'LCK_exp',
-                        'LYL1_exp',
-                        'MAF_exp',
-                        'MOBKL1B_exp',
-                        'MYD88_exp',
-                        'NFATC2_exp',
-                        'P2RY8_exp',
-                        'PAX5_exp',
-                        'PDCD1LG2_exp',
-                        'PDGFRA_exp',
-                        'PML_exp',
-                        'POU2AF1_exp',
-                        'PRDM1_exp',
-                        'PRF1_exp',
-                        'PTPN6_exp',
-                        'PTPRC_exp',
-                        'SH2B3_exp',
-                        'SOCS1_exp',
-                        'STK4_exp',
-                        'SYK_exp',
-                        'TAZ_exp',
-                        'TCF7_exp',
-                        'TCL1A_exp',
-                        'TFEB_exp',
-                        'TGFBR2_exp',
-                        'TNFAIP3_exp',
-                        'TNFRSF14_exp',
-                        'TNFRSF17_exp',
-                        'WAS_exp',
-                        'ZRSR2_exp']
-
-    #column_list = [x.replace('_exp','') for x in column_list]
-
-    map_ = pd.DataFrame()
-    map_['genes'] = column_list
-    map_['cluster2'] = 0
-    map_.loc[map_['genes'].isin(cluster2_genes), 'cluster2'] = 1
-    map_ = map_.set_index('genes')
-    color_map = {0:'lightgray', 1:'red'}
-    row_colors = map_['cluster2'].map(color_map)
-
-    return row_colors
-
 

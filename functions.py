@@ -24,7 +24,7 @@ from typing import List
 
 def get_lrp_files(path_to_lrp_results: str) -> List[str]:
     """
-    Retrieves a list of files starting with "LRP" from the specified directory.
+    Retrieves a sorted list of files starting with "LRP" from the specified directory.
     Args:
         path_to_lrp_results (str): The path to the directory containing LRP result files.
     Returns:
@@ -45,6 +45,8 @@ def get_lrp_files(path_to_lrp_results: str) -> List[str]:
             f"No LRP files found in the directory {path_to_lrp_results}."
             )
     
+    lrp_files.sort()
+
     return lrp_files
 
 
@@ -133,7 +135,7 @@ def get_samples_with_lrp(path_to_lrp_results, starts_with="LRP_"):
         starts_with (str, optional): The prefix that filenames should start with. Defaults to "LRP_".
 
     Returns:
-        list: A list of sample identifiers extracted from the filenames.
+        list: A sorted list of sample identifiers extracted from the filenames.
     """
     files = [f for f in os.listdir(path_to_lrp_results) if f.startswith(starts_with)]
     print(files)

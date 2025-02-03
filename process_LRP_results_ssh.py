@@ -75,7 +75,7 @@ if get_topN:
         print(i)
         data_temp = lrp_dict[sample_name]
         data_temp = f.filter_and_sort_data(data_temp, get_topN_node_type, get_topN_topn)
-        data_temp = f.add_edge_colmn(data_temp)
+        data_temp = f.add_edge_column(data_temp)
         f.add_to_main_df_topn(df_topn, sample_name, data_temp)
 
         # save data_temp to csv

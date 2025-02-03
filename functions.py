@@ -90,6 +90,7 @@ def load_lrp_data(lrp_files: list[str], path_to_lrp_results: str) -> dict:
     n = len(lrp_files)
 
     for i in range(n):
+        print(i, lrp_files[i])
         load_lrp_file(lrp_files[i], path_to_lrp_results, lrp_dict)
 
     return lrp_dict
@@ -137,6 +138,7 @@ def get_samples_with_lrp(path_to_lrp_results, starts_with="LRP_"):
     files = [f for f in os.listdir(path_to_lrp_results) if f.startswith(starts_with)]
     print(files)
     samples = [file.split("_")[2] for file in files]
+    samples.sort()
     return samples
 
 def remove_same_source_target(data: pd.DataFrame) -> pd.DataFrame:

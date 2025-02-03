@@ -186,7 +186,7 @@ def add_edge_column(edges: pd.DataFrame) -> pd.DataFrame:
     return edges
 
 
-def add_to_main_df_topn(df_topn: pd.DataFrame, sample_name: str, data_temp: pd.DataFrame) -> None:
+def add_edges_to_main_df_topn(df_topn: pd.DataFrame, sample_name: str, data_temp: pd.DataFrame) -> None:
     """
     Adds the 'edge' values from the data_temp DataFrame to the df_topn DataFrame under the column named sample_name.
 
@@ -199,6 +199,20 @@ def add_to_main_df_topn(df_topn: pd.DataFrame, sample_name: str, data_temp: pd.D
     None
     """
     df_topn[sample_name] = data_temp['edge'].values
+
+def add_lrps_to_main_df_topn(df_topn: pd.DataFrame, sample_name: str, data_temp: pd.DataFrame) -> None:
+    """
+    Adds the 'LRP' values from the data_temp DataFrame to the df_topn DataFrame under the column named sample_name.
+
+    Parameters:
+    df_topn (pd.DataFrame): The main DataFrame to which the 'edge' values will be added.
+    sample_name (str): The name of the column in df_topn where the 'edge' values will be stored.
+    data_temp (pd.DataFrame): The DataFrame containing the 'LRP' values to be added to df_topn.
+
+    Returns:
+    None
+    """
+    df_topn[sample_name] = data_temp['LRP'].values
 
 def count_unique_edges_in_df_topn(df_topn: pd.DataFrame):
     """

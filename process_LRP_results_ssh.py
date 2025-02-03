@@ -59,7 +59,7 @@ start_time = datetime.now()
 lrp_dict = f.load_lrp_data(lrp_files[:20], path_to_lrp_results)
 end_time = datetime.now()
 print(end_time - start_time)
-
+print(lpr_files[:20])
 n = len(lrp_files)
 print("Number of LRP files: ", n)
 
@@ -70,8 +70,8 @@ print("Number of LRP files: ", n)
 if get_topN:
 
     df_topn = pd.DataFrame(np.zeros((get_topN_topn, len(samples)), dtype="str"), columns=samples)
-
-    for i, sample_name in enumerate(samples):
+    print(samples[:20])
+    for i, sample_name in enumerate(samples[:20]):
         print('get_topN: ', i, sample_name)
         data_temp = lrp_dict[sample_name]
         data_temp = f.filter_and_sort_data(data_temp, get_topN_node_type, get_topN_topn)

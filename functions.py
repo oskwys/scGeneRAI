@@ -126,20 +126,25 @@ def filter_and_sort_data(data_temp: pd.DataFrame, node_type: str = None, topn: i
 
 
 
-def get_samples_with_lrp(path_to_lrp_results, starts_with="LRP_"):
+def get_samples_with_lrp(lrp_files: list[str], starts_with: str = "LRP_") -> list[str]:
     """
-    Retrieves sample identifiers from filenames in a specified directory that start with a given prefix.
+    Retrieves sample identifiers from filenames in a list that start with a given prefix.
 
     Args:
-        path_to_lrp_results (str): The path to the directory containing LRP result files.
+        lrp_files (list[str]): A list of filenames containing LRP data.
         starts_with (str, optional): The prefix that filenames should start with. Defaults to "LRP_".
 
     Returns:
         list: A list of sample identifiers extracted from the filenames.
+
+    Raises:
+        ValueError: If a filename does not start with the specified prefix.
     """
-    files = [f for f in os.listdir(path_to_lrp_results) if f.startswith(starts_with)]
-    print(files)
-    samples = [file.split("_")[2] for file in files]
+    samples = []
+    for file in lrp_files:
+        if not file.startswith(starts_with):
+            raise ValueError(f"Filename {file} does not start with the expected prefix {starts_with}.")
+        samples.append(file.split("_")[2])
     
     return samples
 

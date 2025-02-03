@@ -45,7 +45,7 @@ get_topN_node_type = args.get_topN_node_type
 
 
 
-samples = f.get_samples_with_lrp(path_to_lrp_results)
+
 # samples = samples[:10]
 print("Samples: ", len(samples))
 print("Samples: ", len(set(samples)))
@@ -54,12 +54,13 @@ print("Samples: ", len(set(samples)))
 
 
 lrp_files = f.get_lrp_files(path_to_lrp_results)
+samples = f.get_samples_with_lrp(lrp_files)
 
 start_time = datetime.now()
 lrp_dict = f.load_lrp_data(lrp_files[:20], path_to_lrp_results)
 end_time = datetime.now()
 print(end_time - start_time)
-print(lpr_files[:20])
+print(lrp_files[:20])
 n = len(lrp_files)
 print("Number of LRP files: ", n)
 

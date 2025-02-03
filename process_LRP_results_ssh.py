@@ -44,17 +44,14 @@ get_topN_topn = args.get_topN_topn
 get_topN_node_type = args.get_topN_node_type
 
 
-
-
-# samples = samples[:10]
-print("Samples: ", len(samples))
-print("Samples: ", len(set(samples)))
-
 # %%% load LRP data
 
 
 lrp_files = f.get_lrp_files(path_to_lrp_results)
 samples = f.get_samples_with_lrp(lrp_files)
+# samples = samples[:10]
+print("Samples: ", len(samples))
+print("Samples: ", len(set(samples)))
 
 start_time = datetime.now()
 lrp_dict = f.load_lrp_data(lrp_files[:20], path_to_lrp_results)
@@ -95,7 +92,7 @@ if get_topN:
         )
     )
 
-    unique_edges_df = f.count_unique_edges(df_topn)
+    unique_edges_df = f.count_unique_edges_in_df_topn(df_topn)
 
     unique_edges_df.to_csv(
         os.path.join(

@@ -129,6 +129,7 @@ def main(args):
     
     # Construct the full path to the CSV file.
     csv_file_path = os.path.join(args.data_path, args.file_name)
+    print('csv_file_path: ', csv_file_path)
     if not os.path.isfile(csv_file_path):
         print(f"Error: File {csv_file_path} does not exist.")
         sys.exit(1)

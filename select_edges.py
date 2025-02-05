@@ -147,7 +147,7 @@ def main(args):
     # Save the selected edges (only the 'edge' column).
     output_csv_path = os.path.join(args.data_path, args.output_edges_file)
     selected_edges['edge'].to_csv(output_csv_path, index=False)
-    print(f"Selected edges saved to {output_csv_path}")
+    print("Selected edges saved to " + output_csv_path)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(

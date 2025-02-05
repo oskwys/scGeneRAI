@@ -39,13 +39,19 @@ def main(args):
     path_to_save = args.path_to_save
     file_name_to_save = args.file_name_to_save
 
+    # Print paths and filenames to inform the user
+    print(f"Path to LRP results: {path_to_lrp_results}")
+    print(f"Path and filename for selected edges: {path_and_file_name_edges}")
+    print(f"Path to save the output: {path_to_save}")
+    print(f"Filename for the saved output CSV: {file_name_to_save}")
+
     # %% Load the edges to select from CSV
     edges_to_select = pd.read_csv(path_and_file_name_edges)['edge'].to_list()
 
     # %% Load LRP data and process each file
     lrp_files = f.get_lrp_files(path_to_lrp_results)
     n = len(lrp_files)
-    samples = f.get_samples_with_lrp(path_to_lrp_results)
+    samples = f.get_samples_with_lrp(lrp_files)
 
     start_time = datetime.now()
 
@@ -66,8 +72,8 @@ def main(args):
 
         # For the first sample, add the edge column and extract the selected edges
         if i == 0:
-            data_temp_0 = f.add_edge_colmn(data_temp)
-            data_temp_0 = f.add_edge_colmn(data_temp_0)  # as in your original code
+            data_temp_0 = f.add_edge_column(data_temp)
+            data_temp_0 = f.add_edge_column(data_temp_0)  # as in your original code
             index_ = data_temp_0['edge'].isin(edges_to_select)
             edges = data_temp_0.loc[index_, 'edge'].values
 

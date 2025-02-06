@@ -30,7 +30,7 @@ def main(args):
     save_individual_samples = args.save_individual_samples
 
     # Load LRP data
-    lrp_files = f.get_lrp_files(path_to_lrp_results)[:10]
+    lrp_files = f.get_lrp_files(path_to_lrp_results)
     samples = f.get_samples_with_lrp(lrp_files)
     print("Samples count:", len(samples))
     print("Unique samples count:", len(set(samples)))

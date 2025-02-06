@@ -135,11 +135,11 @@ def main(args):
         sys.exit(1)
     
     # Load the CSV data.
-    edges_count = pd.read_csv(csv_file_path, index_col=0)
+    edges_count = pd.read_csv(csv_file_path)
     
     # Process the edges (using either the provided threshold or the knee finder).
     edges_count, selected_edges, knee_x, knee_y, kf = process_edges(edges_count, threshold=args.threshold)
-    
+    print('selected_edges head: ', selected_edges.head())
     # Plot the results.
     plot_results(edges_count, selected_edges, knee_x=knee_x, knee_y=knee_y, kf=kf,
                     save_plots_dir=args.save_plots_dir)

@@ -47,10 +47,10 @@ def main(args):
         df_topn_edges = pd.DataFrame(columns=samples)
         df_topn_lrps = pd.DataFrame(columns=samples)
 
-        for sample_name in samples:
-            data_temp = f.get_topN_interactions(
-                lrp_dict[sample_name], get_topN_node_type, get_topN_topn
-            )
+        for i, sample_name in enumerate(samples):
+            print("get_topN: ", i, sample_name)
+            data_temp = lrp_dict[sample_name]
+            data_temp = f.filter_and_sort_data(data_temp, get_topN_node_type, get_topN_topn)
             data_temp = f.add_edge_column(data_temp)
             f.add_edges_to_main_df_topn(df_topn_edges, sample_name, data_temp)
             f.add_lrps_to_main_df_topn(df_topn_lrps, sample_name, data_temp)

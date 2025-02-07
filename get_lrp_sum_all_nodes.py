@@ -7,8 +7,8 @@ from datetime import datetime
 # Import your custom functions from functions.py
 import functions as f
 
-def save_lrp_sum_to_csv(path_to_save, file_name_to_save, node_list, np_lrp_temp):
-    df = pd.DataFrame(np_lrp_temp)
+def save_lrp_sum_to_csv(path_to_save, file_name_to_save, node_list, samples, np_lrp_temp):
+    df = pd.DataFrame(np_lrp_temp, columns=samples)
     df ['node'] = node_list        
     df = df.set_index('node')    
     df.to_csv(os.path.join(path_to_save, file_name_to_save), index=True)
@@ -77,7 +77,7 @@ def main(args):
     end_time = datetime.now()
     print(f"Time taken to process {n} files: {end_time - start_time}")
 
-    save_lrp_sum_to_csv(path_to_save, file_name_to_save, node_list, np_lrp_temp)
+    save_lrp_sum_to_csv(path_to_save, file_name_to_save, node_list, samples, np_lrp_temp)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Compute LRP_sum for each node and each sample')
